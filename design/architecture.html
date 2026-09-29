@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[PRODUCT] [DELIVERY] 设计总览</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%232563eb'/%3E%3Ctext x='32' y='44' font-size='36' text-anchor='middle' fill='white'%3EW%3C/text%3E%3C/svg%3E">
+<style>
+  :root{
+    --[DELIVERY]:#2563eb;        /* blue - [DELIVERY]自身 */
+    --[DELIVERY]-bg:#eff6ff;
+    --[DELIVERY]-border:#93c5fd;
+    --target:#059669;        /* green - 目标Agent */
+    --target-bg:#ecfdf5;
+    --target-border:#6ee7b7;
+    --platform:#ea580c;      /* orange - 平台组件 */
+    --platform-bg:#fff7ed;
+    --platform-border:#fdba74;
+    --evo:#7c3aed;           /* purple - 自进化 */
+    --evo-bg:#f5f3ff;
+    --evo-border:#c4b5fd;
+    --gray:#475569;
+    --gray-bg:#f1f5f9;
+    --line:#cbd5e1;
+    --text:#0f172a;
+    --muted:#64748b;
+    --bg:#f8fafc;
+    --card:#ffffff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+       background:var(--bg);color:var(--text);line-height:1.6;font-size:14px}
+  /* ===== 顶部导航 ===== */
+  header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:100}
+  .titlebar{padding:14px 24px 0;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+  .titlebar h1{font-size:18px;font-weight:700;color:var(--text)}
+  .titlebar .badge{font-size:11px;background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;
+                   padding:2px 8px;border-radius:10px;font-weight:600}
+  .titlebar .ver{font-size:12px;color:var(--muted)}
+  nav{display:flex;gap:4px;padding:8px 16px 0;overflow-x:auto}
+  nav button{background:none;border:none;border-bottom:2px solid transparent;padding:8px 14px;
+             cursor:pointer;font-size:13.5px;color:var(--muted);white-space:nowrap;font-family:inherit}
+  nav button:hover{color:var(--text)}
+  nav button.active{color:var(--[DELIVERY]);border-bottom-color:var(--[DELIVERY]);font-weight:600}
+  main{max-width:1280px;margin:0 auto;padding:24px}
+  .tab-panel{display:none}
+  .tab-panel.active{display:block;animation:fade .2s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+  h2{font-size:16px;margin:0 0 4px}
+  .sub{color:var(--muted);font-size:12.5px;margin-bottom:16px}
+  .grid{display:grid;gap:16px}
+  /* ===== 图例 ===== */
+  .legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:16px;font-size:12px}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .sw{width:14px;height:14px;border-radius:3px;border:1.5px solid}
+  .sw.w{background:var(--[DELIVERY]-bg);border-color:var(--[DELIVERY]-border)}
+  .sw.t{background:var(--target-bg);border-color:var(--target-border)}
+  .sw.p{background:var(--platform-bg);border-color:var(--platform-border)}
+  .sw.e{background:var(--evo-bg);border-color:var(--evo-border)}
+  .sw.dash{background:transparent;border:1.5px dashed #94a3b8;border-radius:0;height:0;width:18px;margin:0 3px}
+  /* ===== 架构图 ===== */
+  .arch-wrap{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px;overflow-x:auto}
+  .arch-wrap svg{display:block;min-width:900px;width:100%;height:auto}
+  .node{cursor:pointer}
+  .node rect{transition:stroke-width .15s, filter .15s}
+  .node:hover rect{stroke-width:3;filter:brightness(.96)}
+  .node.selected rect{stroke-width:3.5}
+  .node text{font-family:inherit;pointer-events:none}
+  .node-title{font-size:12.5px;font-weight:700;fill:var(--text)}
+  .node-sub{font-size:10.5px;fill:var(--muted)}
+  .edge{stroke:var(--line);stroke-width:1.5;fill:none;marker-end:url(#arrow)}
+  .edge-dash{stroke-dasharray:5 4}
+  .edge-label{font-size:10px;fill:var(--muted)}
+  /* ===== 详情卡片 ===== */
+  .detail-card{margin-top:16px;background:#fff;border:1px solid var(--line);border-radius:10px;
+               padding:18px;display:none}
+  .detail-card.show{display:block}
+  .detail-card h3{font-size:15px;margin-bottom:8px}
+  .detail-card .meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+  .tag{font-size:11px;padding:2px 8px;border-radius:10px;font-weight:600}
+  .tag.w{background:var(--[DELIVERY]-bg);color:var(--[DELIVERY])}
+  .tag.t{background:var(--target-bg);color:var(--target)}
+  .tag.p{background:var(--platform-bg);color:var(--platform)}
+  .tag.e{background:var(--evo-bg);color:var(--evo)}
+  .tag.warn{background:#fef2f2;color:#b91c1c}
+  .tag.ok{background:#ecfdf5;color:#047857}
+  .tag.part{background:#fffbeb;color:#b45309}
+  .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;font-size:13px}
+  .detail-grid b{color:var(--muted);font-weight:600}
+  /* ===== 流程时间轴 ===== */
+  .flow{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin:20px 0;position:relative}
+  .flow::before{content:"";position:absolute;top:28px;left:10%;right:10%;height:2px;background:var(--line);z-index:0}
+  .step{position:relative;z-index:1;text-align:center;cursor:pointer;padding:0 8px}
+  .step .dot{width:56px;height:56px;border-radius:50%;background:#fff;border:2.5px solid var(--[DELIVERY]);
+             display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-weight:700;
+             font-size:16px;color:var(--[DELIVERY]);transition:all .15s}
+  .step:hover .dot,.step.open .dot{background:var(--[DELIVERY]);color:#fff}
+  .step h4{font-size:13.5px;margin-bottom:2px}
+  .step p{font-size:11.5px;color:var(--muted)}
+  .step-detail{display:none;margin-top:12px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px;text-align:left}
+  .step-detail.show{display:block}
+  .step-detail table{width:100%;border-collapse:collapse;font-size:12.5px}
+  .step-detail th{text-align:left;color:var(--muted);font-weight:600;padding:6px 8px;border-bottom:1px solid var(--line);width:110px;vertical-align:top}
+  .step-detail td{padding:6px 8px;border-bottom:1px solid var(--line)}
+  .evo-loop{margin-top:20px;background:var(--evo-bg);border:1px solid var(--evo-border);border-radius:10px;padding:14px 18px}
+  .evo-loop h4{color:var(--evo);font-size:13.5px;margin-bottom:8px}
+  .evo-chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:12.5px}
+  .evo-chain .chip{background:#fff;border:1px solid var(--evo-border);color:var(--evo);padding:3px 10px;border-radius:12px;font-weight:600}
+  .evo-chain .arr{color:var(--evo);font-weight:700}
+  /* ===== 组件映射 ===== */
+  .filters{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+  .filters button{background:#fff;border:1px solid var(--line);padding:6px 14px;border-radius:16px;
+                 cursor:pointer;font-size:12.5px;font-family:inherit;color:var(--muted)}
+  .filters button:hover{border-color:var(--[DELIVERY]);color:var(--[DELIVERY])}
+  .filters button.active{background:var(--[DELIVERY]);color:#fff;border-color:var(--[DELIVERY])}
+  .comp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+  .comp-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px;transition:box-shadow .15s}
+  .comp-card:hover{box-shadow:0 2px 8px rgba(0,0,0,.06)}
+  .comp-card .ch{display:flex;justify-content:space-between;align-items:start;margin-bottom:6px}
+  .comp-card h4{font-size:14px}
+  .comp-card .num{font-size:11px;color:var(--muted);font-weight:600}
+  .comp-card .role{font-size:12px;color:var(--text);margin-bottom:4px}
+  .comp-card .role b{color:var(--[DELIVERY])}
+  .comp-card .trole b{color:var(--target)}
+  .comp-card .skill{font-size:11px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+                    background:var(--gray-bg);padding:2px 6px;border-radius:4px;display:inline-block;margin-top:4px}
+  /* ===== 部署蓝图 ===== */
+  .deploy-box{background:#fff;border:1px solid var(--line);border-radius:10px;padding:18px;margin-bottom:16px}
+  .deploy-box h3{font-size:14px;margin-bottom:10px}
+  .deploy-svg{width:100%;min-width:800px;height:auto}
+  .checklist{list-style:none;font-size:12.5px}
+  .checklist li{padding:6px 0;border-bottom:1px dashed var(--line);display:flex;gap:8px;align-items:start}
+  .checklist li:last-child{border:none}
+  .dot-warn{color:#b45309;font-weight:700}
+  /* ===== 状态与缺口 ===== */
+  .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+  .stat{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px;text-align:center}
+  .stat .n{font-size:26px;font-weight:700;line-height:1.1}
+  .stat .l{font-size:11.5px;color:var(--muted);margin-top:4px}
+  .stat.total .n{color:var(--text)}
+  .stat.read .n{color:var(--target)}
+  .stat.fail .n{color:#dc2626}
+  .stat.remain .n{color:var(--platform)}
+  .gap-list{background:#fff;border:1px solid var(--line);border-radius:10px;padding:6px 18px;margin-bottom:16px}
+  .gap-list h3{font-size:14px;margin:12px 0 8px}
+  .gap-list ul{padding-left:18px;font-size:12.5px}
+  .gap-list li{padding:4px 0}
+  .compare{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .compare .opt{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px}
+  .compare .opt.rec{border-color:var(--target);box-shadow:0 0 0 2px var(--target-border)}
+  .compare .opt h4{font-size:14px;margin-bottom:8px}
+  .compare .opt .pros{font-size:12.5px;color:var(--target)}
+  .compare .opt .cons{font-size:12.5px;color:#b45309}
+  .compare ul{padding-left:18px;font-size:12.5px;margin:6px 0}
+  .foot{margin-top:28px;padding-top:14px;border-top:1px solid var(--line);font-size:11.5px;color:var(--muted)}
+  /* 响应式 */
+  @media(max-width:900px){
+    .flow{grid-template-columns:1fr;gap:16px}
+    .flow::before{display:none}
+    .detail-grid{grid-template-columns:1fr}
+    .stat-row{grid-template-columns:repeat(2,1fr)}
+    .compare{grid-template-columns:1fr}
+    main{padding:14px}
+    .titlebar{padding:12px 14px 0}
+  }
+  nav button,.filters button{min-height:44px;min-width:44px}
+  @media(max-width:640px){
+    .titlebar .badge,.titlebar .ver,.sub,.legend,.step p,.evo-chain,.tag,.filters button,.comp-card .role,.comp-card .skill,.checklist,.gap-list ul,.compare ul,.compare .opt .pros,.compare .opt .cons,.foot{font-size:14px}
+    main p[style],main span[style]{font-size:14px!important}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="titlebar">
+    <h1>[PRODUCT] Agent 开发 [DELIVERY] — 设计总览</h1>
+    <span class="badge">设计审阅稿 · 未实现 / 未部署 / 未云端验收</span>
+    <span class="ver">2026-09-18 · 证据基线见各组件卡片</span>
+  </div>
+  <nav id="nav">
+    <button data-tab="arch" class="active">架构总览</button>
+    <button data-tab="flow">Eval-driven 流程</button>
+    <button data-tab="comp">组件映射</button>
+    <button data-tab="deploy">部署蓝图</button>
+    <button data-tab="status">状态与缺口</button>
+  </nav>
+</header>
+<main>
+
+<!-- ============ 1. 架构总览 ============ -->
+<section id="tab-arch" class="tab-panel active">
+  <h2>[DELIVERY] 系统架构（修正后）</h2>
+  <p class="sub">[DELIVERY] 底座 = [BASE-AGENT] 原生主循环 <code>AIAgent.run_conversation</code> + 薄 FastAPI shim（满足层1：端口/启动命令/健康检查/鉴权/POST /invoke；层2 /run /run_sse /sessions 按需补）。
+     非「[BASE-ADK] 主 + [BASE-AGENT] sidecar」。节点可点击查看说明。</p>
+  <div class="legend">
+    <span><i class="sw w"></i>[DELIVERY] 自身</span>
+    <span><i class="sw t"></i>目标 Agent</span>
+    <span><i class="sw p"></i>平台组件</span>
+    <span><i class="sw e"></i>自进化流程</span>
+    <span><i class="sw dash"></i>设计示意连线（虚线；当前无真实 trace 覆盖，设计阶段）</span>
+  </div>
+  <div class="arch-wrap">
+    <svg viewBox="0 0 1080 640" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+          <path d="M0,0 L8,4 L0,8 z" fill="#94a3b8"/>
+        </marker>
+      </defs>
+
+      <!-- 用户前端 -->
+      <g class="node" data-id="user" onclick="showDetail('user')">
+        <rect x="380" y="20" width="320" height="64" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+        <text x="540" y="44" text-anchor="middle" class="node-title">用户前端</text>
+        <text x="540" y="62" text-anchor="middle" class="node-sub">引导式 UI · 可交互架构图 · Trace 覆盖层</text>
+      </g>
+
+      <!-- [DELIVERY] 底座：[BASE-AGENT] + shim -->
+      <g class="node" data-id="[DELIVERY]" onclick="showDetail('[DELIVERY]')">
+        <rect x="320" y="130" width="440" height="100" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="2.5"/>
+        <text x="540" y="156" text-anchor="middle" class="node-title">[DELIVERY] 底座（[BASE-AGENT] Agent）</text>
+        <text x="540" y="176" text-anchor="middle" class="node-sub">原生主循环 AIAgent.run_conversation（run_agent.py）</text>
+        <text x="540" y="194" text-anchor="middle" class="node-sub">薄 FastAPI shim：满足层1（端口/启动命令/健康检查/鉴权/POST /invoke）；层2 按需 /run /run_sse /sessions</text>
+        <text x="540" y="214" text-anchor="middle" class="node-sub">四步引导状态机（Step1–4）+ 14 组件 Skill 按需加载</text>
+      </g>
+
+      <!-- 自进化 -->
+      <g class="node" data-id="evo" onclick="showDetail('evo')">
+        <rect x="820" y="130" width="240" height="100" rx="8" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2"/>
+        <text x="940" y="156" text-anchor="middle" class="node-title">[BASE-AGENT] 自进化</text>
+        <text x="940" y="176" text-anchor="middle" class="node-sub">后台审查 Fork（便宜模型 + prompt cache）</text>
+        <text x="940" y="194" text-anchor="middle" class="node-sub">记忆/技能改进提案 → 人工审批队列</text>
+        <text x="940" y="212" text-anchor="middle" class="node-sub">提案 pending → 人工审批 → 回归通过才发布</text>
+      </g>
+
+      <!-- [PRODUCT] Runtime -->
+      <g class="node" data-id="runtime" onclick="showDetail('runtime')">
+        <rect x="380" y="290" width="320" height="70" rx="8" fill="#fff7ed" stroke="#ea580c" stroke-width="2"/>
+        <text x="540" y="316" text-anchor="middle" class="node-title">[PRODUCT] Runtime</text>
+        <text x="540" y="334" text-anchor="middle" class="node-sub">框架无关 · 层1强制：端口/启动命令/健康检查/鉴权</text>
+        <text x="540" y="350" text-anchor="middle" class="node-sub">/run /run_sse /sessions 是 [BASE-ADK] 应用层路由（非 Runtime 强制）</text>
+      </g>
+
+      <!-- 目标 Agent -->
+      <g class="node" data-id="target" onclick="showDetail('target')">
+        <rect x="380" y="410" width="320" height="80" rx="8" fill="#ecfdf5" stroke="#059669" stroke-width="2.5"/>
+        <text x="540" y="436" text-anchor="middle" class="node-title">目标 Agent（用户选择框架）</text>
+        <text x="540" y="454" text-anchor="middle" class="node-sub">[BASE-ADK] / Codex / 自定义 / ADK workflow</text>
+        <text x="540" y="472" text-anchor="middle" class="node-sub">[DELIVERY] 不替用户决定，Step3 决策树引导</text>
+      </g>
+
+      <!-- 平台周边组件 -->
+      <g class="node" data-id="obs" onclick="showDetail('obs')">
+        <rect x="40" y="290" width="170" height="56" rx="8" fill="#fff7ed" stroke="#ea580c"/>
+        <text x="125" y="314" text-anchor="middle" class="node-title">观测</text>
+        <text x="125" y="332" text-anchor="middle" class="node-sub">APMPlus trace + TLS 日志</text>
+      </g>
+      <g class="node" data-id="eval" onclick="showDetail('eval')">
+        <rect x="40" y="360" width="170" height="56" rx="8" fill="#fff7ed" stroke="#ea580c"/>
+        <text x="125" y="384" text-anchor="middle" class="node-title">评测</text>
+        <text x="125" y="402" text-anchor="middle" class="node-sub">评测集 / 评估器 / 实验</text>
+      </g>
+      <g class="node" data-id="gw" onclick="showDetail('gw')">
+        <rect x="40" y="430" width="170" height="56" rx="8" fill="#fff7ed" stroke="#ea580c"/>
+        <text x="125" y="454" text-anchor="middle" class="node-title">网关 / MCP</text>
+        <text x="125" y="472" text-anchor="middle" class="node-sub">OpenAPI 转 MCP · 凭据托管</text>
+      </g>
+      <g class="node" data-id="id" onclick="showDetail('id')">
+        <rect x="40" y="500" width="170" height="56" rx="8" fill="#fff7ed" stroke="#ea580c"/>
+        <text x="125" y="524" text-anchor="middle" class="node-title">身份权限</text>
+        <text x="125" y="542" text-anchor="middle" class="node-sub">UserPool + Cedar · KeyAuth</text>
+      </g>
+
+      <g class="node" data-id="kb" onclick="showDetail('kb')">
+        <rect x="870" y="290" width="170" height="56" rx="8" fill="#fff7ed" stroke="#ea580c"/>
+        <text x="955" y="314" text-anchor="middle" class="node-title">知识库</text>
+        <text x="955" y="332" text-anchor="middle" class="node-sub">VikingDB RAG</text>
+      </g>
+      <g class="node" data-id="a2a" onclick="showDetail('a2a')">
+        <rect x="870" y="360" width="170" height="56" rx="8" fill="#fff7ed" stroke="#ea580c"/>
+        <text x="955" y="384" text-anchor="middle" class="node-title">A2A Registry</text>
+        <text x="955" y="402" text-anchor="middle" class="node-sub">AgentCard 注册 · 语义检索</text>
+      </g>
+      <g class="node" data-id="sk" onclick="showDetail('sk')">
+        <rect x="870" y="430" width="170" height="56" rx="8" fill="#fff7ed" stroke="#ea580c"/>
+        <text x="955" y="454" text-anchor="middle" class="node-title">Skills 中心</text>
+        <text x="955" y="472" text-anchor="middle" class="node-sub">三种挂载方式</text>
+      </g>
+      <g class="node" data-id="sb" onclick="showDetail('sb')">
+        <rect x="870" y="500" width="170" height="56" rx="8" fill="#fff7ed" stroke="#ea580c"/>
+        <text x="955" y="524" text-anchor="middle" class="node-title">沙箱</text>
+        <text x="955" y="542" text-anchor="middle" class="node-sub">AIO / Code / Skills</text>
+      </g>
+
+      <g class="node" data-id="guard" onclick="showDetail('guard')">
+        <rect x="260" y="500" width="160" height="56" rx="8" fill="#fff7ed" stroke="#ea580c"/>
+        <text x="340" y="524" text-anchor="middle" class="node-title">安全围栏</text>
+        <text x="340" y="542" text-anchor="middle" class="node-sub">大模型应用防火墙</text>
+      </g>
+      <g class="node" data-id="mem" onclick="showDetail('mem')">
+        <rect x="660" y="500" width="160" height="56" rx="8" fill="#fff7ed" stroke="#ea580c"/>
+        <text x="740" y="524" text-anchor="middle" class="node-title">会话记忆</text>
+        <text x="740" y="542" text-anchor="middle" class="node-sub">三层：Session/短期/长期</text>
+      </g>
+
+      <!-- 连线 -->
+      <path class="edge" d="M540,84 L540,130"/>
+      <path class="edge" d="M760,180 L820,180"/>
+      <path class="edge edge-dash" d="M940,230 L940,260 L540,260 L540,290" marker-end="url(#arrow)"/>
+      <text x="740" y="254" class="edge-label">提案/审批回环</text>
+      <path class="edge" d="M540,230 L540,290"/>
+      <path class="edge" d="M540,360 L540,410"/>
+      <path class="edge" d="M210,318 L380,318"/>
+      <path class="edge" d="M210,388 L380,350"/>
+      <path class="edge edge-dash" d="M210,458 L300,458 L300,330" marker-end="url(#arrow)"/>
+      <path class="edge" d="M210,528 L260,528"/>
+      <path class="edge" d="M870,318 L700,318"/>
+      <path class="edge" d="M870,388 L700,360"/>
+      <path class="edge edge-dash" d="M870,458 L780,458 L780,340" marker-end="url(#arrow)"/>
+      <path class="edge" d="M660,528 L700,490"/>
+      <text x="540" y="600" text-anchor="middle" class="edge-label" style="font-size:11px">
+        分层说明：实线=设计时拓扑连线（Step3 计划态）；虚线=设计示意连线（当前无真实 trace 覆盖，设计阶段；Step4 运行后才叠加真实 trace）
+      </text>
+    </svg>
+  </div>
+  <div class="detail-card" id="detail-card"></div>
+</section>
+
+<!-- ============ 2. Eval-driven 流程 ============ -->
+<section id="tab-flow" class="tab-panel">
+  <h2>Eval-driven 四步开发流程</h2>
+  <p class="sub">先定验收，再写架构，最后用真实观测验证。点击步骤展开输入/输出/交互/行为/验收。</p>
+
+  <div class="flow" id="flow">
+    <div class="step" data-step="1" onclick="toggleStep(1)">
+      <div class="dot">1</div>
+      <h4>业务目标</h4>
+      <p>grill-with-docs 访谈 / prompt 快速生成</p>
+    </div>
+    <div class="step" data-step="2" onclick="toggleStep(2)">
+      <div class="dot">2</div>
+      <h4>验收标准</h4>
+      <p>独立可验证产物 · 拒认 Agent 完成声明</p>
+    </div>
+    <div class="step" data-step="3" onclick="toggleStep(3)">
+      <div class="dot">3</div>
+      <h4>架构设计</h4>
+      <p>14 组件 Skill 按需加载 · 智能推荐</p>
+    </div>
+    <div class="step" data-step="4" onclick="toggleStep(4)">
+      <div class="dot">4</div>
+      <h4>测试验证</h4>
+      <p>Runtime 调用 + 观测 Trace 取数 · 不编造</p>
+    </div>
+  </div>
+
+  <div id="step-details"></div>
+
+  <div class="evo-loop">
+    <h4>自进化闭环（评测结果 → 提案 pending → 人工审批 + 回归通过 → 发布生效）</h4>
+    <div class="evo-chain">
+      <span class="chip">Step4 评测结果 + trace</span><span class="arr">→</span>
+      <span class="chip">[BASE-AGENT] 后台审查 Fork</span><span class="arr">→</span>
+      <span class="chip">记忆/Skill 提案（pending）</span><span class="arr">→</span>
+      <span class="chip">安全扫描 + 人工审批</span><span class="arr">→</span>
+      <span class="chip">回归测试</span><span class="arr">→</span>
+      <span class="chip">通过→发布生效 / 失败→回退 pending</span>
+    </div>
+    <p style="font-size:11.5px;color:var(--evo);margin-top:8px">纪律：坏 case 只扩充评测集，绝不修改 baseline_locked 阈值；提案进入 pending 队列，未经人工审批 + 回归通过不得发布；回归失败回退 pending。</p>
+  </div>
+</section>
+
+<!-- ============ 3. 组件映射 ============ -->
+<section id="tab-comp" class="tab-panel">
+  <h2>14 个 [PRODUCT] 组件映射</h2>
+  <p class="sub">每行回答：[DELIVERY] 自身角色 / 目标 Agent 可选角色 / 对应 Skill / 验证状态。验证状态指 Skill 文档完成度，不代表云资源已部署。</p>
+  <div class="filters" id="comp-filters">
+    <button data-cat="all" class="active">全部</button>
+    <button data-cat="core">核心框架</button>
+    <button data-cat="integ">集成组件</button>
+    <button data-cat="ops">运维治理</button>
+  </div>
+  <div class="comp-grid" id="comp-grid"></div>
+</section>
+
+<!-- ============ 4. 部署蓝图 ============ -->
+<section id="tab-deploy" class="tab-panel">
+  <h2>部署蓝图（目标态 · 未执行）</h2>
+  <p class="sub">华北2 cn-beijing / default project / <镜像仓库> 镜像仓库 / 新建 Runtime 与 MCP。以下均为设计目标，未部署、未核验凭据。</p>
+  <div class="deploy-box">
+    <h3>部署拓扑</h3>
+    <svg class="deploy-svg" viewBox="0 0 1000 360" xmlns="http://www.w3.org/2000/svg">
+      <rect x="20" y="20" width="960" height="320" rx="10" fill="#fff7ed" stroke="#ea580c" stroke-width="2" stroke-dasharray="6 4"/>
+      <text x="40" y="48" style="font-size:13px;font-weight:700;fill:#ea580c">火山引擎 华北2（北京）cn-beijing · 项目 default</text>
+      <g>
+        <rect x="60" y="80" width="180" height="70" rx="8" fill="#fff" stroke="#ea580c"/>
+        <text x="150" y="108" text-anchor="middle" style="font-size:12.5px;font-weight:700">镜像仓库 <镜像仓库></text>
+        <text x="150" y="128" text-anchor="middle" style="font-size:10.5px;fill:#64748b">现有复用 · 待核验可拉</text>
+      </g>
+      <g>
+        <rect x="320" y="80" width="220" height="70" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+        <text x="430" y="106" text-anchor="middle" style="font-size:12.5px;font-weight:700">新建 Runtime: [DELIVERY]-self</text>
+        <text x="430" y="124" text-anchor="middle" style="font-size:10.5px;fill:#64748b">[BASE-AGENT] 主循环 + FastAPI shim</text>
+        <text x="430" y="140" text-anchor="middle" style="font-size:10.5px;fill:#b91c1c">未创建</text>
+      </g>
+      <g>
+        <rect x="620" y="80" width="220" height="70" rx="8" fill="#ecfdf5" stroke="#059669" stroke-width="2"/>
+        <text x="730" y="106" text-anchor="middle" style="font-size:12.5px;font-weight:700">新建 Runtime: target-agent</text>
+        <text x="730" y="124" text-anchor="middle" style="font-size:10.5px;fill:#64748b">按 Step3 决策树生成</text>
+        <text x="730" y="140" text-anchor="middle" style="font-size:10.5px;fill:#b91c1c">未创建</text>
+      </g>
+      <g>
+        <rect x="320" y="200" width="220" height="60" rx="8" fill="#fff" stroke="#ea580c"/>
+        <text x="430" y="226" text-anchor="middle" style="font-size:12.5px;font-weight:700">新建 MCP 服务/工具集</text>
+        <text x="430" y="246" text-anchor="middle" style="font-size:10.5px;fill:#b91c1c">未创建</text>
+      </g>
+      <g>
+        <rect x="620" y="200" width="220" height="60" rx="8" fill="#fff" stroke="#ea580c"/>
+        <text x="730" y="226" text-anchor="middle" style="font-size:12.5px;font-weight:700">APMPlus + TLS 观测</text>
+        <text x="730" y="246" text-anchor="middle" style="font-size:10.5px;fill:#b45309">须开启 · 未核验已开</text>
+      </g>
+      <path class="edge" d="M240,115 L320,115"/>
+      <path class="edge" d="M240,115 L620,115"/>
+      <path class="edge" d="M430,150 L430,200"/>
+      <path class="edge" d="M730,150 L730,200"/>
+      <path class="edge edge-dash" d="M540,230 L620,230"/>
+      <text x="80" y="310" style="font-size:11px;fill:#64748b">配额约束：单账号单地域 Runtime ≤20 · 单 Runtime 实例 ≤20 · 最低 0.5 vCPU</text>
+      <text x="80" y="328" style="font-size:11px;fill:#64748b">服务域名：<INTERNAL_HOST>.com · 资源创建后不可换地域</text>
+    </svg>
+  </div>
+  <div class="deploy-box">
+    <h3>待核验项清单</h3>
+    <ul class="checklist">
+      <li><span class="dot-warn">!</span><span>火山引擎账号凭据（AK/SK / 短期 STS）是否存在且有 [PRODUCT] + CR + APMPlus + TLS 权限</span></li>
+      <li><span class="dot-warn">!</span><span><code>default</code> 项目实际存在、且 <code><镜像仓库></code> 镜像仓库可拉</span></li>
+      <li><span class="dot-warn">!</span><span>观测服务（APMPlus + TLS）是否已为目标 Runtime 开启（在线评测必须开启观测）</span></li>
+      <li><span class="dot-warn">!</span><span>[BASE-AGENT] FastAPI shim 在 [PRODUCT] Runtime 容器内能否启动、Runtime HTTP 协议细节未实测</span></li>
+      <li><span class="dot-warn">!</span><span>Runtime 网关对容器探活/路由的确切路径与鉴权 header 名（ApiKeyName 自定义）</span></li>
+      <li><span class="dot-warn">!</span><span>Workload Access Token 接入 Gateway 的 issuer/JWKS/audience 配置（手册未闭环，以线上接口为准）</span></li>
+      <li><span class="dot-warn">!</span><span>轨迹白盒化评测能力是否已补齐（原规划 9 月）</span></li>
+      <li><span class="dot-warn" style="color:#16a34a">✓</span><span>A2A 智能体 JSON 示例 / MCP 服务 API 文件规范正文 — 已通过浏览器 DOM 补读（A2A 0.3.0 AgentCard 全字段 / Swagger 2.0·OpenAPI 3.0.1），不再阻塞</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 5. 状态与缺口 ============ -->
+<section id="tab-status" class="tab-panel">
+  <h2>文档覆盖统计与关键缺口（证据驱动版）</h2>
+  <p class="sub">数据来源：docs/volcengine-official/read_status.json + reading_evidence.jsonl（2026-09-18 证据驱动重建，不使用 URL 白名单）</p>
+
+  <div class="stat-row">
+    <div class="stat total"><div class="n">403</div><div class="l">URL 记录数<br>(目录399 + URL映射补录2 + 历史留痕2)</div></div>
+    <div class="stat read"><div class="n">346</div><div class="l">记录标记 read_full<br>(shard到底310 + 浏览器确认升级22 + 续读补全14)</div></div>
+    <div class="stat fail"><div class="n">10</div><div class="l">未取得有效正文<br>(empty_shell=10, 需核对重定向与正文)</div></div>
+    <div class="stat remain"><div class="n">47</div><div class="l">部分读取待核验<br>(47初始[x]精读无offset证据)</div></div>
+  </div>
+
+  <div class="gap-list">
+    <h3>关键缺口（影响设计落地）</h3>
+    <ul>
+      <li><b>单次 trace 与聚合观测分离已修正</b> — 单次 trace 的 duration 由 span 起止差计算（DurationMicroseconds/1000），错误来自 span Status/ErrorInfoList，调用次数按操作语义计数；P50/P95/QPS 独立聚合面板，不归属一次调用。</li>
+      <li><b>APMPlus trace 查询 API 设计文档可查</b> — GetTraceDetail（按 TraceId 查 span 树）、ListSpan（按时间范围+过滤条件）、ListSession（会话级 token 统计）。域名 apmplus-server.cn-beijing.volcengineapi.com，鉴权 AK/SK HMAC-SHA256 签名 V4，API Version 2026-01-01，BusinessCarrier=[PRODUCT]_runtime。</li>
+      <li><b>[BASE-AGENT] 采集适配点待 POC</b> — [BASE-AGENT] 不自动产生 [BASE-ADK] 埋点；shim 需在请求入口/调用 run_conversation/LLM 调用/工具执行四个位置注入 OTel tracer；OTel traceparent 贯通待实测。</li>
+      <li><b>组件调用证据映射待 POC</b> — 用 service.name+operation.name+gen_ai.agent.name/gen_ai.tool.name+资源 ID 映射到 component_id；碰撞标 unknown；observed-unmapped 节点单独展示。</li>
+      <li><b>Runtime 真实协议未实测</b> — 「非 [BASE-ADK] 镜像可跑（须满足运行时契约）」基于 API 文档与源码静态推断，网关探活路径/鉴权 header/SSE 事件格式未用一次真实 CreateRuntime 验证。</li>
+      <li><b>[BASE-AGENT] api_server surface 复用度未知</b> — gateway/run.py 中 api_server 路由表未深读，shim 工作量待估。</li>
+      <li><b>完整阅读要求尚未达标</b> — 47 条记录缺少完整阅读证据；10 条记录未取得匹配有效正文，不能据此推断原文档未发布。其余记录状态见阅读索引；这些统计不是对全部来源重新审计的保证。</li>
+      <li><b>运行验证未完成</b> — 已做依赖导入、参数与默认值、语法及源码结构离线检查；未实现 [DELIVERY]、未部署、未执行真实云端调用。文档核验不能替代运行时验证。</li>
+    </ul>
+  </div>
+
+  <div class="gap-list">
+    <h3>[BASE-AGENT] 适配方案对比</h3>
+    <div class="compare">
+      <div class="opt rec">
+        <h4>方案 A（推荐起步）：[BASE-AGENT] 原生主循环 + 薄 FastAPI shim</h4>
+        <p class="pros">优势：</p>
+        <ul>
+          <li>完全保留 [BASE-AGENT] 原生 loop / 工具 / skills / 自进化，[BASE-AGENT] 是真正底座</li>
+          <li>不要求 [BASE-AGENT] 继承 LlmAgent/BaseAgent，绕开类型不兼容</li>
+          <li>Runtime 侧须满足三层契约：层1 强制（端口/启动命令/健康检查存在/鉴权 KeyAuth 或 JWT/资源网络 IAM）；层2 可选 [BASE-ADK] 路由（/run /run_sse /sessions /ping）；层3 [DELIVERY] 自研 shim 逻辑</li>
+        </ul>
+        <p class="cons">代价：</p>
+        <ul>
+          <li>需自实现 Runtime HTTP 协议（鉴权 header / SSE 事件 / session 语义）</li>
+          <li>[BASE-AGENT] state.db 会话模型与 Runtime session 模型需对齐</li>
+        </ul>
+      </div>
+      <div class="opt">
+        <h4>方案 B：[BASE-AGENT] 包成类 BaseAgent wrapper，复用 [BASE-ADK]</h4>
+        <p class="pros">优势：</p>
+        <ul>
+          <li>零手写 Runtime 协议，白捡 [BASE-ADK] 的 HTTP/SSE/鉴权/session 全套</li>
+          <li>可被 ADK 编排（Sequential/Parallel/Loop/Supervisor）包裹</li>
+          <li>harness_extension 接口极窄（仅 sidecar_status_payload + close）</li>
+        </ul>
+        <p class="cons">代价：</p>
+        <ul>
+          <li>需把 AIAgent turn 语义翻译成 ADK Runner event stream（主要工程量）</li>
+          <li>耦合 [BASE-ADK] 版本（[PRODUCT]-sdk-python≥0.8.2 才支持 identity）</li>
+          <li>BaseAgent 抽象方法清单未读，wrapper 边界待补</li>
+        </ul>
+      </div>
+    </div>
+    <p style="font-size:11.5px;color:var(--muted);margin-top:10px">
+      注：方案 C「[BASE-ADK] 主 + [BASE-AGENT] MCP sidecar」不符合原需求约束（[BASE-AGENT]为底座），不采用此方案——它把底座让给 [BASE-ADK]，[BASE-AGENT] 退化为工具提供方，违背「[BASE-AGENT] 是 [DELIVERY] 底座」要求。且 [BASE-AGENT] mcp_serve.py 是 messaging bridge（10 个工具：会话/历史/事件/审批/出站消息），不是完整 agent loop，不能当「发 prompt→跑 loop→回答案」的 RPC。
+    </p>
+  </div>
+
+  <div class="foot">
+    本页面为设计文档可视化，所有「已接通/已部署」均标注为「设计目标 / 未执行」。证据基线：docs/lark-supplements/doc01~08、docs/volcengine-official/*.md、docs/[BASE-PAIR]/01~05*.md。
+  </div>
+</section>
+
+</main>
+
+<script>
+/* ===== Tab 切换 ===== */
+document.getElementById('nav').addEventListener('click', function(e){
+  var btn = e.target.closest('button'); if(!btn) return;
+  document.querySelectorAll('#nav button').forEach(function(b){b.classList.remove('active')});
+  btn.classList.add('active');
+  document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active')});
+  document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+
+/* ===== 架构图节点详情 ===== */
+var DETAILS = {
+  user:{title:'用户前端', tags:[['w','[DELIVERY] 自身']],
+    rows:[['用途','引导开发者完成 Eval-driven 开发的交互入口'],
+          ['关键交互','引导式 UI（对话/表单）+ 可交互架构图（节点点击下钻）+ Trace 覆盖层（运行时观测叠加在设计时拓扑上）'],
+          ['对应 Skill','无（前端层，非 [PRODUCT] 组件）'],
+          ['验证状态','设计目标 / 未实现']]},
+  [DELIVERY]:{title:'[DELIVERY] 底座（[BASE-AGENT] Agent）', tags:[['w','[DELIVERY] 自身'],['warn','未实测']],
+    rows:[['用途','[DELIVERY] 自身的主进程：原生主循环 AIAgent.run_conversation 驱动对话；薄 FastAPI shim 满足层1、按需补层2'],
+          ['关键 API','run_agent.AIAgent + agent/conversation_loop.run_conversation（模型调用→工具分发→重试/降级→上下文压缩→turn 后钩子）'],
+          ['shim 路由','层1 必须：POST /invoke 调用入口 + 健康检查端点（路径待POC）+ 端口/启动命令/鉴权；层2 按需：/run /run_sse /sessions /ping；不实现 /web/harness-sidecar/status'],
+          ['对应 Skill','[BASE-ADK]（框架参考）、[PRODUCT]-sdk（协议参考）；自研 [BASE-AGENT]-shim（待建）'],
+          ['验证状态','⚠️ 代码证据成熟（[BASE-AGENT] v0.21.1 commit e83b1d51），Runtime 容器内启动未实测']]},
+  evo:{title:'[BASE-AGENT] 自进化', tags:[['e','自进化流程'],['warn','未实测']],
+    rows:[['用途','后台审查 Fork 重放 trace → 生成记忆/Skill 改进提案（pending）→ 人工审批 → 回归测试 → 通过才发布生效；回归失败回退 pending'],
+          ['关键机制','memory.write_approval / skills.write_approval（写入进 pending）；安全扫描前置（prompt injection / 凭证泄露 / 后门模式）'],
+          ['纪律','坏 case 只扩充评测集，不改 baseline_locked 阈值；提案进入 pending，未经人工审批 + 回归通过不发布；回归失败回退 pending'],
+          ['对应 Skill','[BASE-AGENT]-self-evolution（[DELIVERY] 自研，见 04-[BASE-AGENT]-self-evolution.md）'],
+          ['验证状态','⚠️ 机制来自 [BASE-AGENT] 原生（01-[BASE-AGENT]-agent.md §3.2/§3.3），落地到 Runtime 未实测']]},
+  runtime:{title:'[PRODUCT] Runtime', tags:[['p','平台组件'],['part','部分核验']],
+    rows:[['用途','托管 [DELIVERY] 自身与目标 Agent 的在线服务实例'],
+          ['关键 API','CreateRuntime（ArtifactType=image + ArtifactUrl + RoleName + AuthorizerConfiguration.KeyAuth/Jwt + Envs + CpuMilli/MemoryMb）'],
+          ['核心约束','API 层框架无关、不强制镜像基于 [BASE-ADK]/create_[PRODUCT]_app；层1 强制：端口（默认8000）/启动命令 Command/健康检查/KeyAuth 或 JWT/资源网络 IAM；/run /run_sse /sessions /ping 是 [BASE-ADK]/ADK 应用层路由（SDK 最精简 [PRODUCT]SimpleApp 不含前三者），非 Runtime 强制；资源创建后不可换地域'],
+          ['对应 Skill','skills/[PRODUCT]-runtime/SKILL.md（✅ 已完成）'],
+          ['验证状态','✅ API 文档已读；⚠️ 真实 CreateRuntime 未执行（协议细节未实测）']]},
+  target:{title:'目标 Agent（用户选择框架）', tags:[['t','目标 Agent'],['part','设计目标']],
+    rows:[['用途','用户最终要上线的业务 Agent，框架由用户决定，[DELIVERY] 不替选'],
+          ['可选框架','[BASE-ADK] 高代码 / Codex / 自定义（[BASE-AGENT] 等任意框架）/ ADK workflow / Studio 低代码 / Harness 无代码 / 存量迁移'],
+          ['引导方式','Step3 决策树：是否存量 → 框架类型 → 开发偏好 → 生成 harness 配置 + 组件关联清单 + 评测方案'],
+          ['对应 Skill','按用户选择加载对应组件 Skill'],
+          ['验证状态','设计目标 / 未生成实例']]},
+  obs:{title:'观测（APMPlus + TLS）', tags:[['p','平台组件'],['ok','设计文档可查']],
+    rows:[['用途','Step4 真实取数的唯一数据源：哪个 Agent/Skill/MCP/知识库被调用、单次调用耗时/错误、聚合 QPS/P50/P95 趋势'],
+          ['单次 trace 数据','duration 由 span 起止差计算（DurationMicroseconds/1000）；错误来自 span Status/ErrorInfoList；调用次数按操作语义计数——不用聚合 Metrics'],
+          ['聚合观测面板','P50/P95/QPS 来自 Histogram/Counter 时间窗聚合，独立展示，不归属单次调用'],
+          ['APMPlus 查询 API','GetTraceDetail（按 TraceId 查 span 树）、ListSpan（按时间范围+过滤条件）、ListSession（会话级 token 统计）。域名 apmplus-server.cn-beijing.volcengineapi.com，鉴权 AK/SK HMAC-SHA256 签名 V4，API Version 2026-01-01，BusinessCarrier=[PRODUCT]_runtime'],
+          ['组件映射','用 service.name+operation.name+gen_ai.agent.name/gen_ai.tool.name+资源 ID 映射到 component_id；碰撞标 unknown；observed-unmapped 节点单独展示'],
+          ['关键约束','在线评测必须开启观测（05-runtime.md）；trace attribute Follow gen.ai 标准；线上 trace 可自动回流评测集'],
+          ['对应 Skill','skills/[PRODUCT]-observability/SKILL.md（✅ 设计完成 v1.0.0，三层分离已更新）'],
+          ['验证状态','✅ 字段契约已验证（浏览器 DOM）；✅ 查询 API 设计文档可查（API Explorer）；⚠️ [BASE-AGENT] 采集适配点/OTel 贯通待 POC']]},
+  eval:{title:'评测', tags:[['p','平台组件'],['ok','设计文档可查']],
+    rows:[['用途','[DELIVERY] 用评测集回归引导质量；为目标 Agent 生成准出门禁 + 评测集回流'],
+          ['三件套','评测集 + 评估器（内容质量/工具调用/轨迹质量）+ 评测实验'],
+          ['基线纪律','进入 Step2 的 EvalCase 标记 baseline_locked=true，自进化提案无权改写'],
+          ['对应 Skill','skills/[PRODUCT]-evaluation/SKILL.md（✅ 设计完成 v1.0.0）'],
+          ['验证状态','✅ 概念已读；⚠️ 评测集回流对接（本地会话不回流，须走线上 Runtime）待核验']]},
+  gw:{title:'网关 / MCP', tags:[['p','平台组件'],['ok','设计文档可查']],
+    rows:[['用途','目标 Agent 调企业存量 API / 已有 MCP Server / 统一模型代理'],
+          ['关键能力','OpenAPI 转 MCP、凭据托管、语义检索降本 60%；Runtime 网关与 MCP 网关是两套独立实例、分别计费'],
+          ['四层验收','①接入层 HTTP 状态 ②tools/list 可见 ③tools/call isError=false ④后端真实执行'],
+          ['对应 Skill','skills/[PRODUCT]-gateway-mcp/SKILL.md（✅ 设计完成 v1.0.0）'],
+          ['验证状态','✅ 概述已读；✅ MCP API 文件规范正文已通过浏览器 DOM 补读（Swagger 2.0/OpenAPI 3.0.1）']]},
+  id:{title:'身份权限', tags:[['p','平台组件'],['ok','设计文档可查']],
+    rows:[['用途','[DELIVERY] 自身受保护；目标 Agent 上线真人用户前的 AuthN/AuthZ'],
+          ['关键组件','UserPool / WorkloadPool / Credential Provider / Cedar 授权；API Key ≠ Workload Identity'],
+          ['关键坑','Allowed Clients 空=允许所有人；ID Token 不能当 Bearer；Workload Access Token issuer/JWKS/audience 手册未闭环'],
+          ['对应 Skill','skills/[PRODUCT]-identity-permission/SKILL.md（✅ 已完成）'],
+          ['验证状态','✅ 八步身份链 + 四职责分离 + 负向测试已读']]},
+  kb:{title:'知识库（VikingDB RAG）', tags:[['p','平台组件'],['ok','设计文档可查']],
+    rows:[['用途','文档问答 / RAG 类目标；[DELIVERY] 自演化沉淀的文档可入知识库供检索'],
+          ['区分','知识库=知道什么事实；记忆=用户画像/偏好（09-session-memory.md）'],
+          ['关键能力','查看切片详情，用于验收「答案引用了目标切片」'],
+          ['对应 Skill','skills/[PRODUCT]-knowledge-base/SKILL.md（✅ 已完成）'],
+          ['验证状态','✅ 已读']]},
+  a2a:{title:'A2A Registry', tags:[['p','平台组件'],['ok','设计文档可查']],
+    rows:[['用途','多 Agent 互相发现调用（Provider/Consumer）；复杂 Agent Mesh/Team 仍 POC 非现网'],
+          ['关键能力','AgentCard 注册、SearchAgentCards 语义检索；动态 A2A：build_remote_a2a_agent_tools'],
+          ['对应 Skill','skills/[PRODUCT]-a2a-registry/SKILL.md（✅ 已完成）'],
+          ['验证状态','✅ 概念已读；✅ A2A 智能体 JSON 示例已通过浏览器 DOM 补读（A2A 0.3.0 AgentCard 全字段）']]},
+  sk:{title:'Skills 中心', tags:[['p','平台组件'],['ok','设计文档可查']],
+    rows:[['用途','[DELIVERY] 自身组件能力全部 Skill 化；把业务方法/SOP 沉淀为可复用 Skill'],
+          ['三种挂载','Hub slug / Space 全量 / space:skill 精准；渐进式披露不占固定 token'],
+          ['关键坑','Skill Hub 只发内容不分发其声明的 MCP，MCP 需自配'],
+          ['对应 Skill','skills/[PRODUCT]-skills/SKILL.md（✅ 设计完成 v1.0.0）'],
+          ['验证状态','✅ 三种挂载方式已读']]},
+  sb:{title:'沙箱 Sandbox', tags:[['p','平台组件'],['ok','设计文档可查']],
+    rows:[['用途','[DELIVERY] 让 Codex 在隔离环境生成/验证代码与 Skill；目标 Agent 跑代码/不可信逻辑/并行子任务'],
+          ['选型','AIO / Skills / Code / ArkClaw / [BASE-AGENT]（按场景选）'],
+          ['关键坑','TOS 只挂产物/工作空间别全量挂；session 隔离'],
+          ['对应 Skill','skills/[PRODUCT]-sandbox/SKILL.md（✅ 设计完成 v1.0.0）'],
+          ['验证状态','✅ 沙箱矩阵已读']]},
+  guard:{title:'安全围栏', tags:[['p','平台组件'],['ok','设计文档可查']],
+    rows:[['用途','[DELIVERY] 自身防注入/防滥用；目标 Agent 对公网/PII 场景必开'],
+          ['依据','OWASP LLM Top10：注入/滥用/敏感数据/算力；Runtime 勾选开启大模型应用防火墙'],
+          ['对应 Skill','skills/[PRODUCT]-guardrails/SKILL.md（✅ 设计完成 v1.0.0）'],
+          ['验证状态','✅ 概念已读']]},
+  mem:{title:'会话记忆管理', tags:[['p','平台组件'],['ok','设计文档可查']],
+    rows:[['用途','[DELIVERY] 跨会话记住用户项目状态；目标 Agent 多轮/跨会话体验'],
+          ['三层架构','Session（会话资源 PG/Serverless PG）/ 短期 / 长期记忆（mem0/viking）'],
+          ['关键坑','长期记忆约 1 分钟抽取后才可读出；viking_mem 已废弃转 viking'],
+          ['对应 Skill','skills/[PRODUCT]-session-memory/SKILL.md（✅ 设计完成 v1.0.0）'],
+          ['验证状态','✅ 三层架构已读']]}
+};
+function showDetail(id){
+  var d = DETAILS[id]; if(!d) return;
+  document.querySelectorAll('.node').forEach(function(n){n.classList.remove('selected')});
+  var el = document.querySelector('.node[data-id="'+id+'"]');
+  if(el) el.classList.add('selected');
+  var card = document.getElementById('detail-card');
+  var tags = d.tags.map(function(t){return '<span class="tag '+t[0]+'">'+t[1]+'</span>'}).join('');
+  var rows = d.rows.map(function(r){return '<tr><th>'+r[0]+'</th><td>'+r[1]+'</td></tr>'}).join('');
+  card.innerHTML = '<h3>'+d.title+'</h3><div class="meta">'+tags+'</div><table class="detail-grid" style="border-collapse:collapse">'+rows+'</table>';
+  card.classList.add('show');
+}
+
+/* ===== 流程步骤详情 ===== */
+var STEPS = {
+  1:{title:'Step 1：确定业务目标', rows:[
+    ['输入','用户自然语言（一句话或零散需求）'],
+    ['[DELIVERY] 行为','识别是否存量迁移（LangChain/ADK/Dify）；识别是否长链路任务（跨系统排障/日志分析/代码迁移）；grill-with-docs 逐题深挖 或 直接生成 Goal Card 草稿'],
+    ['用户交互','回答访谈问题 / 修改草稿目标定义卡'],
+    ['输出','目标定义卡 Goal Card（场景/任务/输入输出/期望产出/非目标/长链路标记/迁移标记）'],
+    ['验收标准','目标可被一句成功标准复述，且用户确认；[DELIVERY] 能判定任务类型（RAG/工具调用/代码执行/多Agent）']]},
+  2:{title:'Step 2：确定验收标准与评测判断方式', rows:[
+    ['输入','Goal Card'],
+    ['[DELIVERY] 行为','把目标翻译成可独立验证的结果；生成 5–10 条种子 EvalCase；强制四层分别断言（接入/工具可见/调用/真实效果）'],
+    ['用户交互','确认/修改评测点，选择判断方式（artifact/external_state/llm_judge/rule）'],
+    ['输出','验收标准模板 + 评测集种子（baseline_locked=true）'],
+    ['验收标准','每条验收都有「如何判断通过」；至少一条 artifact 或 external_state 硬验收；不接受 Agent 自称完成']]},
+  3:{title:'Step 3：架构设计（组件选择引导 + Skill 调用）', rows:[
+    ['输入','Goal Card + 验收标准'],
+    ['[DELIVERY] 行为','按目标信号逐个判定 14 组件选/不选；调用对应 Skill 的前置条件检查；生成设计时拓扑图 + harness 配置草案'],
+    ['用户交互','决策树选择（框架/网关形态/是否多Agent等）；确认每个组件选用理由'],
+    ['输出','设计时拓扑 + harness.yaml/[PRODUCT].yaml 草案 + 组件关联清单'],
+    ['验收标准','每个组件选/弃都有一句话理由；配置草案已生成但未部署']]},
+  4:{title:'Step 4：测试验证 + 观测 trace 取数', rows:[
+    ['输入','设计时拓扑 + 评测集种子 + harness 草案'],
+    ['[DELIVERY] 行为','在隔离 Sandbox/测试 Runtime 触发评测集；单次 trace 从 APMPlus GetTraceDetail 按 TraceId 拉 span 树（duration=span 起止差、错误=span Status/ErrorInfoList、次数=操作语义计数）；聚合 P50/P95/QPS 独立面板；渲染设计态 vs 运行态对照；与 Step2 验收逐项对照'],
+    ['用户交互','看真实 trace 报告，判断通过/失败；失败项进入自进化闭环'],
+    ['输出','运行时 trace 报告 + 评测结论（每个数字附来源：APMPlus GetTraceDetail span / TLS 日志 / 本地测试）'],
+    ['验收标准','Step2 每条验收有通过/失败结论 + 证据；运行态与设计态拓扑并排展示，差异高亮；观测缺失标「未知/无数据」不编数；单次 trace 不用聚合 Metrics']]}
+};
+function toggleStep(n){
+  var el = document.querySelector('.step[data-step="'+n+'"]');
+  var wasOpen = el.classList.contains('open');
+  document.querySelectorAll('.step').forEach(function(s){s.classList.remove('open')});
+  var box = document.getElementById('step-details');
+  if(wasOpen){ box.innerHTML=''; return; }
+  el.classList.add('open');
+  var s = STEPS[n];
+  var rows = s.rows.map(function(r){return '<tr><th>'+r[0]+'</th><td>'+r[1]+'</td></tr>'}).join('');
+  box.innerHTML = '<div class="step-detail show"><table>'+rows+'</table></div>';
+}
+
+/* ===== 组件映射 ===== */
+var COMPS = [
+  {n:1, name:'SDK', cat:'core', wiz:'入口代码用 [PRODUCT]SimpleApp 写', tgt:'所有高代码目标 Agent 的入口骨架', skill:'skills/[PRODUCT]-sdk/SKILL.md', status:'ok', stxt:'已完成'},
+  {n:2, name:'[BASE-ADK]', cat:'core', wiz:'框架参考（[DELIVERY] 底座已改为 [BASE-AGENT]）', tgt:'高代码目标 Agent 的 Agent/Runner 本体', skill:'skills/[BASE-ADK]/SKILL.md', status:'ok', stxt:'设计完成 v1.0.0'},
+  {n:3, name:'ADK workflow', cat:'core', wiz:'引导状态机可借 Sequential/Parallel/Supervisor 表达', tgt:'多步编排（顺序/并行/循环/Supervisor）', skill:'skills/adk-workflow/SKILL.md', status:'ok', stxt:'设计完成 v1.0.0'},
+  {n:4, name:'知识库 VikingDB', cat:'integ', wiz:'自演化沉淀文档可入库供检索', tgt:'文档问答 / RAG 类目标', skill:'skills/[PRODUCT]-knowledge-base/SKILL.md', status:'ok', stxt:'已完成'},
+  {n:5, name:'A2A Registry', cat:'integ', wiz:'与目标 Agent 互相发现时注册', tgt:'多 Agent 互相调用（Provider/Consumer）', skill:'skills/[PRODUCT]-a2a-registry/SKILL.md', status:'ok', stxt:'已完成'},
+  {n:6, name:'Skills 中心', cat:'integ', wiz:'自身组件能力全部 Skill 化', tgt:'把业务方法/SOP 沉淀为可复用 Skill', skill:'skills/[PRODUCT]-skills/SKILL.md', status:'ok', stxt:'设计完成 v1.0.0'},
+  {n:7, name:'网关 / MCP', cat:'integ', wiz:'调企业存量 API 经此接入', tgt:'目标 Agent 调企业系统 / 模型代理', skill:'skills/[PRODUCT]-gateway-mcp/SKILL.md', status:'ok', stxt:'设计完成 v1.0.0'},
+  {n:8, name:'身份权限', cat:'ops', wiz:'自身受 UserPool+Cedar 保护', tgt:'上线真人用户前的 AuthN/AuthZ', skill:'skills/[PRODUCT]-identity-permission/SKILL.md', status:'ok', stxt:'已完成'},
+  {n:9, name:'安全围栏', cat:'ops', wiz:'自身防注入/防滥用', tgt:'对公网/敏感数据场景必开', skill:'skills/[PRODUCT]-guardrails/SKILL.md', status:'ok', stxt:'设计完成 v1.0.0'},
+  {n:10, name:'评测', cat:'ops', wiz:'用评测集回归引导质量', tgt:'目标 Agent 准出门禁 + 评测集回流', skill:'skills/[PRODUCT]-evaluation/SKILL.md', status:'ok', stxt:'设计完成 v1.0.0'},
+  {n:11, name:'观测', cat:'ops', wiz:'Step4 真实取数唯一数据源（单次 trace span 数据 + 聚合面板分离）', tgt:'所有目标 Agent 排障与 trace 来源', skill:'skills/[PRODUCT]-observability/SKILL.md', status:'ok', stxt:'设计完成 v1.0.0（三层分离已更新）'},
+  {n:12, name:'沙箱 Sandbox', cat:'integ', wiz:'让 Codex 在隔离环境生成/验证代码', tgt:'跑代码/不可信逻辑/并行子任务', skill:'skills/[PRODUCT]-sandbox/SKILL.md', status:'ok', stxt:'设计完成 v1.0.0'},
+  {n:13, name:'Runtime', cat:'core', wiz:'自身部署载体；也承载目标 Agent', tgt:'目标 Agent 的托管服务实例', skill:'skills/[PRODUCT]-runtime/SKILL.md', status:'ok', stxt:'已完成'},
+  {n:14, name:'会话记忆', cat:'integ', wiz:'跨会话记住用户项目状态', tgt:'多轮/跨会话体验', skill:'skills/[PRODUCT]-session-memory/SKILL.md', status:'ok', stxt:'设计完成 v1.0.0'}
+];
+function renderComps(cat){
+  var g = document.getElementById('comp-grid');
+  g.innerHTML = '';
+  COMPS.filter(function(c){return cat==='all'||c.cat===cat}).forEach(function(c){
+    var st = c.status==='ok'?'<span class="tag ok">文档已整理</span>':c.status==='part'?'<span class="tag part">部分核验</span>':'<span class="tag warn">待核验</span>';
+    g.innerHTML += '<div class="comp-card">'+
+      '<div class="ch"><h4>'+c.name+'</h4><span class="num">#'+c.n+'</span></div>'+
+      '<div class="role"><b>[DELIVERY] 自身：</b>'+c.wiz+'</div>'+
+      '<div class="role trole"><b>目标 Agent：</b>'+c.tgt+'</div>'+
+      '<span class="skill">'+c.skill+'</span>'+
+      '<div style="margin-top:8px">'+st+' <span style="font-size:11px;color:var(--muted)">'+c.stxt+'</span></div>'+
+    '</div>';
+  });
+}
+renderComps('all');
+document.getElementById('comp-filters').addEventListener('click', function(e){
+  var btn = e.target.closest('button'); if(!btn) return;
+  document.querySelectorAll('#comp-filters button').forEach(function(b){b.classList.remove('active')});
+  btn.classList.add('active');
+  renderComps(btn.dataset.cat);
+});
+</script>
+</body>
+</html>
+
+
+<!-- 措辞与契约修正记录（2026-09-18）
+  - Runtime 节点副标题、缺口说明、runtime 详情面板「核心约束」由「托管任意 OCI 容器/任意 OCI 容器可跑」改为「不强制 [BASE-ADK] 镜像但须满足运行时契约（端口/健康检查/调用协议/鉴权/生命周期/网络与 IAM）」。
+  - 方案 C 注释「已被明确否决」改为「不符合原需求约束（[BASE-AGENT]为底座），不采用此方案」。
+  只改措辞与契约描述，不改变技术结论；原有正确内容保留。
+
+  三层契约修正（2026-09-18，二次核验，源码实证）：
+  - shim 节点与 [DELIVERY] 详情面板「shim 路由」、runtime 节点副标题与「核心约束」改为三层口径：
+    层1 Runtime 强制（端口默认8000/启动命令 Command/健康检查/KeyAuth或JWT/资源网络 IAM）；
+    层2 [BASE-ADK]/SDK 应用层可选路由（/run /run_sse /sessions /ping，非 Runtime 强制）；
+    反证：SDK 最精简 [PRODUCT]SimpleApp 只含 /invoke + 四个健康探针，无 /run /run_sse /sessions。
+  - [BASE-AGENT] 主路径不实现 /web/harness-sidecar/status（[BASE-ADK] harness_extension 层）。
+-->

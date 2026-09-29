@@ -1,0 +1,57 @@
+{
+  "experiment_id": "<REDACTED_ID>",
+  "experiment_name": "online-eval-20260928231256-exp",
+  "status": 11,
+  "terminal": true,
+  "workspace_id": "<REDACTED_ID>",
+  "project_name": "default",
+  "runtime_id": "<REDACTED_ID>",
+  "a2a_agent_id": "<REDACTED_ID>",
+  "dataset_id": "<REDACTED_ID>",
+  "dataset_version": "0.0.1",
+  "evaluator_version_id": "<REDACTED_ID>",
+  "success_turns": 3,
+  "failed_turns": 0,
+  "average_score": 1.0,
+  "average_target_latency_ms": 1916.33,
+  "judge_input_tokens": 1237,
+  "judge_output_tokens": 734,
+  "rows": [
+    {
+      "input": "计算负5加12，只回答数字",
+      "reference_output": "7",
+      "actual_output": "7",
+      "score": 1.0,
+      "reasoning": "The model's output 7 is the correct calculation result of negative 5 plus 12, which fully meets the requirement of only returning the number, with no factual errors, missing information or wrong statements.",
+      "target_latency_ms": 1798,
+      "judge_input_tokens": 411,
+      "judge_output_tokens": 267,
+      "target_trace_id": "<REDACTED_ID>",
+      "evaluator_trace_id": "<REDACTED_ID>"
+    },
+    {
+      "input": "计算100减37，只回答数字",
+      "reference_output": "63",
+      "actual_output": "63",
+      "score": 1.0,
+      "reasoning": "The calculation result of 100 minus 37 is 63, the output content is the correct required number, there is no factual error, the information is accurate and complete, which fully meets the requirements of the question.",
+      "target_latency_ms": 2209,
+      "judge_input_tokens": 414,
+      "judge_output_tokens": 223,
+      "target_trace_id": "<REDACTED_ID>",
+      "evaluator_trace_id": "<REDACTED_ID>"
+    },
+    {
+      "input": "计算12乘8，只回答数字",
+      "reference_output": "96",
+      "actual_output": "96",
+      "score": 1.0,
+      "reasoning": "用户要求计算12乘8且仅返回数字，模型输出的96是12乘8的正确运算结果，信息准确无误，完全满足问题的所有要求，不存在事实错误、信息缺失等问题。",
+      "target_latency_ms": 1742,
+      "judge_input_tokens": 412,
+      "judge_output_tokens": 244,
+      "target_trace_id": "<REDACTED_ID>",
+      "evaluator_trace_id": "<REDACTED_ID>"
+    }
+  ]
+}

@@ -1,0 +1,128 @@
+{
+  "generated_at": "2026-09-28",
+  "repo": "/home/user/Documents/agentkit_dev_skills",
+  "package_dir": "/home/user/Documents/agentkit_dev_skills/benchmark_20260928/iteration2/package",
+  "fixed_timestamp": "2026-09-28T00:00:00",
+  "verify_all": {
+    "ok": true,
+    "generated_at": "2026-09-28T22:38:10",
+    "checks": {
+      "skill_structure": true,
+      "code_blocks": true,
+      "pytest": true,
+      "secret_scan": true,
+      "duplicate_skills": true,
+      "reference_links": true
+    },
+    "pytest_suites": [
+      {
+        "name": "benchmark_tests",
+        "rc": 0,
+        "passed": 53,
+        "failed": 0,
+        "duration_s": 11.3
+      },
+      {
+        "name": "iteration2_evaluation",
+        "rc": 0,
+        "passed": 9,
+        "failed": 0,
+        "duration_s": 103.8
+      },
+      {
+        "name": "iteration2_cold_start",
+        "rc": 0,
+        "passed": 7,
+        "failed": 0,
+        "duration_s": 2.5
+      }
+    ],
+    "formal_skill_count": 14
+  },
+  "exclusion_rules": {
+    "global_dir_parts": [
+      ".backups",
+      ".git",
+      ".pytest_cache",
+      ".ruff_cache",
+      ".venv",
+      "__pycache__",
+      "_backup",
+      "backup_skills",
+      "node_modules"
+    ],
+    "skills_zip": [
+      "exclude .DS_Store",
+      "exclude any filename containing '.bak' (*.bak, *.bak-*)",
+      "exclude backup/cache/venv directory parts",
+      "include 14 formal skills, skills/README.md, skills/references/, and per-component references/ & scripts/; SKILL-TEMPLATE.md kept (authoring template, not on exclusion list, shipped by prior pkg)"
+    ],
+    "benchmark_zip": [
+      "roots: benchmark_20260928/{README.md,harness,tests,journal,audit,iteration2}",
+      "exclude iteration2/backup_skills/",
+      "exclude iteration2/package/ (self)",
+      "exclude .venv/.pytest_cache/__pycache__/.ruff_cache/.git/.DS_Store",
+      "include iteration2/{cold_start,evaluation,reports,security,verification,references}"
+    ]
+  },
+  "archives": [
+    {
+      "label": "skills",
+      "zip": "/home/user/Documents/agentkit_dev_skills/benchmark_20260928/iteration2/package/agentkit-skills-iteration2-20260928.zip",
+      "zip_name": "agentkit-skills-iteration2-20260928.zip",
+      "manifest": "/home/user/Documents/agentkit_dev_skills/benchmark_20260928/iteration2/package/agentkit-skills-iteration2-20260928.zip.sha256.json",
+      "entry_count": 22,
+      "uncompressed_bytes": 290275,
+      "compressed_bytes": 127658,
+      "crc_test": {
+        "ok": true,
+        "first_bad_entry": null,
+        "entries": 22,
+        "dir_entries": []
+      },
+      "package_sha256": "3392da92340489d69d0dce5d883fb831c7fd6c702f93d18890b978cd2d7ea2f8",
+      "secret_scan": {
+        "ok": true,
+        "files_scanned": 22,
+        "findings": [],
+        "patterns_checked": [
+          "aws_access_key_id",
+          "private_key_block",
+          "github_token",
+          "slack_token",
+          "openai_api_key",
+          "aws_secret_key_assign"
+        ]
+      }
+    },
+    {
+      "label": "benchmark",
+      "zip": "/home/user/Documents/agentkit_dev_skills/benchmark_20260928/iteration2/package/agentkit-benchmark-iteration2-20260928.zip",
+      "zip_name": "agentkit-benchmark-iteration2-20260928.zip",
+      "manifest": "/home/user/Documents/agentkit_dev_skills/benchmark_20260928/iteration2/package/agentkit-benchmark-iteration2-20260928.zip.sha256.json",
+      "entry_count": 57,
+      "uncompressed_bytes": 263191,
+      "compressed_bytes": 123407,
+      "crc_test": {
+        "ok": true,
+        "first_bad_entry": null,
+        "entries": 57,
+        "dir_entries": []
+      },
+      "package_sha256": "4e3cf427fe1217a907ad60efa2aa1e30e525aad52a45c2ba4626577fc495f4f6",
+      "secret_scan": {
+        "ok": true,
+        "files_scanned": 57,
+        "findings": [],
+        "patterns_checked": [
+          "aws_access_key_id",
+          "private_key_block",
+          "github_token",
+          "slack_token",
+          "openai_api_key",
+          "aws_secret_key_assign"
+        ]
+      }
+    }
+  ]
+}

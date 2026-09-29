@@ -1,0 +1,109 @@
+# .mailmap — canonical author mapping for git shortlog / git log / GitHub
+# Format: Canonical Name <canonical@email> <commit@email>
+# See: https://git-scm.com/docs/gitmailmap
+#
+# This maps commit emails to GitHub noreply addresses so that:
+# 1. `git shortlog -sn` shows deduplicated contributor counts
+# 2. GitHub's contributor graph can attribute commits correctly
+# 3. Contributors with personal/work emails get proper credit
+#
+# When adding entries: use the contributor's GitHub noreply email as canonical
+# so GitHub can link commits to their profile.
+
+# === Teknium (multiple emails) ===
+Teknium <user@example.com> <user@example.com>
+Teknium <user@example.com> <user@example.com>
+
+# === Contributors — personal/work emails mapped to GitHub noreply ===
+# Format: Canonical Name <GH-noreply> <commit-email>
+
+# Verified via GH API email search
+kshitijk4poor <user@example.com> <user@example.com>
+luyao618 <user@example.com> <user@example.com>
+ethernet8023 <user@example.com> <user@example.com>
+nicoloboschi <user@example.com> <user@example.com>
+cherifya <user@example.com> <user@example.com>
+BongSuCHOI <user@example.com> <user@example.com>
+dsocolobsky <user@example.com> <user@example.com>
+pefontana <user@example.com> <user@example.com>
+Helmi <user@example.com> <user@example.com>
+hata1234 <user@example.com> <user@example.com>
+
+# Verified via PR investigation / salvage PR bodies
+DeployFaith <user@example.com> <user@example.com>
+flobo3 <user@example.com> <user@example.com>
+gaixianggeng <user@example.com> <user@example.com>
+KUSH42 <user@example.com> <user@example.com>
+konsisumer <user@example.com> <user@example.com>
+WorldInnovationsDepartment <user@example.com> <user@example.com>
+m0n5t3r <user@example.com> <user@example.com>
+sprmn24 <user@example.com> <user@example.com>
+fancydirty <user@example.com> <user@example.com>
+fxfitz <user@example.com> <user@example.com>
+limars874 <user@example.com> <user@example.com>
+AaronWong1999 <user@example.com> <user@example.com>
+dippwho <user@example.com> <user@example.com>
+duerzy <user@example.com> <user@example.com>
+geoffwellman <user@example.com> <user@example.com>
+hcshen0111 <user@example.com> <user@example.com>
+jamesarch <user@example.com> <user@example.com>
+stephenschoettler <user@example.com> <user@example.com>
+Tranquil-Flow <user@example.com> <user@example.com>
+Dusk1e <user@example.com> <user@example.com>
+Awsh1 <user@example.com> <user@example.com>
+WAXLYY <user@example.com> <user@example.com>
+donrhmexe <user@example.com> <user@example.com>
+hqhq1025 <user@example.com> <user@example.com>
+BlackishGreen33 <user@example.com> <user@example.com>
+tomqiaozc <user@example.com> <user@example.com>
+MagicRay1217 <user@example.com> <user@example.com>
+aaronagent <user@example.com> <user@example.com>
+YoungYang963 <user@example.com> <user@example.com>
+LongOddCode <user@example.com> <user@example.com>
+Cafexss <user@example.com> <user@example.com>
+Cygra <user@example.com> <user@example.com>
+DomGrieco <user@example.com> <user@example.com>
+
+# Duplicate email mapping (same person, multiple emails)
+Sertug17 <user@example.com> <user@example.com>
+yyovil <user@example.com> <user@example.com>
+DomGrieco <user@example.com> <user@example.com>
+dsocolobsky <user@example.com> <user@example.com>
+olafthiele <user@example.com> <user@example.com>
+
+# Verified via git display name matching GH contributor username
+cokemine <user@example.com> <user@example.com>
+dalianmao000 <user@example.com> <user@example.com>
+emozilla <user@example.com> <user@example.com>
+jjovalle99 <user@example.com> <user@example.com>
+kagura-agent <user@example.com> <user@example.com>
+spniyant <user@example.com> <user@example.com>
+olafthiele <user@example.com> <user@example.com>
+r266-tech <user@example.com> <user@example.com>
+xingkongliang <user@example.com> <user@example.com>
+win4r <user@example.com> <user@example.com>
+zhouboli <user@example.com> <user@example.com>
+yongtenglei <user@example.com> <user@example.com>
+
+# Nous Research team
+benbarclay <user@example.com> <user@example.com>
+yoniebans <user@example.com> <user@example.com>
+
+# GH contributor list verified
+spideystreet <user@example.com> <user@example.com>
+dorukardahan <user@example.com> <user@example.com>
+MustafaKara7 <user@example.com> <user@example.com>
+Hmbown <user@example.com> <user@example.com>
+kamil-gwozdz <user@example.com> <user@example.com>
+kira-ariaki <user@example.com> <user@example.com>
+knopki <user@example.com> <user@example.com>
+Unayung <user@example.com> <user@example.com>
+SeeYangZhi <user@example.com> <user@example.com>
+Julientalbot <user@example.com> <user@example.com>
+lesterli <user@example.com> <user@example.com>
+JiayuuWang <user@example.com> <user@example.com>
+tesseracttars-creator <user@example.com> <user@example.com>
+xinbenlv <user@example.com> <user@example.com>
+SaulJWu <user@example.com> <user@example.com>
+angelos <user@example.com> <user@example.com>
+MestreY0d4-Uninter <user@example.com> <user@example.com>

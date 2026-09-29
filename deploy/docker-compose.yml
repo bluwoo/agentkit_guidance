@@ -1,0 +1,47 @@
+# Local single-command stack for the AgentKit Wizard backend.
+#
+#   docker compose -f deploy/docker-compose.yml up --build
+#
+# Open http://localhost:8000  (API + prebuilt SPA, if web/dist was built).
+#
+# The image defaults to WIZARD_MODE=production (fail-closed). For LOCAL demos
+# this compose file overrides it to "mock" so you get the deterministic offline
+# Hermes bridge with no LLM credentials. To run the image's production path
+# locally, set WIZARD_MODE=production AND provide WIZARD_LLM_* + WIZARD_ALLOWED_ORIGINS.
+# See DEPLOYMENT.md for the full environment-variable table.
+
+services:
+  wizard:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    image: agentkit-wizard:local
+    container_name: agentkit-wizard
+    ports:
+      - "8000:8000"
+    environment:
+      # --- Mode: "mock" (offline deterministic bridge) | "local" | "production" ---
+      # Production refuses to start without WIZARD_LLM_* and WIZARD_ALLOWED_ORIGINS.
+      WIZARD_MODE: "mock"
+      # --- Runtime auth (leave RUNTIME_API_KEY empty for open local dev) ---
+      RUNTIME_API_KEY: ""
+      # --- Hermes bridge: blank in mock mode; required in production/local-real ---
+      WIZARD_LLM_BASE_URL: ""
+      WIZARD_LLM_API_KEY: ""
+      WIZARD_LLM_MODEL: ""
+      # --- CORS allowlist: required (non-empty, no "*") when WIZARD_MODE=production ---
+      WIZARD_ALLOWED_ORIGINS: ""
+      # --- Observability: blank -> console/no-op, APMPlus -> not_configured ---
+      OTEL_EXPORTER_OTLP_ENDPOINT: ""
+      APMPLUS_ACCESS_KEY: ""
+      APMPLUS_SECRET_KEY: ""
+      # --- Persistence ---
+      WIZARD_DATA_DIR: /app/wizard_data
+      # Serve the built SPA at "/" by default (set to "" to run API-only).
+      SERVE_FRONTEND_DIST: /app/web/dist
+    volumes:
+      - wizard_data:/app/wizard_data
+    restart: unless-stopped
+
+volumes:
+  wizard_data:

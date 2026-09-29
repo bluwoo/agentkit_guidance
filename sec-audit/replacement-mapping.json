@@ -1,0 +1,55 @@
+{
+  "generated_at": "2026-09-29",
+  "mappings": [
+    {
+      "category": "private_project_codename",
+      "replacement": "<PROJECT_NAME>"
+    },
+    {
+      "category": "cloud_account_or_tenant_id",
+      "replacement": "<ACCOUNT_ID>"
+    },
+    {
+      "category": "cloud_resource_id",
+      "replacement": "<RESOURCE_ID> or typed placeholder"
+    },
+    {
+      "category": "runtime_or_gateway_endpoint",
+      "replacement": "<ENDPOINT>"
+    },
+    {
+      "category": "registry_host_or_image",
+      "replacement": "<REGISTRY_HOST>/<IMAGE>"
+    },
+    {
+      "category": "workspace_or_experiment_identifier",
+      "replacement": "<WORKSPACE_ID>/<EXPERIMENT_ID>"
+    },
+    {
+      "category": "trace_or_session_identifier",
+      "replacement": "<TRACE_ID>/<SESSION_ID>"
+    },
+    {
+      "category": "user_identity_or_email",
+      "replacement": "<USER_ID>/<CONTACT_EMAIL>"
+    },
+    {
+      "category": "credential_or_token",
+      "replacement": "environment variable or <SECRET>"
+    },
+    {
+      "category": "temporary_test_prefix",
+      "replacement": "sample-* or <TASK_PREFIX>"
+    },
+    {
+      "category": "local_absolute_path",
+      "replacement": "relative path or $PROJECT_ROOT"
+    }
+  ],
+  "preserved_public_terms": [
+    "AgentKit",
+    "veADK",
+    "Google ADK",
+    "Hermes"
+  ]
+}

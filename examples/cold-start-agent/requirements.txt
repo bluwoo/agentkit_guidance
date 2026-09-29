@@ -1,0 +1,6 @@
+veadk-python[extensions]==1.1.13
+agentkit-sdk-python==0.8.7
+google-adk==2.2.0
+mcp==1.26.0
+pytest==9.1.1
+pytest-asyncio==1.4.0

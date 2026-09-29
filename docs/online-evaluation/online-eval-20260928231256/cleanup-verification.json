@@ -1,0 +1,11 @@
+{
+  "experiment_retained": true,
+  "experiment_terminal": true,
+  "success_turns": 3,
+  "failed_turns": 0,
+  "a2a_target_present": false,
+  "dataset_present": false,
+  "evaluator_present": false,
+  "runtime_present": false,
+  "cr_tag_count": 0
+}

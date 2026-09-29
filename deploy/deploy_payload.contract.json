@@ -1,0 +1,64 @@
+{
+  "ProjectName": "default",
+  "Name": "agentkit-wizard",
+  "Description": "AgentKit Wizard (Hermes 0.21.3 + FastAPI shim)",
+  "ArtifactType": "image",
+  "ArtifactUrl": "<REGISTRY>/agentkit/agentkit-wizard:0.21.3",
+  "RoleName": "<RUNTIME_ROLE_NAME>",
+  "AuthorizerConfiguration": {
+    "KeyAuth": {
+      "ApiKeyLocation": "Header",
+      "ApiKeyName": "X-Api-Key"
+    }
+  },
+  "Envs": [
+    {
+      "Key": "WIZARD_MODE",
+      "Value": "production"
+    },
+    {
+      "Key": "SERVE_FRONTEND_DIST",
+      "Value": "/app/web/dist"
+    },
+    {
+      "Key": "WIZARD_DATA_DIR",
+      "Value": "/app/wizard_data"
+    },
+    {
+      "Key": "WIZARD_LLM_BASE_URL",
+      "Value": "https://ark.cn-beijing.volces.com/api/v3"
+    },
+    {
+      "Key": "WIZARD_LLM_API_KEY",
+      "Value": "<redacted>"
+    },
+    {
+      "Key": "WIZARD_LLM_MODEL",
+      "Value": "doubao-pro-32k"
+    },
+    {
+      "Key": "WIZARD_ALLOWED_ORIGINS",
+      "Value": "https://wizard.example.com"
+    }
+  ],
+  "NetworkConfiguration": {
+    "EnablePublicNetwork": true
+  },
+  "ClientToken": "<CLIENT_TOKEN>",
+  "CpuMilli": 2000,
+  "MemoryMb": 4096,
+  "MaxInstance": 3,
+  "ApmplusEnable": true,
+  "Tags": [
+    {
+      "Key": "managed_by",
+      "Value": "agentkit-wizard",
+      "Type": "custom"
+    },
+    {
+      "Key": "hermes_version",
+      "Value": "0.21.3",
+      "Type": "custom"
+    }
+  ]
+}

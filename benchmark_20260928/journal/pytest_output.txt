@@ -1,0 +1,57 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.12.14, pytest-9.1.1, pluggy-1.6.0 -- /home/user/Documents/agentkit_dev_skills/benchmark_20260928/.venv/bin/python
+cachedir: .pytest_cache
+rootdir: /home/user/Documents/agentkit_dev_skills/benchmark_20260928
+plugins: anyio-4.15.1
+collecting ... collected 40 items
+
+tests/test_components_import.py::test_all_components_import PASSED       [  2%]
+tests/test_components_import.py::test_app_imports PASSED                 [  5%]
+tests/test_components_import.py::test_pinned_sdks_available PASSED       [  7%]
+tests/test_integration.py::test_happy_path_authed_chat PASSED            [ 10%]
+tests/test_integration.py::test_injection_blocked_by_guardrail PASSED    [ 12%]
+tests/test_integration.py::test_no_auth_rejected PASSED                  [ 15%]
+tests/test_integration.py::test_cloud_boundary_report_complete PASSED    [ 17%]
+tests/test_mcp_a2a_sandbox.py::test_mcp_no_key_401 PASSED                [ 20%]
+tests/test_mcp_a2a_sandbox.py::test_mcp_four_layer_acceptance PASSED     [ 22%]
+tests/test_mcp_a2a_sandbox.py::test_agentcard_validates_and_serializes PASSED [ 25%]
+tests/test_mcp_a2a_sandbox.py::test_agentcard_bad_protocol_version PASSED [ 27%]
+tests/test_mcp_a2a_sandbox.py::test_a2a_message_send PASSED              [ 30%]
+tests/test_mcp_a2a_sandbox.py::test_gateway_path_rewrite PASSED          [ 32%]
+tests/test_mcp_a2a_sandbox.py::test_sandbox_exec_and_session_reuse PASSED [ 35%]
+tests/test_mcp_a2a_sandbox.py::test_sandbox_isolation_between_sessions PASSED [ 37%]
+tests/test_memory_kb_obs_eval.py::test_memory_three_layer_persists PASSED [ 40%]
+tests/test_memory_kb_obs_eval.py::test_knowledge_retrieves PASSED        [ 42%]
+tests/test_memory_kb_obs_eval.py::test_observability_single_trace_vs_aggregate PASSED [ 45%]
+tests/test_memory_kb_obs_eval.py::test_evaluation_experiment PASSED      [ 47%]
+tests/test_sdk_runtime.py::test_ping_returns_pong PASSED                 [ 50%]
+tests/test_sdk_runtime.py::test_missing_user_id_session_id_rejected_400 PASSED [ 52%]
+tests/test_sdk_runtime.py::test_entrypoint_invoked_with_identity PASSED  [ 55%]
+tests/test_sdk_runtime.py::test_runtime_descriptor_and_apis PASSED       [ 57%]
+tests/test_security.py::test_no_credentials_401 PASSED                   [ 60%]
+tests/test_security.py::test_expired_token_401 PASSED                    [ 62%]
+tests/test_security.py::test_authorized_200 PASSED                       [ 65%]
+tests/test_security.py::test_unauthorized_tool_403 PASSED                [ 67%]
+tests/test_security.py::test_guardrail_blocks_injection PASSED           [ 70%]
+tests/test_security.py::test_guardrail_real_boundary_needs_app_id PASSED [ 72%]
+tests/test_skills.py::test_skills_field_from_env_returns_id_when_set PASSED [ 75%]
+tests/test_skills.py::test_skills_field_from_env_returns_empty_when_unset PASSED [ 77%]
+tests/test_skills.py::test_skills_field_from_env_trims_whitespace PASSED [ 80%]
+tests/test_skills.py::test_registry_publish_list_execute PASSED          [ 82%]
+tests/test_skills.py::test_registry_execute_missing_raises PASSED        [ 85%]
+tests/test_skills.py::test_registry_list_unknown_space_empty PASSED      [ 87%]
+tests/test_workflow.py::test_routing_graph_bug PASSED                    [ 90%]
+tests/test_workflow.py::test_routing_graph_support PASSED                [ 92%]
+tests/test_workflow.py::test_routing_graph_other_default PASSED          [ 95%]
+tests/test_workflow.py::test_fanout_join PASSED                          [ 97%]
+tests/test_workflow.py::test_dynamic PASSED                              [100%]
+
+=============================== warnings summary ===============================
+<frozen abc>:106
+<frozen abc>:106
+<frozen abc>:106
+<frozen abc>:106
+  <frozen abc>:106: DeprecationWarning: BaseAgentConfig is deprecated and will be removed in future versions.
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================== 40 passed, 4 warnings in 4.87s ========================

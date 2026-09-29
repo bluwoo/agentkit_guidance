@@ -1,0 +1,24 @@
+{
+  "status": "PASS",
+  "staged_files": 7249,
+  "package_lockfiles": 5,
+  "integrities": 2075,
+  "invalid_integrities": 0,
+  "content_findings": [],
+  "path_findings": [],
+  "wrongly_staged_exclusions": [],
+  "allowed_upstream_metadata": {
+    "email_hits": 2559,
+    "files": 136,
+    "scope": "vendored open-source attribution and public npm package metadata",
+    "rationale": "Preserved for license attribution and lockfile integrity; no project user or private identity is included."
+  },
+  "latest_regression": {
+    "cold_start_example": "14/14",
+    "root_tests": "158/158",
+    "benchmark": "53/53 + 9/9 + 7/7",
+    "http_e2e": "PASS",
+    "frontend": "npm ci/build/lint/typecheck PASS",
+    "skills": "14/14; 31 markdown files; 69 code blocks; 0 failures"
+  }
+}

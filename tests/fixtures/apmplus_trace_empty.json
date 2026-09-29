@@ -1,0 +1,11 @@
+{
+  "Trace": {
+    "TraceId": "trace-empty-003",
+    "SpanList": []
+  },
+  "Summary": {
+    "SpanNums": 0,
+    "ServiceNums": 0,
+    "ErrorSpanIds": []
+  }
+}

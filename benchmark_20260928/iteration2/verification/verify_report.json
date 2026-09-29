@@ -1,0 +1,199 @@
+{
+  "generated_at": "2026-09-29T19:30:48",
+  "repo": "<PROJECT_ROOT>",
+  "benchmark": "<PROJECT_ROOT>/benchmark_20260928",
+  "ok": true,
+  "checks": {
+    "skill_structure": {
+      "ok": true,
+      "formal_dir": "<PROJECT_ROOT>/skills",
+      "expected_count": 14,
+      "skills": {
+        "adk-workflow": {
+          "dir_exists": true,
+          "skill_md_exists": true,
+          "frontmatter_name": "adk-workflow",
+          "name_matches": true,
+          "has_description": true,
+          "ok": true
+        },
+        "agentkit-a2a-registry": {
+          "dir_exists": true,
+          "skill_md_exists": true,
+          "frontmatter_name": "agentkit-a2a-registry",
+          "name_matches": true,
+          "has_description": true,
+          "ok": true
+        },
+        "agentkit-evaluation": {
+          "dir_exists": true,
+          "skill_md_exists": true,
+          "frontmatter_name": "agentkit-evaluation",
+          "name_matches": true,
+          "has_description": true,
+          "ok": true
+        },
+        "agentkit-gateway-mcp": {
+          "dir_exists": true,
+          "skill_md_exists": true,
+          "frontmatter_name": "agentkit-gateway-mcp",
+          "name_matches": true,
+          "has_description": true,
+          "ok": true
+        },
+        "agentkit-guardrails": {
+          "dir_exists": true,
+          "skill_md_exists": true,
+          "frontmatter_name": "agentkit-guardrails",
+          "name_matches": true,
+          "has_description": true,
+          "ok": true
+        },
+        "agentkit-identity-permission": {
+          "dir_exists": true,
+          "skill_md_exists": true,
+          "frontmatter_name": "agentkit-identity-permission",
+          "name_matches": true,
+          "has_description": true,
+          "ok": true
+        },
+        "agentkit-knowledge-base": {
+          "dir_exists": true,
+          "skill_md_exists": true,
+          "frontmatter_name": "agentkit-knowledge-base",
+          "name_matches": true,
+          "has_description": true,
+          "ok": true
+        },
+        "agentkit-observability": {
+          "dir_exists": true,
+          "skill_md_exists": true,
+          "frontmatter_name": "agentkit-observability",
+          "name_matches": true,
+          "has_description": true,
+          "ok": true
+        },
+        "agentkit-runtime": {
+          "dir_exists": true,
+          "skill_md_exists": true,
+          "frontmatter_name": "agentkit-runtime",
+          "name_matches": true,
+          "has_description": true,
+          "ok": true
+        },
+        "agentkit-sandbox": {
+          "dir_exists": true,
+          "skill_md_exists": true,
+          "frontmatter_name": "agentkit-sandbox",
+          "name_matches": true,
+          "has_description": true,
+          "ok": true
+        },
+        "agentkit-sdk": {
+          "dir_exists": true,
+          "skill_md_exists": true,
+          "frontmatter_name": "agentkit-sdk",
+          "name_matches": true,
+          "has_description": true,
+          "ok": true
+        },
+        "agentkit-session-memory": {
+          "dir_exists": true,
+          "skill_md_exists": true,
+          "frontmatter_name": "agentkit-session-memory",
+          "name_matches": true,
+          "has_description": true,
+          "ok": true
+        },
+        "agentkit-skills": {
+          "dir_exists": true,
+          "skill_md_exists": true,
+          "frontmatter_name": "agentkit-skills",
+          "name_matches": true,
+          "has_description": true,
+          "ok": true
+        },
+        "veadk": {
+          "dir_exists": true,
+          "skill_md_exists": true,
+          "frontmatter_name": "veadk",
+          "name_matches": true,
+          "has_description": true,
+          "ok": true
+        }
+      }
+    },
+    "code_blocks": {
+      "ok": true,
+      "files_scanned": 31,
+      "fenced_blocks": 69,
+      "skipped_placeholder_blocks": 9,
+      "yaml_available": true,
+      "failures": []
+    },
+    "pytest": {
+      "ok": true,
+      "python": "<PROJECT_ROOT>/benchmark_20260928/.venv/bin/python",
+      "suites": [
+        {
+          "name": "benchmark_tests",
+          "rc": 0,
+          "passed": 53,
+          "failed": 0,
+          "duration_s": 12.8,
+          "tail": [
+            "",
+            "-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html",
+            "53 passed, 4 warnings in 11.43s"
+          ]
+        },
+        {
+          "name": "iteration2_evaluation",
+          "rc": 0,
+          "passed": 9,
+          "failed": 0,
+          "duration_s": 104.1,
+          "tail": [
+            ".........                                                                [100%]",
+            "9 passed in 103.33s (0:01:43)"
+          ]
+        },
+        {
+          "name": "iteration2_cold_start",
+          "rc": 0,
+          "passed": 7,
+          "failed": 0,
+          "duration_s": 4.7,
+          "tail": [
+            "",
+            "-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html",
+            "7 passed, 4 warnings in 3.27s"
+          ]
+        }
+      ]
+    },
+    "secret_scan": {
+      "ok": true,
+      "findings": [],
+      "patterns_checked": [
+        "aws_access_key_id",
+        "private_key_block",
+        "github_token",
+        "slack_token",
+        "openai_api_key",
+        "aws_secret_key_assign"
+      ]
+    },
+    "duplicate_skills": {
+      "ok": true,
+      "skill_dirs_scanned": 14,
+      "duplicate_names": {},
+      "duplicate_content": {}
+    },
+    "reference_links": {
+      "ok": true,
+      "links_checked": 9,
+      "broken": []
+    }
+  }
+}

@@ -1,0 +1,105 @@
+# ---- secrets / local state (never commit real values; keep .env.example) ----
+.env
+.env.*
+!.env.example
+/deployment-state/*.env
+/deployment-state/*.key
+/deployment-state/*.token
+/deployment-state/*.json
+/deployment-state/.latest-target-trace-id
+/.agentkit/
+
+# ---- python ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.venv/
+.venv-verify/
+venv/
+
+# ---- node / frontend ----
+node_modules/
+web/dist/
+dist/
+build/
+
+# ---- OS / editor / logs / temporary files ----
+.DS_Store
+*.swp
+*.swo
+*~
+*.tmp
+*.temp
+*.log
+logs/
+tmp/
+.temp/
+
+# ---- Docker authentication and local CLI state ----
+.docker/
+docker-auth/
+/.agentkit/
+.agentkit-private-*/
+
+# ---- private backups and credentials ----
+_backup/
+private-backup/
+*.pem
+*.key
+*.token
+*.p12
+*.pfx
+credentials.json
+secrets.json
+
+# ---- release archives and generated manifests ----
+*.zip
+SHA256MANIFEST.txt
+
+# ---- internal excerpts / historical edit snapshots ----
+/docs/lark-supplements/
+/benchmark_20260928/iteration2/backup_skills/
+/benchmark_20260928/iteration2/evaluation/pre_edit/
+/design/_backup/
+
+# ---- intermediate security-audit outputs (keep only final reports/manifests) ----
+/sec-audit/scan_report.json
+/sec-audit/scan_summary.txt
+/sec-audit/final-scan.json
+/sec-audit/final-audit.json
+/sec-audit/final-project-scan.json
+/sec-audit/final-all-project-scan.json
+/sec-audit/final-public-project-scan.json
+/sec-audit/final-package-scan.json
+/sec-audit/commit-candidate-scan.json
+/sec-audit/retest-report-*.md
+/sec-audit/COMMIT-CANDIDATES.sha256
+/sec-audit/PACKAGE-CONTENTS.sha256
+/sec-audit/FINAL-PACKAGE.sha256
+/sec-audit/git-index-security-scan.json
+
+# ---- cloud run raw responses and screenshots (keep final summaries only) ----
+/docs/**/_shots/
+/docs/**/shard-*.json
+/docs/**/resource-ledger.json
+/docs/**/evidence.json
+/docs/**/audit-checks.json
+/docs/**/independent-final-checks.json
+/docs/**/quota-evidence.json
+/docs/**/rebuild-info.md
+/docs/online-evaluation/**/deploy/
+/docs/online-evaluation/**/release.ndjson
+/docs/online-evaluation/**/cr-login.json
+/docs/online-evaluation/**/dataset-*.json
+/docs/online-evaluation/**/evaluator-*.json
+/docs/online-evaluation/**/experiment-*.json
+/docs/online-evaluation/**/cleanup-*.txt
+/docs/online-evaluation/**/cleanup-a2a.json
+/docs/online-evaluation/**/cleanup-dataset.json
+/docs/online-evaluation/**/cleanup-evaluator.json
+/docs/online-evaluation/**/state.json

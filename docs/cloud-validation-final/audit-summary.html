@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230066cc'/%3E%3Cpath d='M18 45 29 17h7l11 28h-7l-2-7H27l-2 7Zm11-13h7l-3-9Z' fill='white'/%3E%3C/svg%3E">
+<title>[PRODUCT] 14 组件云验证审计摘要</title>
+<style>
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin: 2rem; background: #f5f5f5; }
+.container { max-width: 1200px; margin: 0 auto; background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+h1 { color: #1a1a2e; border-bottom: 3px solid #0066cc; padding-bottom: 0.5rem; }
+h2 { color: #16213e; margin-top: 2rem; }
+.stats { display: flex; gap: 1rem; margin: 1rem 0; flex-wrap: wrap; }
+.stat-card { flex: 1; min-width: 120px; padding: 1rem; border-radius: 6px; text-align: center; }
+.stat-card .num { font-size: 2rem; font-weight: bold; }
+.stat-card .label { font-size: 0.9rem; color: #666; }
+.pass { background: #d4edda; color: #155724; }
+.partial { background: #fff3cd; color: #856404; }
+.blocked { background: #f8d7da; color: #721c24; }
+.fail { background: #e2e3e5; color: #383d41; }
+table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #ddd; }
+th { background: #f8f9fa; font-weight: 600; }
+tr:hover { background: #f5f5f5; }
+.status-pass { color: #28a745; font-weight: bold; }
+.status-partial { color: #ffc107; font-weight: bold; }
+.status-blocked { color: #dc3545; font-weight: bold; }
+.breakthrough { background: #e7f3ff; border-left: 4px solid #0066cc; padding: 1rem; margin: 1rem 0; }
+.breakthrough ul { margin: 0.5rem 0; }
+.meta { color: #666; font-size: 0.9rem; margin-bottom: 1rem; }
+.scope-note { background: #fff3cd; border-left: 4px solid #ffc107; padding: 1rem; margin: 1rem 0; }
+@media (max-width: 640px) {
+  body { margin: 0; background: #fff; font-size: 14px; }
+  .container { padding: 1rem; border-radius: 0; box-shadow: none; }
+  h1 { font-size: 1.45rem; line-height: 1.3; }
+  h2 { font-size: 1.2rem; }
+  .stat-card { min-width: calc(50% - 2rem); }
+  table { display: block; width: 100%; overflow-x: auto; white-space: normal; -webkit-overflow-scrolling: touch; }
+  table::before { content: "左右滑动查看完整表格"; display: block; color: #666; font-size: 0.78rem; padding: 0 0 0.35rem; }
+  table tbody { display: table; min-width: 720px; width: 100%; }
+  th, td { min-width: 72px; vertical-align: top; }
+  th:last-child, td:last-child { min-width: 280px; }
+  .meta, .scope-note, .breakthrough { line-height: 1.65; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>[PRODUCT] 14 组件真实火山环境验证 — 审计摘要</h1>
+<div class="meta">
+  <strong>项目:</strong> 12组件 <PROJECT_NAME> + Observability/Evaluation default（用户豁免2026-09-24） | <strong>地域:</strong> cn-beijing | <strong>日期:</strong> 2026-09-24<br>
+  <strong>CLI:</strong> 0.52.13 | <strong>SDK:</strong> [BASE-ADK] 1.1.13 / [PRODUCT]-sdk 0.8.7 / google-adk 2.2.0 | <strong>模型:</strong> doubao-seed-2-0-lite-260428
+</div>
+
+<div class="scope-note">
+<strong>项目归属口径：</strong>12 个组件严格 project=<project> 验证通过；Observability 本轮在 default 项目实际 GetTraceDetail 成功（266 spans，primary依据），<PROJECT_NAME> 170 spans 为附加证据；Evaluation 在同账号独立 TEA Workspace（default 后端）验证通过。截至本轮 Obs/Eval 产品仅支持 default，default PASS 不代表 <PROJECT_NAME> 支持；未来 project 支持扩展后需补测回归门禁。
+</div>
+
+<h2>最终状态统计</h2>
+<div class="stats">
+  <div class="stat-card pass"><div class="num">14</div><div class="label">PASS</div></div>
+  <div class="stat-card partial"><div class="num">0</div><div class="label">PARTIAL</div></div>
+  <div class="stat-card blocked"><div class="num">0</div><div class="label">BLOCKED</div></div>
+  <div class="stat-card fail"><div class="num">0</div><div class="label">FAIL</div></div>
+</div>
+
+<h2>本轮关键修复与突破</h2>
+<div class="breakthrough">
+<ul>
+  <li><strong>A2A test-server 正式 SDK 修复</strong>: 改用 [BASE-ADK].a2a.ve_a2a_server.init_app()，自动暴露 /.well-known/agent-card.json（GET 200, protocolVersion 0.3.0），标准 message/send JSON-RPC 协议；本地单测 9/9 通过。</li>
+  <li><strong>SDK 持久化会话修复</strong>: ShortTermMemory(db_url="sqlite+aiosqlite:////data/sessions.db") 显式配置 DatabaseSessionService；缺 user_id/session_id 返回 400 不回落 default；本地单测 5/5 通过；default Runtime trace 中可见 SQLite 持久化 span。</li>
+  <li><strong>Guardrails 四回调矩阵</strong>: before_model 注入拦截 + after_model 正常透传 + before_tool/after_tool 经 skill 触发；用户提供 LLM Shield App <APP_ID>。</li>
+  <li><strong>Skills execute_skill 真实调用</strong>: 修复 Agent.skills 字段支持，local 模式下载 TOS 包→skills_tool→返回 marker；v1→v2 版本更新生效。</li>
+  <li><strong>Sandbox 快照完整生命周期</strong>: EnableSnapshot=true Tool→CreateSessionSnapshot→PauseSession→ResumeSessionFromSnapshot(CreateNewInstance=true)→文件断言 MATCH→异 session 隔离→清理。</li>
+  <li><strong>Evaluation TEA 终态</strong>: exp6 status=11 终态，2/2 样本 score=1，avg_score=1.0；Runtime-source Agent 解决 JWT 拒绝问题。</li>
+  <li><strong>Observability default 验证</strong>: default Runtime 266 spans GetTraceDetail 成功，含完整调用链和 SQLite 持久化证据。</li>
+  <li><strong>KB 根因修复</strong>: [BASE-ADK].knowledge → [BASE-ADK].knowledgebase（ModuleNotFoundError 修复）。</li>
+</ul>
+</div>
+
+<h2>逐组件状态</h2>
+<table>
+<tr><th>#</th><th>组件</th><th>项目</th><th>状态</th><th>关键证据</th></tr>
+<tr><td>1</td><td>[BASE-ADK]</td><td><PROJECT_NAME></td><td class="status-pass">PASS</td><td>真实模型 42/72/Paris；Agent MRO；非法名 ValidationError</td></tr>
+<tr><td>2</td><td>[PRODUCT]-sdk</td><td><PROJECT_NAME></td><td class="status-pass">PASS</td><td>路由核验；ShortTermMemory(db_url) 持久化；缺 header→400；单测 5/5</td></tr>
+<tr><td>3</td><td>adk-workflow</td><td><PROJECT_NAME></td><td class="status-pass">PASS</td><td>validate_orchestration 8/8；真实 Graph function→Agent 91；动态路由</td></tr>
+<tr><td>4</td><td>[PRODUCT]-runtime</td><td><PROJECT_NAME></td><td class="status-pass">PASS</td><td>create→release→Ready→invoke→logs→versions→回滚→清理</td></tr>
+<tr><td>5</td><td>[PRODUCT]-sandbox</td><td><PROJECT_NAME></td><td class="status-pass">PASS</td><td>CodeEnv Tool；shell 1+1=2；同 session FS 复用；异 session 隔离；快照 Pause→Resume 恢复断言；清理</td></tr>
+<tr><td>6</td><td>[PRODUCT]-skills</td><td><PROJECT_NAME></td><td class="status-pass">PASS</td><td>SkillSpace+Skill(<PROJECT_NAME>)；execute_skill V1/V2 marker；版本更新生效；清理</td></tr>
+<tr><td>7</td><td>[PRODUCT]-session-memory</td><td><PROJECT_NAME></td><td class="status-pass">PASS</td><td>memory 集合 <PROJECT_NAME>；写入蓝色偏好；跨 session 召回；异用户隔离；清理</td></tr>
+<tr><td>8</td><td>[PRODUCT]-knowledge-base</td><td><PROJECT_NAME></td><td class="status-pass">PASS</td><td>--viking-project <PROJECT_NAME>；唯一标记文档；RAG 命中；[BASE-ADK].knowledgebase 修复；清理</td></tr>
+<tr><td>9</td><td>[PRODUCT]-gateway-mcp</td><td><PROJECT_NAME></td><td class="status-pass">PASS</td><td>自建 MCP server；四层握手；鉴权矩阵；清理</td></tr>
+<tr><td>10</td><td>[PRODUCT]-a2a-registry</td><td><PROJECT_NAME></td><td class="status-pass">PASS</td><td>正式 SDK init_app；AgentCard 200；message/send 真实响应；SearchAgentCards 命中；单测 9/9</td></tr>
+<tr><td>11</td><td>[PRODUCT]-identity-permission</td><td><PROJECT_NAME></td><td class="status-pass">PASS</td><td>UserPool service=id 生命周期；Policy Cedar 生命周期；有效 Bearer→200；无/错→401</td></tr>
+<tr><td>12</td><td>[PRODUCT]-guardrails</td><td><PROJECT_NAME></td><td class="status-pass">PASS</td><td>四回调矩阵；before_model 注入拦截；after_model/before_tool/after_tool 日志；攻击日志 console-only（可见性限制）</td></tr>
+<tr><td>13</td><td>[PRODUCT]-observability</td><td>default</td><td class="status-pass">PASS</td><td>default Runtime 266 spans GetTraceDetail；完整调用链+SQLite 持久化；<PROJECT_NAME> 170 spans 附加；清理</td></tr>
+<tr><td>14</td><td>[PRODUCT]-evaluation</td><td>default</td><td class="status-pass">PASS</td><td>TEA Workspace 同账号；exp6 终态 avg_score=1.0；2/2 样本；Runtime-source JWT 修复</td></tr>
+</table>
+
+<h2>E2E 集成验收</h2>
+<table>
+<tr><th>链路</th><th>Trace/Session</th><th>组件覆盖</th><th>结果</th></tr>
+<tr><td><PROJECT_NAME> 业务链</td><td>trace 47c69880..., session se2e_795</td><td>KB RAG + Skill + Memory + Guardrails + Observability(170 spans)</td><td class="status-pass">PASS</td></tr>
+<tr><td>default 观测链</td><td>trace ac5d1b37..., session obs-default-1790257962-87156</td><td>Observability(266 spans) + SDK 持久化(SQLite in trace)</td><td class="status-pass">PASS</td></tr>
+<tr><td>评测链</td><td>exp <WORKSPACE_ID></td><td>Evaluation(TEA, avg_score=1.0)</td><td class="status-pass">PASS</td></tr>
+</table>
+
+<h3>异常路径回归</h3>
+<table>
+<tr><th>测试</th><th>预期</th><th>实际</th></tr>
+<tr><td>无 Authorization</td><td>401</td><td class="status-pass">401</td></tr>
+<tr><td>错误 Bearer</td><td>401</td><td class="status-pass">401</td></tr>
+<tr><td>有效 Bearer</td><td>200</td><td class="status-pass">200</td></tr>
+<tr><td>用户隔离</td><td>userB 无 userA 记忆</td><td class="status-pass">隔离</td></tr>
+<tr><td>缺 user_id/session_id</td><td>400 拒绝</td><td class="status-pass">400</td></tr>
+<tr><td>注入向量</td><td>LLM Shield 拦截</td><td class="status-pass">拦截</td></tr>
+</table>
+
+<h2>资源清理</h2>
+<table>
+<tr><th>指标</th><th>值</th></tr>
+<tr><td>账本记录总数</td><td>65（含历史重复记录与2条最终纠偏清理记录，均已标注）</td></tr>
+<tr><td>已删除</td><td>46（含2个最终审计发现并精确清理的CR标签）</td></tr>
+<tr><td>历史已完成</td><td>16</td></tr>
+<tr><td>已还原(env)</td><td>2</td></tr>
+<tr><td>保留（终态、无活跃执行，持续费用未确认）</td><td>1（Experiment <WORKSPACE_ID>，TEA 无 delete API，已终态、无活跃执行；终态记录是否产生持续费用未从现有计费资料得到明确确认）</td></tr>
+<tr><td><strong>活跃运行/实例资源</strong></td><td><strong>0；终态Experiment记录1条（持续费用未确认）</strong></td></tr>
+</table>
+
+<h2>可见性/范围限制（非失败）</h2>
+<ul>
+<li>Guardrails 攻击日志：LLM Shield SDK 仅提供 Moderate/ModerateStream，无日志查询 API；日志仅控制台可查。四回调钩子和 before_model 拦截已通过 Runtime 日志验证。</li>
+<li>Observability/Evaluation：产品当前仅支持 default 项目，<PROJECT_NAME> 支持待平台扩展后补测。</li>
+<li>Sandbox：仅 CodeEnv 模板验证；Web/VNC/scp/TOS mount 等非核心功能未验证。</li>
+</ul>
+
+</div>
+</body>
+</html>

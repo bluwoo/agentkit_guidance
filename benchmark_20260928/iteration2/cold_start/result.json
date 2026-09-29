@@ -1,0 +1,52 @@
+{
+  "entry_read": "skills/README.md",
+  "start_time": "2026-09-28 22:18:02 CST",
+  "end_time": "2026-09-28 22:28:03 CST",
+  "elapsed_minutes": 10.0,
+  "tool_rounds_estimate": 21,
+  "skills_read_count": 6,
+  "skills_read": [
+    "veadk",
+    "agentkit-session-memory",
+    "agentkit-knowledge-base",
+    "agentkit-sandbox",
+    "agentkit-observability",
+    "adk-workflow"
+  ],
+  "skills_not_read": [
+    "agentkit-sdk",
+    "agentkit-runtime",
+    "agentkit-skills",
+    "gateway-mcp",
+    "a2a-registry",
+    "agentkit-guardrails",
+    "agentkit-identity-permission",
+    "agentkit-evaluation"
+  ],
+  "scenario_components": [
+    "veadk (底座: Agent 构造 + 继承 google.adk.agents.LlmAgent)",
+    "adk-workflow (条件路由 Graph: Event(route=...) + dict 边, 纯 @node 函数无模型)",
+    "sandbox (真子进程 sys.executable 执行; 同 session_id 复用 FS / 跨 session_id 隔离)",
+    "observability (内存 span recorder; 单次 trace 与聚合计数分离)",
+    "evaluation (确定性 ExactMatch 本地打分)"
+  ],
+  "failures": [
+    "LongTermMemory(backend=local) 构造期抛 FileNotFoundError (要 AK/SK/VeFaaS IAM) -> 放弃真实记忆读写",
+    "KnowledgeBase(backend=local) 离线不可召回 (Skill 自述: 内存存储+云 embedding) -> 放弃 KB",
+    "veadk.Agent() 裸构造触发 model_post_init->get_ark_token() FileNotFoundError",
+    "__main__ 实例变量名 sys 遮蔽 import sys, 子进程 sys.executable 解析到实例",
+    "节点返回值进 event.output 而非 content.text, 结果文本为空"
+  ],
+  "rework_steps": [
+    "显式传本地占位 model_api_key 以跳过 get_ark_token(), 离线构造 Agent 成功",
+    "把 __main__ 实例从 sys 改名为 system 以解除对 sys 模块的遮蔽",
+    "结果取值改为 text 优先、否则回退 str(event.output)",
+    "用本地 subprocess + 按 session_id 键控工作目录实现 sandbox 离线语义(不依赖 TOOL_CODE_SANDBOX_URL)",
+    "以实证探测替代对 memory/KB/重型 CodeExecutor 的无依据猜测"
+  ],
+  "tests_passed": 7,
+  "tests_failed": 0,
+  "test_command": "/home/user/Documents/agentkit_dev_skills/benchmark_20260928/.venv/bin/python -B -m pytest test_cold_start.py -v",
+  "offline": true,
+  "cloud_credentials_used": false
+}

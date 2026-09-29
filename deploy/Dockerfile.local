@@ -1,0 +1,84 @@
+#
+# AgentKit Wizard — single-image backend (+ built frontend) running Hermes for real.
+#
+# Build (from the repo root, so server/, vendor/, web/dist are in context):
+#   docker build -f deploy/Dockerfile -t agentkit-wizard:local .
+#
+# Run (production is FAIL-CLOSED: WIZARD_MODE=production is baked in, so the
+# container refuses to start unless the LLM + CORS allowlist are provided):
+#   docker run --rm -p 8000:8000 \
+#     -e WIZARD_LLM_BASE_URL=https://llm/v1 \
+#     -e WIZARD_LLM_API_KEY=sk-... \
+#     -e WIZARD_LLM_MODEL=gpt-x \
+#     -e WIZARD_ALLOWED_ORIGINS=https://app.example.com \
+#     agentkit-wizard:local
+#
+# Local / demo run (override mode to use the deterministic offline mock bridge):
+#   docker run --rm -p 8000:8000 -e WIZARD_MODE=mock \
+#     -e WIZARD_ALLOWED_ORIGINS="http://localhost:8000" agentkit-wizard:local
+#
+# No secrets are baked into this image. See DEPLOYMENT.md for the full env table.
+
+# python:3.12-slim over alpine: otel/grpcio-otel and the volcengine SDK ship
+# prebuilt manylinux wheels for slim; alpine needs a gcc/musl toolchain.
+FROM python:3.12-slim
+
+# --- sane runtime defaults (override at run time) ---
+ENV PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    APP_HOME=/app \
+    HERMES_VENDOR_ROOT=/app/vendor/hermes-agent \
+    WIZARD_DATA_DIR=/app/wizard_data \
+    SERVE_FRONTEND_DIST=/app/web/dist \
+    # Production default: fail-closed. Override to "mock" only for local demos.
+    WIZARD_MODE=production \
+    WIZARD_VERSION=0.21.3 \
+    HERMES_VERSION=0.21.3
+
+WORKDIR ${APP_HOME}
+
+# 1) Runtime deps first (layer caching: rebuild only when requirements change).
+#    requirements.txt is Hermes 0.21.3 [project].dependencies verbatim, with the
+#    ASGI layer pinned to Hermes's own web-extra exact pins and OTel to its
+#    otlp-extra exact pins. No provider extras.
+COPY deploy/requirements.txt ./deploy/requirements.txt
+RUN pip install -r deploy/requirements.txt
+
+# 2) The offline import-check script (build-time guard, runs below).
+COPY deploy/hermes_import_check.py ./deploy/hermes_import_check.py
+
+# 3) Backend package (includes server/wizard/grill/prompts/NOTICES.md).
+COPY server/ ./server/
+
+# 4) Vendor Hermes source — RealHermesBridge lazily imports from here.
+#    The full Hermes core dependency set is installed by step 1, so this is the
+#    REAL agent loop, not a mock. vendor/hermes-agent/LICENSE (MIT, Nous Research)
+#    ships with the tree. The repo-root .dockerignore strips the 990MB
+#    vendor/hermes-agent/.git (VCS history) — only sources + LICENSE ship.
+COPY vendor/hermes-agent/ ./vendor/hermes-agent/
+
+# 5) Build-time offline verification: the import paths the shim uses must resolve.
+#    This does NOT call an LLM or hit the network; it only asserts
+#    `import run_agent` + `from agent.conversation_loop import run_conversation`
+#    resolve cleanly against the pinned dependency set. FAILS THE BUILD otherwise.
+#    (It deliberately does NOT import server.wizard.main: under the baked-in
+#    WIZARD_MODE=production with no WIZARD_ALLOWED_ORIGINS, create_app() raises
+#    — that is the runtime fail-closed path, exercised by `docker run`, not here.)
+RUN python deploy/hermes_import_check.py
+
+# 6) Built frontend (.dockerignore excludes node_modules; only dist ships).
+COPY web/dist/ ./web/dist/
+
+# Persistent draft/session store.
+RUN mkdir -p ${WIZARD_DATA_DIR}
+VOLUME ["/app/wizard_data"]
+
+EXPOSE 8000
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+  CMD python -c "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3).status==200 else 1)"
+
+# Layer-1 Runtime shim. KeyAuth / LLM / OTel are all env-driven.
+CMD ["uvicorn", "server.wizard.main:app", "--host", "0.0.0.0", "--port", "8000"]

@@ -1,0 +1,136 @@
+{
+  "Trace": {
+    "TraceId": "trace-error-002",
+    "SpanList": [
+      {
+        "SpanId": "span-root",
+        "ParentSpanId": "",
+        "OperationName": "invocation",
+        "ServiceName": "agentkit-runtime",
+        "Status": "OK",
+        "DurationMicroseconds": 2100000,
+        "StartTimeMillisecond": 1700000000000,
+        "StartTimeMicrosecond": 1700000000000000,
+        "GenAISpanKind": "workflow",
+        "ErrorInfoList": [],
+        "EventList": [],
+        "TotalTokens": 0,
+        "OutputTokens": 0,
+        "CacheReadTokens": 0,
+        "CallServiceName": "",
+        "CallServiceType": "",
+        "CallResourceName": "",
+        "Attributes": {
+          "gen_ai.system": "agentkit",
+          "gen_ai.operation.name": "invocation",
+          "gen_ai.app.name": "demo-app"
+        }
+      },
+      {
+        "SpanId": "span-agent",
+        "ParentSpanId": "span-root",
+        "OperationName": "invoke_agent",
+        "ServiceName": "agentkit-runtime",
+        "Status": "OK",
+        "DurationMicroseconds": 2000000,
+        "StartTimeMillisecond": 1700000000100,
+        "StartTimeMicrosecond": 1700000000100000,
+        "GenAISpanKind": "workflow",
+        "ErrorInfoList": [],
+        "EventList": [],
+        "TotalTokens": 0,
+        "OutputTokens": 0,
+        "CacheReadTokens": 0,
+        "CallServiceName": "",
+        "CallServiceType": "",
+        "CallResourceName": "",
+        "Attributes": {
+          "gen_ai.system": "agentkit",
+          "gen_ai.operation.name": "invoke_agent",
+          "gen_ai.agent.name": "target_agent"
+        }
+      },
+      {
+        "SpanId": "span-llm-error",
+        "ParentSpanId": "span-agent",
+        "OperationName": "call_llm",
+        "ServiceName": "agentkit-runtime",
+        "Status": "ERROR",
+        "DurationMicroseconds": 1200000,
+        "StartTimeMillisecond": 1700000000200,
+        "StartTimeMicrosecond": 1700000000200000,
+        "GenAISpanKind": "llm",
+        "ErrorInfoList": [
+          {
+            "ErrorKind": "RateLimitError",
+            "ErrorMessage": "model rate limit exceeded",
+            "ErrorStack": "llm_client.py:421 raise RateLimitError(...)"
+          }
+        ],
+        "EventList": [],
+        "TotalTokens": 0,
+        "OutputTokens": 0,
+        "CacheReadTokens": 0,
+        "CallServiceName": "",
+        "CallServiceType": "",
+        "CallResourceName": "",
+        "Attributes": {
+          "gen_ai.system": "agentkit",
+          "gen_ai.operation.name": "call_llm",
+          "gen_ai.request.model": "doubao-pro-32k"
+        }
+      },
+      {
+        "SpanId": "span-tool-unmapped",
+        "ParentSpanId": "span-agent",
+        "OperationName": "execute_tool",
+        "ServiceName": "agentkit-runtime",
+        "Status": "OK",
+        "DurationMicroseconds": 150000,
+        "StartTimeMillisecond": 1700000001500,
+        "StartTimeMicrosecond": 1700000001500000,
+        "GenAISpanKind": "tool",
+        "ErrorInfoList": [],
+        "EventList": [],
+        "TotalTokens": 0,
+        "OutputTokens": 0,
+        "CacheReadTokens": 0,
+        "CallServiceName": "",
+        "CallServiceType": "",
+        "CallResourceName": "",
+        "Attributes": {
+          "gen_ai.system": "agentkit",
+          "gen_ai.operation.name": "execute_tool",
+          "gen_ai.tool.name": "unplanned_external_plugin"
+        }
+      },
+      {
+        "SpanId": "span-mcp-unmapped",
+        "ParentSpanId": "span-agent",
+        "OperationName": "call_service",
+        "ServiceName": "agentkit-runtime",
+        "Status": "OK",
+        "DurationMicroseconds": 200000,
+        "StartTimeMillisecond": 1700000001700,
+        "StartTimeMicrosecond": 1700000001700000,
+        "GenAISpanKind": "tool",
+        "ErrorInfoList": [],
+        "EventList": [],
+        "TotalTokens": 0,
+        "OutputTokens": 0,
+        "CacheReadTokens": 0,
+        "CallServiceName": "unmapped-mcp-service",
+        "CallServiceType": "mcp",
+        "CallResourceName": "unmapped-resource",
+        "Attributes": {
+          "gen_ai.system": "agentkit"
+        }
+      }
+    ]
+  },
+  "Summary": {
+    "SpanNums": 5,
+    "ServiceNums": 1,
+    "ErrorSpanIds": ["span-llm-error"]
+  }
+}

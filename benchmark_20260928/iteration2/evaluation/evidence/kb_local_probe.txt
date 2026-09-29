@@ -1,0 +1,54 @@
+== import veadk.knowledgebase ==
+OK KnowledgeBase from veadk.knowledgebase.knowledgebase
+
+== KnowledgeBase signature & supported backends ==
+KnowledgeBase signature: (*, name: str = 'user_knowledgebase', description: str = 'This knowledgebase stores some user-related information.', backend: Union[Literal['local', 'opensearch', 'viking', 'redis', 'milvus', 'tos_vector', 'context_search', 'openviking'], veadk.knowledgebase.backends.base_backend.BaseKnowledgebaseBackend] = 'local', backend_config: dict = <factory>, top_k: int = 10, app_name: str = '', index: str = '', enable_profile: bool = False, query_with_user_profile: bool = False) -> None
+
+== construct KnowledgeBase(backend='local') with NO secrets ==
+2026-09-28 20:09:31 | INFO | knowledgebase.py:174 - Initializing knowledgebase: backend=local index=probe_local top_k=3
+2026-09-28 20:09:34 | INFO | ark_veauth.py:96 - Fetching ARK token...
+2026-09-28 20:09:34 | INFO | utils.py:34 - Get Volcegnine access key or secret key from environment variables failed, try to get from VeFaaS IAM file (path=/var/run/secrets/iam/credential).
+2026-09-28 20:09:34 | ERROR | utils.py:41 - Get Volcegnine access key or secret key from environment variables failed, and VeFaaS IAM file (path=/var/run/secrets/iam/credential) not exists. Please check your configuration.
+CONSTRUCT FAILED: FileNotFoundError('Get Volcegnine access key or secret key from environment variables failed, and VeFaaS IAM file (path=/var/run/secrets/iam/credential) not exists. Please check your configuration.')
+
+== guarded add_from_text/search attempt (dead local embed endpoint, NO real cloud) ==
+2026-09-28 20:09:34 | INFO | knowledgebase.py:160 - Initialized knowledgebase with provided backend instance InMemoryKnowledgeBackend
+add_from_text -> APIConnectionError: Connection error.
+search      -> None
+
+== VERDICT ==
+结论见 checks。
+
+== JSON ==
+{
+  "when_utc": "2026-09-28T12:09:31.077802+00:00",
+  "python": "3.12.14",
+  "executable": "/home/user/Documents/agentkit_dev_skills/benchmark_20260928/.venv/bin/python",
+  "platform": "macOS-26.6.2-arm64-arm-64bit",
+  "checks": [
+    {
+      "check": "import_knowledgebase",
+      "ok": true,
+      "file": "veadk.knowledgebase.knowledgebase"
+    },
+    {
+      "check": "kb_signature",
+      "ok": true,
+      "signature": "(*, name: str = 'user_knowledgebase', description: str = 'This knowledgebase stores some user-related information.', backend: Union[Literal['local', 'opensearch', 'viking', 'redis', 'milvus', 'tos_vector', 'context_search', 'openviking'], veadk.knowledgebase.backends.base_backend.BaseKnowledgebaseBackend] = 'local', backend_config: dict = <factory>, top_k: int = 10, app_name: str = '', index: str = '', enable_profile: bool = False, query_with_user_profile: bool = False) -> None"
+    },
+    {
+      "check": "construct_local_offline",
+      "ok": false,
+      "error": "FileNotFoundError: Get Volcegnine access key or secret key from environment variables failed, and VeFaaS IAM file (path=/var/run/secrets/iam/credential) not exists. Please check your configuration.",
+      "tb": "Traceback (most recent call last):\n  File \"/home/user/Documents/agentkit_dev_skills/benchmark_20260928/iteration2/evaluation/scripts/probe_kb_local.py\", line 63, in <module>\n    kb = KnowledgeBase(backend=\"local\", index=\"probe_local\", top_k=3)\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/user/Documents/agentkit_dev_skills/benchmark_20260928/.venv/lib/python3.12/site-packages/pydantic/main.py\", line 250, in __init__\n    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/user/Documents/agentkit_dev_skills/benchmark_20260928/.venv/lib/python3.12/site-packages/veadk/knowledgebase/knowledgebase.py\", line 177, in model_post_init\n    self._backend = _get_backend_cls(self.backend)(index=self.index)\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/user/Documents/agentkit_dev_skills/benchmark_20260928/.venv/lib/python3.12/site-packages/pydantic/main.py\", line 250, in __init__\n    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/user/Documents/agentkit_dev_skills/benchmark_20260928/.venv/lib/python3.12/site-packages/veadk/knowledgebase/backends/in_memory_backend.py\", line 44, in model_post_init\n    api_key=self.embedding_config.api_key,\n            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/user/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none/lib/python3.12/functools.py\", line 998, in __get__\n    val = self.func(instance)\n          ^^^^^^^^^^^^^^^^^^^\n  File \"/home/user/Documents/agentkit_dev_skills/benchmark_20260928/.venv/lib/python3.12/site-packages/veadk/configs/model_configs.py\", line 74, in api_key\n    or get_ark_token()\n       ^^^^^^^^^^^^^^^\n  File \"/home/user/Documents/agentkit_dev_skills/benchmark_20260928/.venv/lib/python3.12/site-packages/veadk/auth/veauth/ark_veauth.py\", line 108, in get_ark_token\n    cred = get_credential_from_vefaas_iam()\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/user/Documents/agentkit_dev_skills/benchmark_20260928/.venv/lib/python3.12/site-packages/veadk/auth/veauth/utils.py\", line 44, in get_credential_from_vefaas_iam\n    raise FileNotFoundError(\nFileNotFoundError: Get Volcegnine access key or secret key from environment variables failed, and VeFaaS IAM file (path=/var/run/secrets/iam/credential) not exists. Please check your configuration.\n"
+    },
+    {
+      "check": "add_search_needs_network",
+      "ok": false,
+      "conclusion": "add_from_text/search 实际调用 embedding HTTP；离线/无可用 embedding 服务时失败。",
+      "add_error": "APIConnectionError: Connection error.",
+      "search_error": null
+    }
+  ],
+  "verdict": "结论见 checks。"
+}

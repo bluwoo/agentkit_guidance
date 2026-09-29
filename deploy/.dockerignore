@@ -1,0 +1,51 @@
+# Docker build-context ignore list for the AgentKit Wizard image.
+#
+# Effective file: this repo-root `.dockerignore` (we build with
+# `docker build -f deploy/Dockerfile .`). deploy/.dockerignore mirrors it for
+# documentation; keep the two in sync.
+
+# --- VCS / CI / editor ---
+.git
+.gitignore
+.github
+.pytest_cache
+.ruff_cache
+.DS_Store
+*.pyc
+__pycache__
+
+# --- The vendored Hermes checkout carries its own 990MB .git: never ship it. ---
+# We DO keep vendor/hermes-agent/LICENSE (MIT) and all Python runtime sources.
+vendor/hermes-agent/.git
+vendor/hermes-agent/.github
+
+# --- Python dev venvs & caches (we install fresh inside the image) ---
+.venv
+venv
+/tmp
+*.egg-info
+
+# --- Node: never ship node_modules; only the built web/dist is copied ---
+web/node_modules
+frontend/node_modules
+**/node_modules
+
+# --- Local test / verification artifacts (not needed in the image) ---
+tests/
+design/
+docs/
+skills/
+*.zip
+agentkit-wizard-design-final.zip
+deploy/e2e-home.png
+
+# --- Runtime data (must not bake host state into the image) ---
+wizard_data/
+*.db
+*.sqlite
+
+# --- Misc ---
+deploy/*.md
+README.md
+DEPLOYMENT.md
+AGENTS.md

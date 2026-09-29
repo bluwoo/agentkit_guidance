@@ -1,0 +1,292 @@
+{
+  "archive": "agentkit-benchmark-iteration2-20260928.zip",
+  "entry_count": 57,
+  "fixed_timestamp": "2026-09-28T00:00:00",
+  "entries": [
+    {
+      "path": "benchmark_20260928/README.md",
+      "size": 1370,
+      "sha256": "d514f6e725d56a36dc5034ab4133f2cd2f8f494bb0d0e3b243c9633641435452"
+    },
+    {
+      "path": "benchmark_20260928/audit/audit_report.md",
+      "size": 23254,
+      "sha256": "b9622ee57f9578c04b662a154434bf3e158c29d779610b7d5a69dc07b988460a"
+    },
+    {
+      "path": "benchmark_20260928/audit/fix_log.md",
+      "size": 3414,
+      "sha256": "8467b3fc6a3a91ded9e0ddc1082f3aef68c887e4911684152f8bcfe08c2e48c7"
+    },
+    {
+      "path": "benchmark_20260928/harness/__init__.py",
+      "size": 503,
+      "sha256": "9ed3e52077b894c055b988c39f742a303f3380c7f1ae0628e05363fc425154b4"
+    },
+    {
+      "path": "benchmark_20260928/harness/app.py",
+      "size": 5039,
+      "sha256": "632c05deb1c918899fba87dd5fb0ab6c0b6a529d5c02adef0001e685ce5999bc"
+    },
+    {
+      "path": "benchmark_20260928/harness/c01_veadk.py",
+      "size": 2718,
+      "sha256": "e09afc6120c2319e990d44a6ab53f2968d8acd4ad8a5711236026c67fa4c0738"
+    },
+    {
+      "path": "benchmark_20260928/harness/c02_sdk_app.py",
+      "size": 2504,
+      "sha256": "ebf443c4ae2a76c40abb875bdc78249cba99c034ef6c1f75036d77b0d281269d"
+    },
+    {
+      "path": "benchmark_20260928/harness/c03_runtime.py",
+      "size": 2262,
+      "sha256": "fb17eb2a72f12e91bc3adc87bfc4924cf97d1ea994d56c92e499fdc872d79a6a"
+    },
+    {
+      "path": "benchmark_20260928/harness/c04_workflow.py",
+      "size": 4121,
+      "sha256": "ace8c45ab942f92c6702d336f66201d40e1f235fd45d586abc9186ab816d4a5b"
+    },
+    {
+      "path": "benchmark_20260928/harness/c05_skills.py",
+      "size": 2509,
+      "sha256": "706c68416cdcbf792992a8cfd06e8bcea08fe8192bff3a86eecbf037fb8f9436"
+    },
+    {
+      "path": "benchmark_20260928/harness/c06_memory.py",
+      "size": 2641,
+      "sha256": "a215f95a981e3533e1f9e279e34de9c25d1f1405e18d76d72667a1f49882b22b"
+    },
+    {
+      "path": "benchmark_20260928/harness/c07_mcp_gateway.py",
+      "size": 4311,
+      "sha256": "67c9337fbe9bde7f0378487262dd046f68f17249ae9990e59bcbeb438b323ef8"
+    },
+    {
+      "path": "benchmark_20260928/harness/c08_a2a.py",
+      "size": 3191,
+      "sha256": "a1d2badc715ee18d2b555717bcde9fb98f00c5e15c4d3029bd3eceefa416c302"
+    },
+    {
+      "path": "benchmark_20260928/harness/c09_sandbox.py",
+      "size": 11929,
+      "sha256": "835e2a4132d8f845696877c064021b8ac42fa1253de12ece808a1e2dd17169f4"
+    },
+    {
+      "path": "benchmark_20260928/harness/c10_guardrails.py",
+      "size": 2453,
+      "sha256": "9d3a0f229218b9603bde6980866c086460d23789c54e03079c2b51b5a94fb824"
+    },
+    {
+      "path": "benchmark_20260928/harness/c11_identity.py",
+      "size": 2721,
+      "sha256": "2a5f1859a1268ef4ad64538e262089aeca4438f19c82c949e4fd8b02319b98f1"
+    },
+    {
+      "path": "benchmark_20260928/harness/c12_knowledge.py",
+      "size": 1912,
+      "sha256": "67af6a1b3dbdbd7768d74944474e90ba13c64337999113d16ae554ebfd4323b5"
+    },
+    {
+      "path": "benchmark_20260928/harness/c13_observability.py",
+      "size": 2867,
+      "sha256": "7c6033bdba59488e7a962e44863ae761e17ee8b9a53ac84d0bf828aac0b344cb"
+    },
+    {
+      "path": "benchmark_20260928/harness/c14_evaluation.py",
+      "size": 2005,
+      "sha256": "6c3eafbcd01da7a936027e2ffa2f6a448c4342d1794a39fe60e0f203d318af63"
+    },
+    {
+      "path": "benchmark_20260928/harness/contract.py",
+      "size": 2089,
+      "sha256": "7c47747069d1d56eda0707d10ab6b88baa2429cd5df528e75548f51a285bce45"
+    },
+    {
+      "path": "benchmark_20260928/iteration2/__init__.py",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "benchmark_20260928/iteration2/cold_start/cold_start_agent.py",
+      "size": 9415,
+      "sha256": "14e944a3f5c217a9fbe4e0cb0cca43ec208856b9e1be6703023c74531755d80d"
+    },
+    {
+      "path": "benchmark_20260928/iteration2/cold_start/cold_start_journal.md",
+      "size": 5598,
+      "sha256": "ca774f7d4f123f0e33d5cdd1875254a23efb56d921f0bd7c3d738a26c06efa40"
+    },
+    {
+      "path": "benchmark_20260928/iteration2/cold_start/result.json",
+      "size": 2265,
+      "sha256": "37d9de7b3041aa6f6ca3da19e48ec4b6a0d90375a11eb256ea6bc022914f99c1"
+    },
+    {
+      "path": "benchmark_20260928/iteration2/cold_start/test_cold_start.py",
+      "size": 4058,
+      "sha256": "6d78bf558c6ee398bc8e51ae9bec6e5d98aeeabd74a553b4411b2e4f6bce230a"
+    },
+    {
+      "path": "benchmark_20260928/iteration2/evaluation/evidence/eval_sdk_probe.txt",
+      "size": 725,
+      "sha256": "3ff66a70c700969bc98956a5cc5dfb21e4b2c8b226ebbcefd5e415c3c67eb8c3"
+    },
+    {
+      "path": "benchmark_20260928/iteration2/evaluation/evidence/kb_local_probe.txt",
+      "size": 6119,
+      "sha256": "99f1fe66b242e49bcc7cfe712004d8a2c177b90c6d711468b69ae7769a436eef"
+    },
+    {
+      "path": "benchmark_20260928/iteration2/evaluation/evidence/local_eval_report.json",
+      "size": 1120,
+      "sha256": "17b8fd8069dca2e03fa234d56103052fee6405422ef79efbafcb0e348be39bbc"
+    },
+    {
+      "path": "benchmark_20260928/iteration2/evaluation/pre_edit/agentkit-evaluation_SKILL.md",
+      "size": 14618,
+      "sha256": "5b786047fce68de8262822259bbcb563ae1c316655a5873eeb233f63854e434f"
+    },
+    {
+      "path": "benchmark_20260928/iteration2/evaluation/pre_edit/agentkit-knowledge-base_SKILL.md",
+      "size": 17120,
+      "sha256": "42dca0cbb81ec23eeda85dab376244c797df380cae2af68dbc38aaf79d253f10"
+    },
+    {
+      "path": "benchmark_20260928/iteration2/evaluation/reference/reference_eval.py",
+      "size": 5985,
+      "sha256": "7e7cdf4872c23dcfaae85cd1b1bd3b7e26d1c55208a58ff51b21779219f8f5b6"
+    },
+    {
+      "path": "benchmark_20260928/iteration2/evaluation/scripts/probe_kb_local.py",
+      "size": 5864,
+      "sha256": "acf1d4a90fb4750a1988ab622659029d8d5d8f9de608674aa1651da7d894859a"
+    },
+    {
+      "path": "benchmark_20260928/iteration2/evaluation/scripts/run_local_eval.py",
+      "size": 1599,
+      "sha256": "762fa18f23cdaeccf441f12ebdd0cbcfc7e144ce9c4423680078853c33abfe68"
+    },
+    {
+      "path": "benchmark_20260928/iteration2/evaluation/tests/test_kb_local_contract.py",
+      "size": 2644,
+      "sha256": "7c5822857213768504dee892b269f2ddf3f63d6381fe04f0281d1b86d3299b7d"
+    },
+    {
+      "path": "benchmark_20260928/iteration2/evaluation/tests/test_local_eval_reference.py",
+      "size": 2035,
+      "sha256": "18e08b0514c5ee6547a30c271b50e10b2cbd8c8de72d0c5bc967c528d6f4be39"
+    },
+    {
+      "path": "benchmark_20260928/iteration2/reports/final_iteration2_report.md",
+      "size": 17185,
+      "sha256": "9522b48cb1a633dbc2e135cf3d592b1d007ad07d24aa1e601538661b83e5f09e"
+    },
+    {
+      "path": "benchmark_20260928/iteration2/reports/skill_refactor_log.md",
+      "size": 3542,
+      "sha256": "3bf82b93972e16fcda2dd6eb2209dd01500ad078da4542c8f5d7be46a802bb29"
+    },
+    {
+      "path": "benchmark_20260928/iteration2/reports/template_inventory.md",
+      "size": 10576,
+      "sha256": "fa01f1bd3240fab2a77762bdbd03666123d0b1698736891f99439b51390c299b"
+    },
+    {
+      "path": "benchmark_20260928/iteration2/security/README.md",
+      "size": 2852,
+      "sha256": "357285bba88bfe70e3526ec92280d7a2639c322e327cd0869d32182a0b17c460"
+    },
+    {
+      "path": "benchmark_20260928/iteration2/security/__init__.py",
+      "size": 782,
+      "sha256": "b784dd766d77bbf397950a5f08338deaccbd62ff3b0c431a2942c9b6cb9fc20c"
+    },
+    {
+      "path": "benchmark_20260928/iteration2/security/guard.py",
+      "size": 2117,
+      "sha256": "001f8a27d12b1869606a9e07e7d7060f070f915b875111231d9e5a9a86e1ed3a"
+    },
+    {
+      "path": "benchmark_20260928/iteration2/verification/README.md",
+      "size": 1710,
+      "sha256": "3c3c4fffe953817c4414cd4f0a5d864fea77c9a3c989b24ea4608681960a4267"
+    },
+    {
+      "path": "benchmark_20260928/iteration2/verification/verify_all.py",
+      "size": 13611,
+      "sha256": "f36268c5817aa6224bd32353151ff8c12dd77b6daf6fafe4234491ae0e9d9756"
+    },
+    {
+      "path": "benchmark_20260928/iteration2/verification/verify_report.json",
+      "size": 5735,
+      "sha256": "83267e610ca6201bcaaff99002b7bce05d63b173ec4d186ea396b49130cde5bf"
+    },
+    {
+      "path": "benchmark_20260928/journal/components_coverage.md",
+      "size": 4718,
+      "sha256": "005a13700317d4046fa0755b7efe41ed982bbd53e2ca3f4c79fc150129e49538"
+    },
+    {
+      "path": "benchmark_20260928/journal/execution_journal.md",
+      "size": 12209,
+      "sha256": "ad63d2265656dac3533ba7c1219ca187e1b2b670d6b7d6920394ca5637a03531"
+    },
+    {
+      "path": "benchmark_20260928/journal/pytest_output.txt",
+      "size": 4042,
+      "sha256": "0a9af0da6ba4b04b2d010fa23ca3e89c9fcb00eaa0dcaac925f187d9b6703b3d"
+    },
+    {
+      "path": "benchmark_20260928/tests/conftest.py",
+      "size": 219,
+      "sha256": "fec32f2a255cb6c73ba27d49a1a7fb08ad221ef8b555a7971daadd2451303608"
+    },
+    {
+      "path": "benchmark_20260928/tests/test_components_import.py",
+      "size": 785,
+      "sha256": "86bd019ea173fb3f7d85f2da2beea3efe53db88ce8f74082b63daf7b5a775ae3"
+    },
+    {
+      "path": "benchmark_20260928/tests/test_integration.py",
+      "size": 1989,
+      "sha256": "f31bc6b5854880dc9cea2fadaa39377f69490ef7bc6a830ed16722297c379a1d"
+    },
+    {
+      "path": "benchmark_20260928/tests/test_mcp_a2a_sandbox.py",
+      "size": 3102,
+      "sha256": "d6b8e3eb3828861a4d5d39bbe14cc2acfacd1aa17ff32432eb1d3ed746a6bf8a"
+    },
+    {
+      "path": "benchmark_20260928/tests/test_memory_kb_obs_eval.py",
+      "size": 1951,
+      "sha256": "37a580460effff088d1b8e8652afcd9bc8487ecc0b37df0136d9e38755cffb88"
+    },
+    {
+      "path": "benchmark_20260928/tests/test_sandbox_security.py",
+      "size": 7330,
+      "sha256": "5ca5cecd79ddf67d78d71beaa218a6c24e17669b6db9ea2b82f5e6b80ccf538d"
+    },
+    {
+      "path": "benchmark_20260928/tests/test_sdk_runtime.py",
+      "size": 1310,
+      "sha256": "f90731e0f21330a3ec0d140c773942b6f486f17cdde5ceb815accd6012133a5d"
+    },
+    {
+      "path": "benchmark_20260928/tests/test_security.py",
+      "size": 1844,
+      "sha256": "7f9ad084b6a51be1081f1a7e4051ef14c86cbf4eea39dc43a076faa4476748d1"
+    },
+    {
+      "path": "benchmark_20260928/tests/test_skills.py",
+      "size": 1699,
+      "sha256": "c0d773bcf3ec3e3518e1dea99a078cd5d55a17568691e7d0b62bc475c5546de6"
+    },
+    {
+      "path": "benchmark_20260928/tests/test_workflow.py",
+      "size": 905,
+      "sha256": "923e1180eec0c3e62c16120c0c2b95dc613d29ec762789f982320f75e5017a81"
+    }
+  ]
+}

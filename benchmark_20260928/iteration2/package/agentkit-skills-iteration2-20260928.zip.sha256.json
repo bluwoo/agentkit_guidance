@@ -1,0 +1,117 @@
+{
+  "archive": "agentkit-skills-iteration2-20260928.zip",
+  "entry_count": 22,
+  "fixed_timestamp": "2026-09-28T00:00:00",
+  "entries": [
+    {
+      "path": "skills/README.md",
+      "size": 6922,
+      "sha256": "1700d7e68232db0cbef6730308c1f2eb088c47719acb0d99d389e2fa7b3a3188"
+    },
+    {
+      "path": "skills/SKILL-TEMPLATE.md",
+      "size": 3190,
+      "sha256": "a30f1bdb0960478aa9fe69b7a9c3654eb693de309d140aaf08e89d66c8fedafa"
+    },
+    {
+      "path": "skills/adk-workflow/SKILL.md",
+      "size": 19702,
+      "sha256": "1dfce5ca065b17e955cafaa38c8b2bd00d5d38b605e0b4cdb20f8fcd7947f29c"
+    },
+    {
+      "path": "skills/adk-workflow/scripts/validate_orchestration.py",
+      "size": 17115,
+      "sha256": "e7d7a56751725d4f9cbecfbb1f9ce6b072af85713187d95618a6dd5a797e4b56"
+    },
+    {
+      "path": "skills/agentkit-a2a-registry/SKILL.md",
+      "size": 16187,
+      "sha256": "70320e38ad0fdc13941a846d7e9d0ab86a33b44023a451268ddc26eef095533a"
+    },
+    {
+      "path": "skills/agentkit-a2a-registry/references/agentcard-schema.md",
+      "size": 2022,
+      "sha256": "9ee675cb0215cb2b07f806bb8e2b448a214b5c7db0364420e2dab26d2a003abb"
+    },
+    {
+      "path": "skills/agentkit-evaluation/SKILL.md",
+      "size": 16194,
+      "sha256": "51b0faa7c74ec5e8f8d65383cee984bfe20abb76a223ec2afd25d7415a04ceff"
+    },
+    {
+      "path": "skills/agentkit-gateway-mcp/SKILL.md",
+      "size": 17164,
+      "sha256": "950fde48f66ed8ec38e15544ef670ec0847092083b8e7057c28b9755e9774563"
+    },
+    {
+      "path": "skills/agentkit-guardrails/SKILL.md",
+      "size": 24625,
+      "sha256": "545e50c4670e981b9812ba4f0749672124f700340754d614aef81d767ab44be5"
+    },
+    {
+      "path": "skills/agentkit-identity-permission/SKILL.md",
+      "size": 17647,
+      "sha256": "9fa33abd04f24a6fa6feb8b77573932b507c90fb29fc550bdbaf773426f861b4"
+    },
+    {
+      "path": "skills/agentkit-identity-permission/references/e2e-acceptance.md",
+      "size": 2001,
+      "sha256": "cad1cccb50a00b14704ac46b97b6f3f118dde46cea47649cb6df262dca91dd47"
+    },
+    {
+      "path": "skills/agentkit-knowledge-base/SKILL.md",
+      "size": 18893,
+      "sha256": "6e830e2036e93fc0883f227ad62940f08756bf25535e2e4c4cf5d408940cbe49"
+    },
+    {
+      "path": "skills/agentkit-observability/SKILL.md",
+      "size": 17430,
+      "sha256": "da146517d386e559fbea4af7fe7bf1823b52a09c980653375bbde88ec714520c"
+    },
+    {
+      "path": "skills/agentkit-observability/references/span-attributes-and-query-api.md",
+      "size": 10953,
+      "sha256": "58dc139c81e3ad3e94f448c54a1f0b8896bd6580a9a8f08634be6947f435fcc0"
+    },
+    {
+      "path": "skills/agentkit-runtime/SKILL.md",
+      "size": 8733,
+      "sha256": "87b0daf44360177ff335b6d0852a2e70c2a5d992acbc992f5935e12e7d089804"
+    },
+    {
+      "path": "skills/agentkit-sandbox/SKILL.md",
+      "size": 16153,
+      "sha256": "51b5bb2b5501016c9591bcf674672ef7d19cf1801f14ef6a62324e9d16650d75"
+    },
+    {
+      "path": "skills/agentkit-sdk/SKILL.md",
+      "size": 15919,
+      "sha256": "5ed18e8e33e33bf15124274899cab3dd1653e06a85ca8236ae6d943fa7c8522d"
+    },
+    {
+      "path": "skills/agentkit-session-memory/SKILL.md",
+      "size": 15512,
+      "sha256": "893f22d76a4e58abd39333db5133a842196b69c83c810b416c21afdc1b3ffc6e"
+    },
+    {
+      "path": "skills/agentkit-skills/SKILL.md",
+      "size": 17480,
+      "sha256": "0c737fd54dae5374bbf1f1431292e61332a38b6204562374e319590f96e3f629"
+    },
+    {
+      "path": "skills/references/runner-entrypoint.md",
+      "size": 8180,
+      "sha256": "ab4a5af07155d7b6b467820134d5376c18a3e19840716abe90e2ee073cf051e4"
+    },
+    {
+      "path": "skills/references/verify_runner_signature.py",
+      "size": 3384,
+      "sha256": "f83269448c4cef0e9312a8c5dfa07c48e2c34caa78764cf181766200291ecc2e"
+    },
+    {
+      "path": "skills/veadk/SKILL.md",
+      "size": 14869,
+      "sha256": "b2a75a257e442b4d3ccad804cb4c9e0794e30153178707f5824224143e2f06b3"
+    }
+  ]
+}

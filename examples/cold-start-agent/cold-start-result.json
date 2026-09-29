@@ -1,0 +1,45 @@
+{
+  "generated_at": "2026-09-29T18:15:00+08:00",
+  "status": "PASS",
+  "mode": "cold_start_offline",
+  "knowledge_entrypoints": [
+    "README.md",
+    "AGENTKIT_AGENT_ONBOARDING.md",
+    "skills/README.md"
+  ],
+  "skills_read": [
+    "veadk",
+    "agentkit-sdk",
+    "adk-workflow",
+    "agentkit-gateway-mcp"
+  ],
+  "requirements": {
+    "veadk_agent": "PASS",
+    "agentkit_sdk_entrypoint": "PASS",
+    "graph_conditional_default": "PASS",
+    "persistent_short_term_memory": "PASS",
+    "missing_headers_400": "PASS",
+    "local_mcp_protocol": "PASS"
+  },
+  "tests": {
+    "example": "14/14",
+    "root": "158/158",
+    "http_e2e": "PASS",
+    "benchmark": "53/53 + 9/9 + 7/7",
+    "frontend": "npm ci/build/lint/typecheck PASS",
+    "lock_integrity": "5 lockfiles, 2075 sha512 entries, invalid 0, placeholders 0"
+  },
+  "evidence_levels": [
+    "L1",
+    "L2"
+  ],
+  "cloud_access": false,
+  "external_credentials_read": false,
+  "git_push": false,
+  "first_failures_resolved": [
+    "Graph function parameter binding",
+    "occupied local port",
+    "session state assignment semantics"
+  ],
+  "independent_review": "PASS"
+}

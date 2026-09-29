@@ -1,0 +1,14 @@
+# Ruff config for the AgentKit Wizard backend (server/wizard/* + tests).
+#
+# The shim is a resilience layer: it must never crash the service, so it
+# deliberately swallows broad exceptions around optional Hermes/OTel wiring.
+# We therefore relax the "blind except" / "try-except-pass" opinions there, while
+# keeping everything else (pyflakes, pyupgrade, imports) enforced.
+line-length = 100
+target-version = "py311"
+
+[lint.per-file-ignores]
+"server/wizard/shim/*" = ["BLE001", "S110", "PYI034"]
+"server/wizard/api/*" = ["BLE001", "B008"]
+"tests/*" = ["F841"]
+"deploy/*" = ["BLE001"]

@@ -1,0 +1,609 @@
+{
+  "environment": {
+    "python": "3.13.7 (main, Aug 14 2025, 11:12:11) [Clang 17.0.0 (clang-1700.0.13.3)]",
+    "packages": {
+      "[BASE-ADK]-python": "1.1.13",
+      "[PRODUCT]-sdk-python": "0.8.7",
+      "google-adk": "2.2.0"
+    }
+  },
+  "overall_passed": 84,
+  "overall_failed": 0,
+  "suites": [
+    {
+      "suite": "test_imports",
+      "total": 25,
+      "passed": 25,
+      "failed": 0,
+      "results": [
+        {
+          "id": "01",
+          "stmt": "from [BASE-ADK] import Agent, Runner",
+          "desc": "[BASE-ADK] 顶层 Agent + Runner",
+          "method": "import",
+          "passed": true,
+          "error": null
+        },
+        {
+          "id": "02",
+          "stmt": "from [BASE-ADK] import Agent",
+          "desc": "[BASE-ADK] 顶层 Agent（单独）",
+          "method": "import",
+          "passed": true,
+          "error": null
+        },
+        {
+          "id": "03",
+          "stmt": "from [PRODUCT].apps import [PRODUCT]SimpleApp",
+          "desc": "[PRODUCT] 简单应用",
+          "method": "import",
+          "passed": true,
+          "error": null
+        },
+        {
+          "id": "04",
+          "stmt": "from [PRODUCT].apps import [PRODUCT]AgentServerApp",
+          "desc": "[PRODUCT] Agent 服务端应用",
+          "method": "import",
+          "passed": true,
+          "error": null
+        },
+        {
+          "id": "05",
+          "stmt": "from google.genai import types",
+          "desc": "Google GenAI types",
+          "method": "import",
+          "passed": true,
+          "error": null
+        },
+        {
+          "id": "06",
+          "stmt": "from google.adk.agents import RunConfig",
+          "desc": "ADK RunConfig",
+          "method": "import",
+          "passed": true,
+          "error": null
+        },
+        {
+          "id": "07",
+          "stmt": "from google.adk.agents.run_config import StreamingMode",
+          "desc": "ADK StreamingMode 枚举",
+          "method": "import",
+          "passed": true,
+          "error": null
+        },
+        {
+          "id": "08",
+          "stmt": "from google.adk.agents import SequentialAgent",
+          "desc": "ADK 顺序编排",
+          "method": "import",
+          "passed": true,
+          "error": null
+        },
+        {
+          "id": "09",
+          "stmt": "from google.adk.agents import ParallelAgent",
+          "desc": "ADK 并行编排",
+          "method": "import",
+          "passed": true,
+          "error": null
+        },
+        {
+          "id": "10",
+          "stmt": "from google.adk.agents import LoopAgent",
+          "desc": "ADK 循环编排",
+          "method": "import",
+          "passed": true,
+          "error": null
+        },
+        {
+          "id": "11",
+          "stmt": "from google.adk import Agent",
+          "desc": "ADK 顶层 Agent",
+          "method": "import",
+          "passed": true,
+          "error": null
+        },
+        {
+          "id": "12",
+          "stmt": "from google.adk import Workflow",
+          "desc": "ADK 顶层 Workflow",
+          "method": "import",
+          "passed": true,
+          "error": null
+        },
+        {
+          "id": "13",
+          "stmt": "from google.adk import Event",
+          "desc": "ADK 顶层 Event",
+          "method": "import",
+          "passed": true,
+          "error": null
+        },
+        {
+          "id": "14",
+          "stmt": "from google.adk.workflow import node",
+          "desc": "ADK workflow node 装饰器",
+          "method": "import",
+          "passed": true,
+          "error": null
+        },
+        {
+          "id": "15",
+          "stmt": "from google.adk.agents.remote_a2a_agent import RemoteA2aAgent",
+          "desc": "ADK 远程 A2A Agent",
+          "method": "import",
+          "passed": true,
+          "error": null
+        },
+        {
+          "id": "16",
+          "stmt": "from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset",
+          "desc": "ADK MCP 工具集",
+          "method": "import",
+          "passed": true,
+          "error": null
+        },
+        {
+          "id": "17",
+          "stmt": "from google.adk.tools.mcp_tool.mcp_toolset import StreamableHTTPConnectionParams",
+          "desc": "ADK MCP 流式 HTTP 连接参数",
+          "method": "import",
+          "passed": true,
+          "error": null
+        },
+        {
+          "id": "18",
+          "stmt": "from [BASE-ADK].knowledgebase import KnowledgeBase",
+          "desc": "[BASE-ADK] 知识库",
+          "method": "import",
+          "passed": true,
+          "error": null
+        },
+        {
+          "id": "19",
+          "stmt": "from [BASE-ADK].tools.builtin_tools.run_code import run_code",
+          "desc": "[BASE-ADK] 内置 run_code 工具",
+          "method": "import",
+          "passed": true,
+          "error": null
+        },
+        {
+          "id": "20",
+          "stmt": "from [BASE-ADK].memory.long_term_memory import LongTermMemory",
+          "desc": "[BASE-ADK] 长期记忆",
+          "method": "import",
+          "passed": true,
+          "error": null
+        },
+        {
+          "id": "21",
+          "stmt": "from [BASE-ADK].integrations.[PRODUCT] import create_[PRODUCT]_app",
+          "desc": "[BASE-ADK] 创建 [PRODUCT] 应用",
+          "method": "import",
+          "passed": true,
+          "error": null
+        },
+        {
+          "id": "22",
+          "stmt": "from [BASE-ADK].integrations.[PRODUCT] import run_[PRODUCT]_app",
+          "desc": "[BASE-ADK] 运行 [PRODUCT] 应用",
+          "method": "import",
+          "passed": true,
+          "error": null
+        },
+        {
+          "id": "23",
+          "stmt": "from [PRODUCT].auth._openapi import OpenApiClient",
+          "desc": "[PRODUCT] OpenAPI 客户端（私有模块）",
+          "method": "import",
+          "passed": true,
+          "error": null
+        },
+        {
+          "id": "24",
+          "stmt": "from [PRODUCT].sdk.mcp.client import [PRODUCT]MCPClient",
+          "desc": "[PRODUCT] MCP 客户端",
+          "method": "import",
+          "passed": true,
+          "error": null
+        },
+        {
+          "id": "25",
+          "stmt": "from google.adk import Context",
+          "desc": "ADK Context（顶层 re-export，修正点）",
+          "method": "import",
+          "passed": true,
+          "error": null
+        }
+      ]
+    },
+    {
+      "suite": "test_signatures",
+      "total": 36,
+      "passed": 36,
+      "failed": 0,
+      "results": [
+        {
+          "check": "Runner.__init__.agent 默认值",
+          "passed": true,
+          "detail": "期望 None, 实际 None"
+        },
+        {
+          "check": "Runner.__init__.short_term_memory 默认值",
+          "passed": true,
+          "detail": "期望 None, 实际 None"
+        },
+        {
+          "check": "Runner.__init__.app_name 默认值",
+          "passed": true,
+          "detail": "期望 None, 实际 None"
+        },
+        {
+          "check": "Runner.__init__.user_id 默认值",
+          "passed": true,
+          "detail": "期望 '[BASE-ADK]_default_user', 实际 '[BASE-ADK]_default_user'"
+        },
+        {
+          "check": "Runner.__init__.upload_inline_data_to_tos 默认值",
+          "passed": true,
+          "detail": "期望 False, 实际 False"
+        },
+        {
+          "check": "Runner.run.messages 必填",
+          "passed": true,
+          "detail": "实际 default=<class 'inspect._empty'>"
+        },
+        {
+          "check": "Runner.run.user_id 默认值",
+          "passed": true,
+          "detail": "期望 '', 实际 ''"
+        },
+        {
+          "check": "Runner.run.session_id 默认值",
+          "passed": true,
+          "detail": "期望 '<dynamic>', 实际 'tmp-session-20260918171820'"
+        },
+        {
+          "check": "Runner.run.run_config 默认值",
+          "passed": true,
+          "detail": "期望 None, 实际 None"
+        },
+        {
+          "check": "Runner.run.save_tracing_data 默认值",
+          "passed": true,
+          "detail": "期望 False, 实际 False"
+        },
+        {
+          "check": "Runner.run_async.user_id 必填",
+          "passed": true,
+          "detail": "实际 default=<class 'inspect._empty'>"
+        },
+        {
+          "check": "Runner.run_async.user_id kind",
+          "passed": true,
+          "detail": "期望 KEYWORD_ONLY, 实际 KEYWORD_ONLY"
+        },
+        {
+          "check": "Runner.run_async.session_id 必填",
+          "passed": true,
+          "detail": "实际 default=<class 'inspect._empty'>"
+        },
+        {
+          "check": "Runner.run_async.session_id kind",
+          "passed": true,
+          "detail": "期望 KEYWORD_ONLY, 实际 KEYWORD_ONLY"
+        },
+        {
+          "check": "Runner.run_async.invocation_id 默认值",
+          "passed": true,
+          "detail": "期望 None, 实际 None"
+        },
+        {
+          "check": "Runner.run_async.new_message 默认值",
+          "passed": true,
+          "detail": "期望 None, 实际 None"
+        },
+        {
+          "check": "Runner.run_async.run_config 默认值",
+          "passed": true,
+          "detail": "期望 None, 实际 None"
+        },
+        {
+          "check": "Runner.run_async.yield_user_message 默认值",
+          "passed": true,
+          "detail": "期望 False, 实际 False"
+        },
+        {
+          "check": "ADKRunner.__init__.session_service 必填",
+          "passed": true,
+          "detail": "实际 default=<class 'inspect._empty'>"
+        },
+        {
+          "check": "ADKRunner.__init__.auto_create_session 默认值",
+          "passed": true,
+          "detail": "期望 False, 实际 False"
+        },
+        {
+          "check": "[PRODUCT]SimpleApp.__init__ 无必填参数",
+          "passed": true,
+          "detail": "parameters=['self']"
+        },
+        {
+          "check": "[PRODUCT]SimpleApp.entrypoint 存在",
+          "passed": true,
+          "detail": "callable=True"
+        },
+        {
+          "check": "[PRODUCT]SimpleApp.run 存在",
+          "passed": true,
+          "detail": "callable=True"
+        },
+        {
+          "check": "[PRODUCT]SimpleApp.ping 存在",
+          "passed": true,
+          "detail": "callable=True"
+        },
+        {
+          "check": "create_[PRODUCT]_app.root_agent 默认值",
+          "passed": true,
+          "detail": "期望 None, 实际 None"
+        },
+        {
+          "check": "create_[PRODUCT]_app.enable_feishu 默认值",
+          "passed": true,
+          "detail": "期望 False, 实际 False"
+        },
+        {
+          "check": "create_[PRODUCT]_app.enable_studio_tools 默认值",
+          "passed": true,
+          "detail": "期望 False, 实际 False"
+        },
+        {
+          "check": "create_[PRODUCT]_app.enable_studio_routes 默认值",
+          "passed": true,
+          "detail": "期望 False, 实际 False"
+        },
+        {
+          "check": "run_[PRODUCT]_app.app 必填",
+          "passed": true,
+          "detail": "实际 default=<class 'inspect._empty'>"
+        },
+        {
+          "check": "run_[PRODUCT]_app.app kind",
+          "passed": true,
+          "detail": "期望 POSITIONAL_OR_KEYWORD, 实际 POSITIONAL_OR_KEYWORD"
+        },
+        {
+          "check": "run_[PRODUCT]_app.host 默认值",
+          "passed": true,
+          "detail": "期望 None, 实际 None"
+        },
+        {
+          "check": "run_[PRODUCT]_app.port 默认值",
+          "passed": true,
+          "detail": "期望 None, 实际 None"
+        },
+        {
+          "check": "StreamingMode.NONE 存在",
+          "passed": true,
+          "detail": "value=StreamingMode.NONE"
+        },
+        {
+          "check": "StreamingMode.SSE 存在",
+          "passed": true,
+          "detail": "value=StreamingMode.SSE"
+        },
+        {
+          "check": "StreamingMode.BIDI 存在",
+          "passed": true,
+          "detail": "value=StreamingMode.BIDI"
+        },
+        {
+          "check": "Runner.run.session_id 默认值非空（时间戳）",
+          "passed": true,
+          "detail": "default='tmp-session-20260918171820'"
+        }
+      ]
+    },
+    {
+      "suite": "test_code_blocks",
+      "skills_scanned": 14,
+      "total_blocks": 15,
+      "passed": 15,
+      "failed": 0,
+      "results": [
+        {
+          "skill": "adk-workflow",
+          "block_index": 0,
+          "start_line": 37,
+          "line_count": 48,
+          "method": "py_compile",
+          "passed": true,
+          "error": null
+        },
+        {
+          "skill": "adk-workflow",
+          "block_index": 1,
+          "start_line": 89,
+          "line_count": 68,
+          "method": "py_compile",
+          "passed": true,
+          "error": null
+        },
+        {
+          "skill": "[PRODUCT]-evaluation",
+          "block_index": 0,
+          "start_line": 48,
+          "line_count": 46,
+          "method": "py_compile",
+          "passed": true,
+          "error": null
+        },
+        {
+          "skill": "[PRODUCT]-gateway-mcp",
+          "block_index": 0,
+          "start_line": 51,
+          "line_count": 57,
+          "method": "py_compile",
+          "passed": true,
+          "error": null
+        },
+        {
+          "skill": "[PRODUCT]-guardrails",
+          "block_index": 0,
+          "start_line": 44,
+          "line_count": 45,
+          "method": "py_compile",
+          "passed": true,
+          "error": null
+        },
+        {
+          "skill": "[PRODUCT]-identity-permission",
+          "block_index": 0,
+          "start_line": 69,
+          "line_count": 23,
+          "method": "py_compile",
+          "passed": true,
+          "error": null
+        },
+        {
+          "skill": "[PRODUCT]-knowledge-base",
+          "block_index": 0,
+          "start_line": 38,
+          "line_count": 55,
+          "method": "py_compile",
+          "passed": true,
+          "error": null
+        },
+        {
+          "skill": "[PRODUCT]-observability",
+          "block_index": 0,
+          "start_line": 49,
+          "line_count": 47,
+          "method": "py_compile",
+          "passed": true,
+          "error": null
+        },
+        {
+          "skill": "[PRODUCT]-runtime",
+          "block_index": 0,
+          "start_line": 35,
+          "line_count": 52,
+          "method": "py_compile",
+          "passed": true,
+          "error": null
+        },
+        {
+          "skill": "[PRODUCT]-sandbox",
+          "block_index": 0,
+          "start_line": 37,
+          "line_count": 56,
+          "method": "py_compile",
+          "passed": true,
+          "error": null
+        },
+        {
+          "skill": "[PRODUCT]-sdk",
+          "block_index": 0,
+          "start_line": 40,
+          "line_count": 63,
+          "method": "py_compile",
+          "passed": true,
+          "error": null
+        },
+        {
+          "skill": "[PRODUCT]-session-memory",
+          "block_index": 0,
+          "start_line": 41,
+          "line_count": 62,
+          "method": "py_compile",
+          "passed": true,
+          "error": null
+        },
+        {
+          "skill": "[PRODUCT]-skills",
+          "block_index": 0,
+          "start_line": 66,
+          "line_count": 48,
+          "method": "py_compile",
+          "passed": true,
+          "error": null
+        },
+        {
+          "skill": "[BASE-ADK]",
+          "block_index": 0,
+          "start_line": 40,
+          "line_count": 24,
+          "method": "py_compile",
+          "passed": true,
+          "error": null
+        },
+        {
+          "skill": "[BASE-ADK]",
+          "block_index": 1,
+          "start_line": 67,
+          "line_count": 15,
+          "method": "py_compile",
+          "passed": true,
+          "error": null
+        }
+      ]
+    },
+    {
+      "suite": "test_session_semantics",
+      "total": 8,
+      "passed": 8,
+      "failed": 0,
+      "auto_create_session_default": "False",
+      "conclusion": {
+        "run_auto_creates_session": true,
+        "run_async_requires_presession": true,
+        "note": "run() 通过 short_term_memory.create_session() 显式建 session（非 auto_create_session 机制）；run_async() 继承 ADK 父类，auto_create_session=False，session 不存在时 raise SessionNotFoundError"
+      },
+      "results": [
+        {
+          "check": "ADK Runner.__init__ auto_create_session 默认值 == False",
+          "passed": true,
+          "detail": "实际默认值=False"
+        },
+        {
+          "check": "_get_or_create_session 受 auto_create_session 门控",
+          "passed": true,
+          "detail": "AST 找到 if self.auto_create_session: = True"
+        },
+        {
+          "check": "_get_or_create_session 在 auto_create=False 时 raise SessionNotFoundError",
+          "passed": true,
+          "detail": "AST 找到 raise SessionNotFoundError = True"
+        },
+        {
+          "check": "[BASE-ADK] Runner.run() 显式调用 short_term_memory.create_session()",
+          "passed": true,
+          "detail": "AST 找到 create_session 调用 = True"
+        },
+        {
+          "check": "[BASE-ADK] Runner.__init__ 未向 super() 传 auto_create_session=True",
+          "passed": true,
+          "detail": "AST 检测到传 True = False"
+        },
+        {
+          "check": "[BASE-ADK] Runner 未用 def 覆盖 run_async（仅 MethodType 包装）",
+          "passed": true,
+          "detail": "AST 检测到 def run_async = False"
+        },
+        {
+          "check": "结论: runner.run(messages=...) 自动建 session（显式 create_session）",
+          "passed": true,
+          "detail": "run() 内部 short_term_memory.create_session() 后再调 run_async"
+        },
+        {
+          "check": "结论: runner.run_async(...) 需要预建 session（否则 SessionNotFoundError）",
+          "passed": true,
+          "detail": "auto_create_session=False 默认，未覆盖，_get_or_create_session 会 raise"
+        }
+      ]
+    }
+  ],
+  "scope": "import/参数与默认值/语法/源码结构；不包含业务运行或云端调用"
+}

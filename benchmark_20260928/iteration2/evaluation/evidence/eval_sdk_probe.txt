@@ -1,0 +1,13 @@
+# Eval SDK probe — 2026-09-28T12:12:25Z
+# venv: /home/user/Documents/agentkit_dev_skills/benchmark_20260928/.venv/bin/python
+
+[OK] veadk.evaluation
+[OK] google.adk.evaluation
+
+google.adk.evaluation public: AgentEvaluator, EvalSet, EvalCase, EvalMetrics,
+  EvalResult, EvalRubrics, CustomMetricEvaluator, PrebuiltMetrics
+PrebuiltMetrics: all LLM/Vertex-backed (response_match, rubric, hallucinations,
+  tool_trajectory, user_simulator, multi_turn_*). No offline deterministic metric.
+veadk.evaluation: EvalSetRecorder, base_evaluator(BaseEvaluator abstract),
+  adk_evaluator, deepeval_evaluator, types(EvalTestCase, MetricResult).
+BaseEvaluator.generate_outputs runs an agent -> needs LLM/credential (cloud boundary).

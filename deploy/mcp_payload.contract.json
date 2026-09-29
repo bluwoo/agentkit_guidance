@@ -1,0 +1,51 @@
+{
+  "_doc_source": "docs/volcengine-official/shard2-results.md section 56 (CreateMCPService)",
+  "ProjectName": "default",
+  "Name": "agentkit-wizard-mcp",
+  "Path": "/agentkit-wizard/mcp",
+  "RoleName": "<RUNTIME_ROLE_NAME>",
+  "BackendType": "CustomPublic",
+  "BackendConfiguration": {
+    "_note": "exactly one sub-config required by BackendType; CustomConfiguration{Domain,Port,ProtocolType,TlsSettings} for a public HTTP backend",
+    "CustomConfiguration": {
+      "Domain": "<runtime-endpoint>.volcengineapi.com",
+      "Port": 443,
+      "ProtocolType": "HTTPS",
+      "TlsSettings": {
+        "TlsMode": "SIMPLE"
+      }
+    }
+  },
+  "ProtocolType": "HTTP",
+  "ProtocolConfiguration": {
+    "HttpApiConfiguration": {
+      "Type": "Swagger",
+      "Configuration": "<base64-encoded Swagger JSON>"
+    }
+  },
+  "InboundAuthorizerConfiguration": {
+    "AuthorizerType": "ApiKey",
+    "Authorizer": {
+      "KeyAuth": {
+        "ApiKeyLocation": "Header",
+        "ApiKeyName": "X-Api-Key",
+        "_pending": "ApiKeys.N.Name/Key filled out-of-band; never hard-coded here"
+      }
+    }
+  },
+  "OutboundAuthorizerConfiguration": {
+    "_pending": "not needed for a public backend; omit until official use"
+  },
+  "NetworkConfiguration": {
+    "EnablePublicNetwork": true
+  },
+  "GatewayMode": "Shared",
+  "ClientToken": "<CLIENT_TOKEN>",
+  "Tags": [
+    {
+      "Key": "managed_by",
+      "Value": "agentkit-wizard",
+      "Type": "custom"
+    }
+  ]
+}

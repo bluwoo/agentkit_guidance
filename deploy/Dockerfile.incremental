@@ -1,0 +1,9 @@
+# Registry host is supplied at build time via --build-arg REGISTRY_HOST=<your-cr-host>;
+# no project-specific registry is baked into the repo.
+ARG REGISTRY_HOST
+FROM ${REGISTRY_HOST}/agentkit/agentkit-wizard:0.21.3
+ENV WIZARD_VERSION=0.21.4
+WORKDIR /app
+COPY server/ ./server/
+COPY web/dist/ ./web/dist/
+CMD ["uvicorn", "server.wizard.main:app", "--host", "0.0.0.0", "--port", "8000"]

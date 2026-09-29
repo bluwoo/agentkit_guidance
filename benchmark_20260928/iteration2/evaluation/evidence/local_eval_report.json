@@ -1,0 +1,50 @@
+{
+  "experiment": "iter2-local",
+  "is_official_sdk": false,
+  "note": "本地 reference/contract test；官方 google.adk/veadk eval 为云/LLM 后台，未调用。",
+  "n_samples": 3,
+  "elapsed_sec": 7.3e-05,
+  "aggregate": {
+    "overall_mean": 0.5,
+    "per_evaluator_mean": {
+      "exact_match": 0.3333,
+      "token_overlap_stub": 0.6667
+    },
+    "pass_count_mean_ge_0_5": 2
+  },
+  "rows": [
+    {
+      "id": "s1",
+      "input": "refund?",
+      "expected": "refund within 30 days",
+      "actual": "refund within 30 days",
+      "scores": {
+        "exact_match": 1.0,
+        "token_overlap_stub": 1.0
+      },
+      "mean": 1.0
+    },
+    {
+      "id": "s2",
+      "input": "ship?",
+      "expected": "2 days",
+      "actual": "dispatch within 2 days",
+      "scores": {
+        "exact_match": 0.0,
+        "token_overlap_stub": 1.0
+      },
+      "mean": 0.5
+    },
+    {
+      "id": "s3",
+      "input": "kb?",
+      "expected": "nine steps",
+      "actual": "see employee handbook",
+      "scores": {
+        "exact_match": 0.0,
+        "token_overlap_stub": 0.0
+      },
+      "mean": 0.0
+    }
+  ]
+}
