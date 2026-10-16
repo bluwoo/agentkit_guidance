@@ -21,6 +21,7 @@ AgentKit Python SDK 深度封装 VeADK，提供**装饰器式应用入口**：�
   ```bash
   uv pip install veadk-python==1.1.13        # 先装 VeADK（离线验证版本）
   uv pip install agentkit-sdk-python==0.8.7  # 再装 AgentKit SDK
+  # 【边界】官网快速上手示例曾钉 agentkit-sdk-python==0.6.4（早于本仓实测基线），勿照抄；以本钉版为准
   ```
 - 服务域名：Region 为 `cn-beijing`。注意区分两类域名——**控制面 OpenAPI** 用 `agentkit.<region>.volcengineapi.com`；**InvokeTool/AsyncExecCommand** 等工具执行接口用 `agentkit.<region>.volces.com`（见 shard1 服务地址页）。已部署 Runtime 的自身调用域名由 `GetRuntime.Endpoint` 返回。
 

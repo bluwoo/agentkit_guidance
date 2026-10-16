@@ -18,7 +18,7 @@ Skill 是 Agent 可调用的**能力单元**（封装好的工具/技能）。Ag
 - [ ] 已创建至少一个 SkillSpace（Skills 空间）
 - 依赖包：`agentkit-cli`，`veadk-python==1.1.13`
 - 环境变量：`VOLCENGINE_REGION=cn-beijing`
-- **地域前提（核证 2026-09-22）**：Skills 中心/智能工坊已公测地域为**华北2（北京，cn-beijing）与华东2（上海，cn-shanghai）**；广州开服进行中；BytePlus 侧为亚太（Johor）付费公测。**企业私有 SkillSpace 是 region 级隔离的（北京只能看到北京的企业私有 SkillSpace），公开 Skill 才是 global 的**，跨地域引用私有空间需注意（来源：<internal-lark-doc>
+- **地域前提**：Skills 中心/智能工坊已开放地域以控制台为准；企业私有 SkillSpace 按 region 隔离、公开 Skill 为 global，跨地域引用私有空间需注意（本仓未云端实测）。
 
 ## 3. 快速上手
 
@@ -215,7 +215,7 @@ agentkit skill delete <skill-id> -y
 - 批量创建 Skill 功能自 2026-09-03 起上线
 - **CLI 限制（0.52.13 实测）**：无 `--skills` 请求级挂载参数；无 `skill-space` 独立创建命令；SkillSpace 创建/绑定需控制台或 OpenAPI
 - **地域**：已公测华北2（北京）/华东2（上海）；企业私有 SkillSpace 按 region 隔离，公开 Skill 为 global；详见 §2 地域前提
-- **Quota（单账号单地域，核证 2026-09-22）**：Skill 400、SkillSpace 40、单 SkillSpace 下绑定 Skill 50（BytePlus 同）（来源：企业内部售前速查指南）
+- **Quota**：Skill/SkillSpace/绑定数量上限以控制台公开说明为准（本仓不背书内部售前口径）。
 - Skills Sandbox 模板自动具备执行 Skill 的能力，无需额外配置
 
 ## 10.5 实测校正（2026-09-24 <project-name>/<region> 端到端验证）
@@ -254,10 +254,5 @@ if _skill_space_id:
 | Skill 概念与两条路径 | https://docs.volcengine.com/docs/AgentKit/SkillsOverview?lang=zh | Skills 概述 |
 | Skills 中心结构（SkillSpace/自定义/SharingSkill） | https://docs.volcengine.com/docs/AgentKit/SkillsOverview?lang=zh | Skills 概述 |
 | 在 Agent 中集成 Skill（Runtime 关联 + execute_skill） | https://docs.volcengine.com/docs/AgentKit/IntegratingSkillsintoagent?lang=zh | 在 Agent 中集成 Skills |
-| 三种挂载方式与实测样例 | <internal-lark-doc> | AgentKit & VeADK：从 Demo 到 Production（三种 Skill 挂载方式） |
-| Skill Hub 不分发 MCP | <internal-lark-doc> | AgentKit & VeADK：从 Demo 到 Production（依赖边界） |
 | 批量创建（2026-09-03起） | https://docs.volcengine.com/docs/AgentKit/SkillsOverview?lang=zh | Skills 概述（更新说明） |
 | Skill API 清单 | https://docs.volcengine.com/docs/AgentKit/SkillsOverview?lang=zh | API 参考 |
-| 已公测地域（北京/上海）与私有空间 region 隔离（核证 2026-09-22） | <internal-lark-doc> | AgentKit Skills One Page |
-| 私有 SkillSpace region 级隔离、公开 Skill global（核证 2026-09-22） | <internal-lark-doc>/threads/7626666171135232967 | 企业版内测跟进群（0409） |
-| Skill/SkillSpace/绑定数 Quota（核证 2026-09-22） | <internal-lark-doc> | AgentKit 售前速查指南 |

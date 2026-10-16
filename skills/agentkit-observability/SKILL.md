@@ -34,12 +34,12 @@ AgentKit 控制台 → 智能体运行时 → 选择 Runtime → 观测数据 �
 **查看日志**：
 AgentKit 控制台 → 智能体运行时 → 日志 → 查看 TLS 日志（含日志字段说明）
 
-**数据回流（trace → 评测集，已按企业内部 Demo 核证）**：
+**数据回流（trace → 评测集）**：
 AgentKit 控制台 → 左侧导航「可观测」分组下的独立「数据回流」Tab →「创建导出任务」：
 1. **数据过滤**：设置过滤条件（可套用「推荐配置」预置卡片，如 LLM 调用异常样本 / 长度截断样本 / 高 Token 消耗样本），并按 `service.name` 等字段锁定目标 Runtime；选择时间范围与重复频率（支持按天/按周持续回流新数据）。
 2. **导出配置**：导出平台选「智能体评测」，指定目标评测集（新建或已有），做字段映射（如 `GenAIInput→input`、`GenAIOutput→output`）。
 3. **预览后提交**：先预览确认能抽到有效输入/输出，再提交；任务运行后 trace 即回流到评测集。
-- **上限与限制**：总量与单次上限均为 **10 万条**；**只回流新数据**，历史数据需走离线 Trace 导出；PII 脱敏默认开启（关闭后可导出完整 Input/Output 用于调试）。（来源：<internal-lark-doc>；<internal-lark-doc>）
+- **上限与限制**：回流数量上限、是否只回流新数据、PII 脱敏默认状态以控制台公开说明为准（本仓未云端实测）；历史数据可走离线 Trace 导出。
 - 其他回流去向：暴露原始 topic 给 TLS 加工 / 导出 Kafka / LAS / TOS。
 - **云端未实测**：以上为控制台配置路径，需云凭据在真实 Runtime 上联调验证。
 
@@ -222,7 +222,7 @@ curl -X POST https://<runtime-domain>/invoke \
 ## 10. 已知限制与注意事项
 
 - **在线评测必须先开启观测服务**，否则 trace 无法回流
-- **定价（服务端按写入数据量后付费，独立计费，实际以控制台为准）**：Trace 0.4 元/GB（境外 0.56），Metrics 0.18 元/百万数据点（境外 0.36）；**免费额度 Trace 25GB/月、Metrics 1 亿数据点/月**；TLS 日志赠送 30 天免费存储。（来源：<internal-lark-doc>）
+- **定价**：服务端按写入数据量后付费、独立计费；具体单价与免费额度以控制台计费页为准（本仓不背书内部报价口径）。
 - 支持无侵入接入的 Coding Agent：**Codex、Claude Code、Cursor、OpenClaw**
 - 数据回流支持：回流到 agentkit、暴露原始 topic 给 TLS 加工、导出 Kafka/las/tos
 - **后续规划**（以官方为准）：
@@ -241,7 +241,6 @@ curl -X POST https://<runtime-domain>/invoke \
 | 统一排障路径 | https://docs.volcengine.com/docs/AgentKit/BasicTroubleshootingUnifiedTroubleshootingSchemeBasedonObservationSystem?lang=zh | 基础排障 |
 | 运行时监控数据（AgentKit） | https://docs.volcengine.com/docs/86681/2164880?lang=zh | 监控数据 |
 | 数据回流（全栈可观测平台） | https://docs.volcengine.com/docs/86845/2232301?lang=zh | 数据回流 |
-| 三方接入/veops/定价/对比/路线图 | <internal-lark-doc> | doc07 第一节 |
 | VeADK tracer 环境变量 | https://volcengine.github.io/agentkit-sdk-python/ | doc03 SDK 核验报告 3.2 节 |
 | AgentKit 埋点字段与 Metrics（浏览器 DOM 读取） | https://docs.volcengine.com/docs/ObservabilityPlatform/AgentKittrackingfieldsandmetricsdescription?lang=zh | APMPlus 全栈可观测平台 |
 | VeADK 埋点字段（通用/LLM/Tool 类，浏览器 DOM 读取） | https://volcengine.github.io/veadk-python/cn/docs/framework/span-attributes/ | VeADK 独立文档站 span-attributes |
@@ -250,7 +249,3 @@ curl -X POST https://<runtime-domain>/invoke \
 | APMPlus ListSession OpenAPI（按时间范围查会话列表） | https://api.volcengine.com/api-docs/view?action=ListSession&serviceCode=apmplus_server&version=2026-01-01 | 火山引擎 API Explorer，2026-09-18 核验 |
 | APMPlus 服务地址（OpenAPI 域名/地域） | https://www.volcengine.com/docs/6431/1582353?lang=zh | 应用性能监控全链路版 |
 | APMPlus OpenAPI 鉴权方式（AK/SK HMAC-SHA256 签名 V4） | https://www.volcengine.com/docs/6431/1176476?lang=zh | 应用性能监控全链路版 OpenAPI 使用示例 |
-| 数据回流到评测集的控制台步骤/字段映射/10万条上限/PII 默认脱敏 | <internal-lark-doc> | 评测能力更新 + 可观测数据回流 OnePage（企业内部） |
-| 回流「只回流新数据/历史走离线导出」等限制 | <internal-lark-doc> | Agent 观测/评测能力下钻对比（企业内部） |
-| 观测/记忆库/知识库监控对象与观测诊断、点赞点踩 | <internal-lark-doc> | Agentkit 可观测产品能力（企业内部） |
-| 观测计费（Trace/Metrics 单价与免费额度） | <internal-lark-doc> | AgentKit 产品与计费一览（企业内部） |

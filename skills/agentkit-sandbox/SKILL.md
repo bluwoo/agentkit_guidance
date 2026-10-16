@@ -112,7 +112,9 @@ agentkit sandbox create                         # 用镜像创建自定义沙箱
 
 > WIP：Janus（Agent 控制浏览器）、Dev（VeADK/AgentKit 开发加速）暂未全量上线。
 >
-> 说明：上表 5 种为**控制台预置模板**（产品概念）。OpenAPI `CreateTool.ToolType` 的取值枚举为 `All-in-one / Skill / Private / CodeEnv / PersonalAssistant / VibeSkill`（见 shard1 CreateTool/UpdateTool），二者不是同一概念，勿混用。
+> 说明：上表 5 种为**控制台预置模板**（产品概念）。OpenAPI `CreateTool.ToolType` 的取值枚举为 `All-in-one / Skill / Private / CodeEnv / PersonalAssistant / VibeSkill`，二者不是同一概念，勿混用。
+>
+> **公开枚举边界（2026-10-16 复核）**：公开 CreateTool 文档仅列出 4 个 GA 取值（All-in-one / Skill / Private / CodeEnv）；`PersonalAssistant` / `VibeSkill` 为未公开发布枚举，对外示例只用 4 个 GA 值，已验证能力不因公开文档未列而删除。
 
 **预置 Skills**：`tos-file-access`（TOS 上传下载）、`code-optimization`（C++/Python/Java/Rust 最多 2 轮性能优化）、`veadk-python`（生成可运行 Agent）、`internal-comms`（企业沟通文案）、`skill-creator`（生成新 Skill）。
 
@@ -226,12 +228,7 @@ agentkit sandbox shell --tool-id "t-xxx" --session-id demo \
 | 沙箱概念与模板 | https://docs.volcengine.com/docs/AgentKit/Tooloverview?lang=zh | 工具总览 |
 | 沙箱类型 | https://docs.volcengine.com/docs/AgentKit/Tooltypes?lang=zh | 工具类型 |
 | run_code 集成代码 | https://docs.volcengine.com/docs/AgentKit/Tools-2?lang=zh | Tools（代码执行） |
-| 模板选型/CLI/权限模型 | <internal-lark-doc> | doc02 沙箱全景 |
-| 快照生命周期闭环 | <internal-lark-doc> | doc03 沙箱场景 |
-| 自定义沙箱 init/build/create | <internal-lark-doc> | doc02 自定义沙箱 |
-| 示例接口仓库 | <internal-samples-repo> | agentkit-samples |
 | 沙箱 SDK | https://github.com/volcengine/agentkit-sdk-python | agentkit-sdk-python |
-| `exec`（交互式 WS 终端）与 `shell`（单命令 HTTP）子命令语义 | <internal-lark-doc> ；<internal-lark-doc> | Sandbox-cli 指令集优化方案 / sandbox-cli-v2 使用指南（企业内部，2026-09-22 核证） |
 
 
 ---

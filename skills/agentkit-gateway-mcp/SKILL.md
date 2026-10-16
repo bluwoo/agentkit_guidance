@@ -161,7 +161,7 @@ curl -X POST $MCP_ENDPOINT \
   - 每个 MCP 服务同时只能配置一种入站 AuthorizerType（`InboundAuthorizerConfiguration.AuthorizerType`）：
     - `ApiKey`：`Authorization: Bearer <mcp_api_key>` — 教学/服务间
     - `CustomJWT`（OAuth JWT）：`Authorization: Bearer <user_access_token>` — 生产用户身份
-  - 二者在同一服务上**互斥**，不能同时启用；可通过「更新 MCP 入站身份认证」修改类型，但修改后旧入站凭证模型失效，需重新联调握手（企业内部「更新MCP入站身份认证」能力已商用）（来源：<internal-lark-doc>
+  - 二者在同一服务上**互斥**，不能同时启用；可通过控制台「更新 MCP 入站身份认证」修改类型，修改后旧入站凭证模型失效，需重新联调握手（以控制台公开功能与授权验证为准）
 - **出站凭据安全边界**：
   - 真实 API Key / OAuth Token / AK-SK 全部由 Gateway 出站凭据托管注入
   - 调用方只持 Proxy Key / 入站 API Key，不接触明文凭据
@@ -195,12 +195,13 @@ curl -X POST $MCP_ENDPOINT \
 3. 四层验收：
 ```bash
 # ① initialize 握手（旧协议有状态握手路径；protocolVersion 取网关接受的旧版本之一即可）
-# 网关旧协议当前接受：2025-11-25 / 2025-06-18 / 2025-03-26 / 2024-11-05；下面用最旧的 2024-11-05 作示例
+# 现行官网公开支持列表：2026-07-28 / 2025-11-25 / 2025-06-18 / 2025-03-26；示例改用在列的 2025-03-26
+# 注：2024-11-05 未出现在现行官网公开支持列表中（非"已证实握手失败"），照抄前请以网关实测回包为准
 # 【版本依赖】MCP 2026-07-28 新无状态协议不使用 initialize，见 §10 协议版本矩阵；老服务/HTTP转MCP 仍走本握手
 curl -X POST $MCP_ENDPOINT \
   -H "Authorization: Bearer $MCP_AUTH_KEY" \
   -H "Content-Type: application/json" \
-  -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{}}}'
+  -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-03-26","capabilities":{}}}'
 
 # ② tools/list 确认工具可见
 curl -X POST $MCP_ENDPOINT \
@@ -237,13 +238,12 @@ curl -X POST $MCP_ENDPOINT \
 - ID Token 不能当 MCP/Gateway Bearer，必须用 Access Token
 - 公共 `agentkit-sdk-python 0.5.10` 不含完整认证模块，完整功能需 `0.6.2`+
 - 运行时明文凭据会出现在内存中，严禁日志/Trace/错误体回显
-- MCP 协议支持 Streamable HTTP 传输；**协议版本矩阵（企业文档核证 2026-09-22）**：
-  - 旧有状态握手路径接受 `protocolVersion` ∈ {2025-11-25, 2025-06-18, 2025-03-26, 2024-11-05}，版本不匹配会报 "unsupported protocolVersion ... supported versions:..."（来源：<internal-lark-doc>
+- MCP 协议支持 Streamable HTTP 传输；**协议版本矩阵（2026-10-16 以现行官网公开页复核）**：
+  - 旧有状态握手路径公开支持列表 `protocolVersion` ∈ {2026-07-28, 2025-11-25, 2025-06-18, 2025-03-26}（来源：官网 MCP 协议版本兼容页）；历史示例曾引用的 2024-11-05 未在现行公开列表，不据此断言握手失败
   - **MCP 2026-07-28 新无状态协议**（去掉 initialize 握手、改用 streamable HTTP 无状态调用）：
     - MCP 工具集：**已全面兼容新旧协议所有场景（含存量实例）**
     - MCP 服务部署/导入：**存量实例不支持，新实例可支持**
-    - HTTP 转 MCP：**尚不支持 2026-07-28，仅支持旧协议**
-    - ReleaseNote v26.09.17（2026-09-18）起新增 2026-07-28 兼容支持；截至 2026-09-21 该 P0 能力仍在开发推进中，对外展示与灰度名单以控制台为准（来源：<internal-lark-doc>
+    - HTTP 转 MCP：**存量服务在对 MCP 转换规则做一次增/删/改后自动同步插件即可用新协议；新建服务默认最新插件、自动支持新旧两类协议**（官网 2026-10-16 口径，替代此前"尚不支持 2026-07-28"的旧限制语）
   - 仍待确认：存量 MCP 服务实例的老协议→2026-07-28 迁移工具/迁移 SOP 企业文档未闭环，勿断言存量实例可一键升级
 - 存量应用 API → MCP 接入周期从周级降至 3-5 小时级
 
@@ -256,13 +256,11 @@ curl -X POST $MCP_ENDPOINT \
 | 接入已有 MCP Server 步骤 | https://docs.volcengine.com/docs/AgentKit/connect-existing-mcp-server-to-agentkit-gateway?lang=zh | 接入已有 MCP Server |
 | REST/OpenAPI 转 MCP | https://docs.volcengine.com/docs/AgentKit/connect-existing-rest-api-or-openapi-to-mcp-tool?lang=zh | REST API 转 MCP 工具 |
 | SDK MCPToolset 集成代码 | https://docs.volcengine.com/docs/AgentKit/IntegratingMCPinagents?lang=zh | 在 Agent 中集成 MCP |
-| MCP 协议版本兼容性 | https://docs.volcengine.com/docs/AgentKit/MCPprotocolversioncompatibilityinstructions?lang=zh | MCP 协议版本兼容说明 |
+| MCP 协议版本兼容性（公开支持版本列表与 HTTP 转 MCP 口径） | https://docs.volcengine.com/docs/agentkit/MCP_protocol_version_compatibility?lang=zh | MCP 协议版本兼容说明 |
 | 计费计数规则 | https://docs.volcengine.com/docs/AgentKit/gateway_mode_and_mcp_request_counting_rules?lang=zh | 网关与 MCP 请求计数规则 |
-| 凭据安全边界与四层验收 | <internal-lark-doc> | AgentKit Gateway + Identity 新手入门操作（0714） |
-| 语义检索 token 优化（31883→10763） | <internal-lark-doc> | AgentKit Gateway：从内部基建到企业场景（MCP Tool Search） |
-| Envoy+Istio 架构与插件三层 | <internal-lark-doc> | AgentKit Gateway：从内部基建到企业场景（架构概览） |
-| 一个账号一个模型网关限制 | <internal-lark-doc> | AgentKit Gateway：从内部基建到企业场景（局限说明） |
+| 凭据安全边界与四层验收 | 本仓 §8 离线四层验收（initialize→tools/list→tools/call→401 负向） | 可公开复现，不依赖内部文档 |
+| 模型网关单账号数量限制 | 以控制台实际配额为准（本仓未做云端实测，不背书具体数字） | — |
 | MCP API 清单 | https://docs.volcengine.com/docs/AgentKit/Gatewayoverview?lang=zh | API 参考 |
-| MCP 2026-07-28 新协议 + 新旧兼容矩阵 + 入站认证可更新（核证 2026-09-22） | <internal-lark-doc> | AgentKit 网关 ReleaseNote & 功能列表 |
-| MCP 0728 无状态协议含义与旧握手版本集（核证 2026-09-22） | <internal-lark-doc> | MCP 网关（0714） |
-| MCP 0728 P0 开发进度（截至 2026-09-21） | <internal-lark-doc> | AgentKit 0921 文档建设项目 |
+| MCP 2026-07-28 新协议与 HTTP 转 MCP 兼容口径（2026-10-16 复核公开页） | https://docs.volcengine.com/docs/agentkit/MCP_protocol_version_compatibility?lang=zh | MCP 协议版本兼容说明 |
+
+> **边界声明**：本仓对 MCP 2026-07-28 兼容矩阵的描述取自现行官网公开页（2026-10-16）。实际租户/区域的可用范围以控制台与授权验证为准；本仓未进行云端实测，不据此断言全量开放或存量实例可一键升级。

@@ -88,7 +88,7 @@ agentkit invoke harness travel_harness "帮我规划一个去北京的三天旅�
 
 ### 3.4 Runtime 一键注册到 A2A 空间
 
-在创建/编辑 Runtime 时，勾选"注册到 A2A 空间"并选择目标空间。注册地址随网络访问方式自动选公网/私网。注册完成后自动生成 AgentCard（含版本、技能如 `chat`），对外经 `/.well-known/agent-card.json` 暴露；`protocolVersion` 按平台当前支持的 0.2.6/0.3.0 生成。
+在创建/编辑 Runtime 时，勾选"注册到 A2A 空间"并选择目标空间。注册地址随网络访问方式自动选公网/私网。注册完成后自动生成 AgentCard（含版本、技能如 `chat`），对外经 `/.well-known/agent-card.json` 暴露；`protocolVersion` 按现行公开示例 0.3.0 生成。
 
 ### 3.5 Provider 端：正式 VeADK A2A SDK 代码（不要自创 HTTP server）
 
@@ -160,11 +160,11 @@ if __name__ == "__main__":
 | Provider（提供能力的 Agent） | `--template a2a` | `--model-name`、`--tools`、部署为 Runtime |
 | Consumer（调用其他 Agent 的 Agent） | `--template harness` | `--registry-region`、`--registry-endpoint`、`--registry-space-id/name`、`--registry-top-k` |
 
-### AgentCard 字段规范（PRD 核证 2026-09-22）
+### AgentCard 字段规范（以公开示例为准）
 
-注册来源（Source）：**Runtime**（填 Runtime 地址）或 **Standard**（`ImportType=json` 导入 JSON / `ImportType=url` 填 AgentCard 地址，`SetDefaultVersion=true`）。AgentCard 遵循 Google A2A 协议，平台当前支持 `protocolVersion` 为 **0.2.6 与 0.3.0**；`protocolBinding` 取 `JSONRPC`（`GRPC`/`HTTP+JSON` 已废弃）；运行期消息方法为 `message/send`（JSON-RPC）。
+注册来源（Source）：**Runtime**（填 Runtime 地址）或 **Standard**（`ImportType=json` 导入 JSON / `ImportType=url` 填 AgentCard 地址，`SetDefaultVersion=true`）。AgentCard 遵循 Google A2A 协议，现行公开文档示例 `protocolVersion` 为 **0.3.0**；`protocolBinding` 取 `JSONRPC`（`GRPC`/`HTTP+JSON` 已废弃）；运行期消息方法为 `message/send`（JSON-RPC）。
 
-> 必填字段（version/name/description/protocolVersion/supportedInterfaces[].url/protocolBinding/defaultInputModes/defaultOutputModes/skills[]）与可选字段（capabilities.*/securitySchemes/securityRequirements/iconUrl 等）的完整清单与示例，见 [references/agentcard-schema.md](references/agentcard-schema.md)（PRD 核证 2026-09-22，含来源 URL）。最小可导入 JSON 示例见 §11 来源追溯。
+> 必填字段（version/name/description/protocolVersion/supportedInterfaces[].url/protocolBinding/defaultInputModes/defaultOutputModes/skills[]）与可选字段（capabilities.*/securitySchemes/securityRequirements/iconUrl 等）的完整清单与示例，见 [references/agentcard-schema.md](references/agentcard-schema.md)（以公开示例为准，含来源 URL）。最小可导入 JSON 示例见 §11 来源追溯。
 
 ### 关键环境变量
 
@@ -245,7 +245,7 @@ agentkit invoke harness travel_harness "帮我查一下北京今天的天气"
 - **Agent Mesh / Agent Team 复杂任务协作（任务拆解/交接/状态跟踪/结果聚合）仍为 POC 阶段，非现网能力**
 - **Runtime-source Agent 的 AgentCard URL 重复路径问题**：通过"注册到 A2A 空间"一键注册 Runtime Agent 时，网关注册的 AgentCard URL 可能带重复 `/runtime/<id>` 前缀，导致 Consumer 调用时 POST 路径与容器内 A2A JSON-RPC handler（仅挂在 `/`）不匹配。容器侧必须加 `_GatewayPathRewrite` ASGI 中间件，对所有 POST 请求在路由前把 path 重写为 `/`（见 §3.5 代码示例）。GET agent-card 不受影响。
 - **Provider 端必须用正式 SDK `veadk.a2a.ve_a2a_server.init_app()`**，不要自创 `do_GET` / `message/status` HTTP handler——非标准实现无法通过 A2A Registry 的 AgentCard 发现与 JSON-RPC 协议校验。
-- ~~A2A 智能体 JSON 文件 schema 待核验~~（已核证 2026-09-22，见 §《AgentCard 字段规范》；`protocolVersion` 限 0.2.6/0.3.0，`protocolBinding` 用 `JSONRPC`）
+- A2A 智能体 JSON 文件 schema 见 §《AgentCard 字段规范》（以公开示例为准；`protocolVersion` 以现行公开示例 0.3.0 为准，`protocolBinding` 用 `JSONRPC`）
 - 空间最多支持 20 个标签
 - 语义检索效果依赖 AgentCard 描述与技能标签质量
 - ArkClaw 企业版应用中心注册后，用户可通过自然语言/@ 命令调用已注册的 Agent
@@ -257,12 +257,7 @@ agentkit invoke harness travel_harness "帮我查一下北京今天的天气"
 | A2A 中心概念与两大能力 | https://docs.volcengine.com/docs/AgentKit/A2ACenteroverview?lang=zh | A2A 中心概述 |
 | 操作流程（创建空间→注册→版本管理→注销） | https://docs.volcengine.com/docs/AgentKit/quick-access-a2a-center?lang=zh | 快速接入 A2A 中心 |
 | Runtime 一键注册到 A2A 空间 | https://docs.volcengine.com/docs/AgentKit/quick-access-a2a-center?lang=zh | 快速接入 A2A 中心 |
-| Provider/Consumer CLI 模式与命令 | <internal-lark-doc> | AgentKit Gateway：从内部基建到企业场景（A2A 网关章节） |
 | A2A API 清单 | https://docs.volcengine.com/docs/AgentKit/A2ACenteroverview?lang=zh | API 参考 |
-| 当前局限（一账号一个模型网关、Agent Mesh POC） | <internal-lark-doc> | AgentKit Gateway：从内部基建到企业场景（局限说明） |
-| 请求级 Registry 覆盖参数 | <internal-lark-doc> | AgentKit & VeADK：从 Demo 到 Production |
-| AgentCard 必填/可选字段、protocolVersion 0.2.6/0.3.0、Source/ImportType（核证 2026-09-22） | <internal-lark-doc> | AgentKit A2A 中心产品设计 |
-| AgentCard 最小可导入 JSON 示例（核证 2026-09-22） | <internal-lark-doc> | ArkClaw 企业版 Agent 手册（JSON 示例） |
 
 
 ---

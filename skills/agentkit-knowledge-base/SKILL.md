@@ -9,7 +9,7 @@ description: AgentKit 知识库（基于 VikingDB 向量库的 RAG 服务）—�
 
 知识库是 AgentKit 基于 **VikingDB 向量库**实现的一体化 RAG 服务，提供"文档管理—语义检索—智能对话"完整链路，支持结构化与非结构化多模态文档，适用于法律、教育、企业内部文档问答等场景。Agent 通过 `KnowledgeBase(backend="viking")` 关联知识库后，VeADK 自动挂载 `LoadKnowledgebaseTool` 工具，Agent 可在对话中调用该工具检索相关文档切片并组织回答；**是否每轮触发检索由 Agent 根据 instruction 与工具描述决定，不保证每轮必检索**，无需手动编写检索逻辑。
 
-> **后端形态（已离线核验 veadk-python==1.1.13 源码）**：AgentKit Knowledge 是「多知识库接入与检索网关」，打通向量/图/全文引擎，用同一接口灵活切换后端。产品侧双引擎为 **Viking 知识库**（高性价比、精准召回、多模态）与 **ContextSearch**（开源兼容 Elasticsearch/OpenSearch）；VeADK SDK `KnowledgeBase` 的 `backend` 还可选 `opensearch`、`redis`、`milvus`、`tos_vector`、`openviking`、`local`（详见 §4）。（来源：<internal-lark-doc>；<internal-lark-doc>）
+> **后端形态（已离线核验 veadk-python==1.1.13 源码）**：AgentKit Knowledge 是「多知识库接入与检索网关」，打通向量/图/全文引擎，用同一接口灵活切换后端。产品侧双引擎为 **Viking 知识库**（高性价比、精准召回、多模态）与 **ContextSearch**（开源兼容 Elasticsearch/OpenSearch）；VeADK SDK `KnowledgeBase` 的 `backend` 还可选 `opensearch`、`redis`、`milvus`、`tos_vector`、`openviking`、`local`（详见 §4）。（后端枚举依据本仓钉版 `veadk-python==1.1.13` 源码）
 
 ## 2. 前置条件
 
@@ -30,7 +30,7 @@ description: AgentKit 知识库（基于 VikingDB 向量库的 RAG 服务）—�
   - `DATABASE_VIKING_COLLECTION=<viking collection 名称>`（即 `KnowledgeBase(index=...)`）
   - `VOLCENGINE_ACCESS_KEY` / `VOLCENGINE_SECRET_KEY`（控制面/后端访问 AK/SK；BytePlus 环境读 `BYTEPLUS_ACCESS_KEY`/`BYTEPLUS_SECRET_KEY`）
   - 可选：`DATABASE_VIKING_PROJECT`（默认 `default`）、`DATABASE_VIKING_RESOURCE_ID`（默认空）、`DATABASE_VIKING_VERSION`（默认 `2`）、`DATABASE_VIKING_REGION` / `REGION`（默认 `cn-beijing`）、`KNOWLEDGEBASE_INDEX`
-  - 注意：AK/SK 是部署/后端访问凭证，不是用户身份；**不得提交或写入示例/YAML/.env 明文**。（来源：<internal-lark-doc>）
+  - 注意：AK/SK 是部署/后端访问凭证，不是用户身份；**不得提交或写入示例/YAML/.env 明文**。
 
 ## 3. 快速上手
 
@@ -139,7 +139,7 @@ agentkit invoke "你们有什么产品？"
 | `opensearch` / `redis` / `milvus` / `tos_vector` / `openviking` | 对应向量后端 | SDK 可选；需各自集群/服务配置 |
 | `local` | InMemoryKnowledgeBackend | 内存，仅本地调试（程序退出即丢失） |
 
-> **双引擎定位**：AgentKit 产品侧「Viking 知识库 + ContextSearch」为统一检索网关，向量/图/全文同源切换；ContextSearch 面向开源 ES/OpenSearch 生态。（来源：<internal-lark-doc>）
+> **双引擎定位**：AgentKit 产品侧「Viking 知识库 + ContextSearch」为统一检索网关，向量/图/全文同源切换；ContextSearch 面向开源 ES/OpenSearch 生态（以官网公开文档为准）。
 
 ### 关键环境变量
 
@@ -154,6 +154,8 @@ agentkit invoke "你们有什么产品？"
 | `DATABASE_VIKING_REGION` / `REGION` | 地域（默认 `cn-beijing`） | 否 |
 | `KNOWLEDGEBASE_INDEX` | 知识库索引名（与 `index` 等效别名） | 否 |
 | `context_search_*`（经 `backend_config`） | ContextSearch 后端的 project/engine_id/endpoint/apikey | 用 context_search 时必填 |
+
+> **关于 `DATABASE_VIKING_API_KEY`（2026-10-16 边界注记）**：现行官网运行时控制台已文档化该变量（知识库级 API Key 鉴权，与 AK/SK 二选一、同时配置优先 API Key）。但本仓钉版 `veadk-python==1.1.13` 的 Viking 后端源码不读取该变量，仍走 `VOLCENGINE_ACCESS_KEY/SECRET_KEY`。升级到支持该鉴权的新版 SDK 前，本地开发与部署仍须配置 AK/SK；不要把 `DATABASE_VIKING_API_KEY` 列为本地 SDK 必填环境变量。
 
 ### 知识库 API 清单（Version 2025-10-30）
 
@@ -221,8 +223,8 @@ agentkit invoke "你们的退款政策是什么？"
 ## 10. 已知限制与注意事项
 
 - 知识库集成通过 `KnowledgeBase(backend=...)` 完成；生产主路径为 Viking 后端，**ContextSearch（兼容 ES/OpenSearch）为统一检索网关的另一引擎**，SDK 还可选 opensearch/redis/milvus 等（见 §4）
-- 细粒度访问控制能力自 2026-06-19 起上线（文档级访问策略），具体配置界面和 API 参数以控制台为准；**按用户身份的文档级隔离依赖可信 `user_id` 映射**，飞连/SSO 同角色共用账号场景会因缺 `user_id` 回退到 account_id 而串档，属已知卡点，需联调验证（企业内部客户案例）（来源：<internal-lark-doc>）
-- 文档上传/更新后**索引更新**指标（以下为 Viking 知识库后端的企业产品资料口径，适用场景为**增量文档更新**的索引刷新，非全量初次建库；不同文档类型/解析 pipeline/文档大小耗时不同）：一般约 2~3 秒、不超过 20 秒，且不影响在线查询；百亿级规模下检索延迟约 10ms。单库容量约 23TB、单文档约 350MB，支持上百个标量过滤字段。**以上为产品资料口径，非 SLA 承诺；ContextSearch 等其他后端的索引与检索指标以各自服务为准**（来源：<internal-lark-doc>；<internal-lark-doc>）
+- 文档级访问策略的配置界面与 API 参数以控制台为准；按用户身份的文档级隔离依赖可信 `user_id` 映射，同角色共用账号场景可能因缺 `user_id` 回退而需联调验证（本仓未云端实测）。
+- 索引更新与检索性能指标以官方公开文档/控制台为准；本仓不背书未经实测的具体数值，且非 SLA 承诺。
 - 支持配置私网访问以满足数据不出 VPC 的合规要求
 - description、知识库等属于创建/部署期配置，不能在 `agentkit invoke` 请求级覆盖中修改
 - **云端未实测**：本节所有检索/建库/索引行为均需云凭据联调验证，本环境无真实 VikingDB/ContextSearch 资源
@@ -236,10 +238,6 @@ agentkit invoke "你们的退款政策是什么？"
 | KnowledgeBase SDK 用法 | https://docs.volcengine.com/docs/AgentKit/Knowledge?lang=zh | 知识库 SDK 参考 |
 | 细粒度访问控制 | https://docs.volcengine.com/docs/AgentKit/Knowledgebaseoverview?lang=zh | 知识库概述（2026-06-19 更新说明） |
 | 知识库 API 清单 | https://docs.volcengine.com/docs/AgentKit/Knowledgebaseoverview?lang=zh | API 参考 |
-| 双引擎统一检索网关 / 文档级访问策略 / 索引更新 2~3s | <internal-lark-doc> | Enterprise Agent Control & Data Plane（企业内部，2026-08） |
-| Viking 产品能力（23TB/350MB/标量过滤/索引≤20s） | <internal-lark-doc> | AgentKit 产品能力（企业内部） |
-| KnowledgeBase 后端环境变量（PROJECT/RESOURCE_ID 等） | <internal-lark-doc> | VeADK + AgentKit 开发部署工作流（企业内部） |
-| 按 user_id 文档级隔离的 SSO 卡点 | <internal-lark-doc> | 企业 AI Agent 客户管理-<customer-case>（企业内部） |
 | KnowledgeBase 类字段/后端工厂（离线源码核验） | veadk-python==1.1.13 `veadk/knowledgebase/knowledgebase.py`、`backends/vikingdb_knowledge_backend.py` | 本地 venv import + inspect，2026-09-22 |
 
 ---

@@ -248,15 +248,16 @@ curl -X POST https://<runtime-domain>/invoke \
 
 ## 10. 已知限制与注意事项
 
-- **`viking_mem` 已废弃**：源码中转发到 `"viking"`，建议直接使用 `"viking"`；生产推荐后端为 `viking`（VikingDB 记忆库）与 `mem0` 两个。（来源：<internal-lark-doc>）
+- **`viking_mem` 已废弃**：依据本仓钉版 `veadk-python==1.1.13` 源码，`viking_mem` 后端实现转发到 `"viking"`，建议直接使用 `"viking"`；生产推荐后端为 `viking`（VikingDB 记忆库）与 `mem0` 两个。
 - **长期记忆抽取有延迟**：首轮写入后约需等待 1 分钟抽取完成才能读出（官方集成文档口径），属异步抽取，需重试
 - **短期上下文受上下文窗口限制**：不能无限累积，必须通过记忆归档策略写入长期记忆
-- **会话后端支持**：云数据库 PostgreSQL 版、MySQL 版、Serverless PostgreSQL（2026-07-31 起）；本地/SDK 侧另支持 `local`、`sqlite`、`mysql`、`postgresql`，按 `app_name + user_id + session_id` 三元组隔离。（来源：<internal-lark-doc>）
+- **会话后端支持**：后端枚举依据 `veadk-python==1.1.13` 源码（`local`/`sqlite`/`mysql`/`postgresql`/`viking`/`mem0` 等），按 `app_name + user_id + session_id` 三元组隔离。
+- **云端创建边界（公开文档可证）**：创建会话资源当前仅支持 **Serverless PostgreSQL**；RDS PostgreSQL/MySQL 需先在对应产品控制台建实例再导入（出处：https://docs.volcengine.com/docs/agentkit/Creating_session_resources?lang=zh）。
 - **依赖版本固定**：`mem0ai==0.1.118`
 - **会话概述文档（Sessionsoverview）正文为空壳**（仅52字节），操作细节以控制台和子页面为准
 - 长期记忆写入需显式调用 `save_session_to_long_term_memory`（协程），或配置 `MemoryAutoSavePolicy`（default/all/custom）自动保存
 - Viking 记忆类型 `DATABASE_VIKINGMEM_MEMORY_TYPE` 默认 `event_v1`，支持逗号分隔多类型
-- **仍待确认（企业内部资料未确认，勿写成平台限制）**：网传「`AddSession` 单次 100 条消息上限」在本次企业内部资料与 SDK 源码中均未找到依据，是否仍有效以 SDK 报错/控制台为准；`ShortTermMemory` 各后端的并发与容量上限未单独核证。
+- **仍待确认（勿写成平台限制）**：网传「`AddSession` 单次 100 条消息上限」在本次 SDK 源码中未找到依据，是否仍有效以 SDK 报错/控制台为准；`ShortTermMemory` 各后端的并发与容量上限以官方文档为准。
 - **云端未实测**：记忆读写、抽取延迟、跨会话读出均需云凭据联调验证，本环境无真实记忆库资源。
 
 ## 11. 来源追溯
@@ -270,6 +271,4 @@ curl -X POST https://<runtime-domain>/invoke \
 | SDK Memory API | https://docs.volcengine.com/docs/AgentKit/Memory?lang=zh | Memory API |
 | 会话概述（空壳文档） | https://docs.volcengine.com/docs/AgentKit/Sessionsoverview?lang=zh | 会话概述 |
 | LongTermMemory 源码/后端工厂/自动保存策略 | https://volcengine.github.io/agentkit-sdk-python/content/6.memory/1.memory_quickstart.html | doc03 SDK 核验报告 第2节 |
-| `viking_mem` 已废弃→viking、viking/mem0 生产推荐 | <internal-lark-doc> | 构建企业级 Agent（企业内部） |
-| 短期/长期记忆后端与隔离键、环境变量 | <internal-lark-doc> | VeADK + AgentKit 开发部署工作流（企业内部） |
 | LongTermMemory/save_session 签名（离线源码核验） | veadk-python==1.1.13 `veadk/memory/long_term_memory.py`、`Runner.save_session_to_long_term_memory` | 本地 venv import + inspect，2026-09-22 |

@@ -7,13 +7,13 @@ description: AgentKit 安全围栏（Guardrails）——基于大模型应用防
 
 ## 1. 概述
 
-安全围栏是 AgentKit 基于**大模型应用防火墙（LLM Shield）**构建的实时安全防护能力，嵌入 Agent 业务流程，在模型输入/输出两侧实时监控，防护 OWASP LLM Top10 风险。它覆盖四类防护：**提示词攻击防护**（Prompt Injection）、**模型滥用防护**、**敏感数据防护**（PII 识别与脱敏）、**算力消耗防护**（DDoS/资源滥用）；防护策略由"规则库（敏感词库/Regex）+ 内容安全模型 + 提示词防护模型（风险分类/相似度向量库/SP 泄漏/PII/恶意代码）"组成，支持默认规则与用户自定义规则/词库（来源：<internal-lark-doc>
+安全围栏是 AgentKit 基于**大模型应用防火墙（LLM Shield）**构建的实时安全防护能力，嵌入 Agent 业务流程，在模型输入/输出两侧实时监控，防护 OWASP LLM Top10 风险。它覆盖四类防护：**提示词攻击防护**（Prompt Injection）、**模型滥用防护**、**敏感数据防护**（PII 识别与脱敏）、**算力消耗防护**（DDoS/资源滥用）；防护策略由"规则库（敏感词库/Regex）+ 内容安全模型 + 提示词防护模型（风险分类/相似度向量库/SP 泄漏/PII/恶意代码）"组成，支持默认规则与用户自定义规则/词库（以官网 LLM Shield 公开文档为准）
 
-**开启方式有两条路径，必须按 Agent 形态选对（企业核证 2026-09-22）：**
+**开启方式有两条路径，必须按 Agent 形态选对：**
 1. **控制台开启**（`EnablingGuardrails`）：Runtime 创建/编辑页勾选"安全围栏服务"，平台侧对经网关的流量自动拦截。**仅托管/低代码 Agent 可视为"勾选即生效"**；高代码 VeADK/ADK Agent 仅勾选控制台开关**不足以**使流量经过防火墙检测（见下方反直觉坑），必须同时完成 §3.2 的 SDK 回调挂载。
-2. **SDK 集成**（`IntegratingGuardrailsinagents`）：高代码 VeADK/ADK Agent 必须在代码里显式挂载 `content_safety` 的 4 个回调（`before_model_callback` / `after_model_callback` / `before_tool_callback` / `after_tool_callback`），并配置环境变量 `TOOL_LLM_SHIELD_APP_ID` 后重新发布 Runtime（来源：<internal-lark-doc>/threads/7678591673703958225；<internal-lark-doc>/threads/7689610310833901596）。
+2. **SDK 集成**（`IntegratingGuardrailsinagents`）：高代码 VeADK/ADK Agent 必须在代码里显式挂载 `content_safety` 的 4 个回调（`before_model_callback` / `after_model_callback` / `before_tool_callback` / `after_tool_callback`），并配置环境变量 `TOOL_LLM_SHIELD_APP_ID` 后重新发布 Runtime（公开文档：https://docs.volcengine.com/docs/agentkit/IntegratingGuardrailsinagents?lang=zh）。
 
-> ⚠️ **反直觉坑（已被真实项目踩过）**：仅在 Runtime 控制台勾选/声明了防火墙变量、控制台显示"已启用"，但高代码 Agent 代码未挂 `content_safety` 回调时，**该 Runtime 的流量可能一次都没真正经过防火墙检测**（"开关开了但没有任何调用被审查过"）。判定是否真生效，要以攻击日志里是否出现拦截记录为准，而不是只看控制台开关（来源：<internal-lark-doc>/threads/7678591673703958225）。
+> ⚠️ **反直觉坑（已被真实项目踩过）**：仅在 Runtime 控制台勾选/声明了防火墙变量、控制台显示"已启用"，但高代码 Agent 代码未挂 `content_safety` 回调时，**该 Runtime 的流量可能一次都没真正经过防火墙检测**（"开关开了但没有任何调用被审查过"）。判定是否真生效，要以攻击日志里是否出现拦截记录为准，而不是只看控制台开关。
 
 安全围栏与身份权限（Identity & Permission）是独立的两层防护：身份权限管"谁能访问"，安全围栏管"输入输出是否安全"。
 
@@ -117,7 +117,7 @@ llm_shield.py:321 - LLM Shield triggered in before_model_callback.
 
 **请求与拦截关联证据**：每次 invoke 使用唯一 `session_id`（如 `<inject-session-id>`），Runtime 日志中可检索到该 session 的 `Running agent with prompt` 记录与 `LLM Shield triggered` 回调记录，时间戳可关联。LLM Shield 产品侧攻击日志查询需控制台（浏览器SSO被阻断），AK/SK SDK（volcenginesdkllmshield ClientV2）仅提供 Moderate/GenerateV2Stream 内容检测方法，无日志查询API。
 
-> 适用范围说明：上述"高代码须挂 4 回调"结论来自特定项目的联调记录（<customer-project> + 安全围栏问题处理群，2026-09-10/11），反映的是 VeADK/ADK 高代码 Agent 在当时版本下的接入要求；不同 SDK 版本、不同 Agent 框架（如纯 HTTP/MCP App）的接入方式可能不同，以官方文档为准。控制台路径（托管/低代码）不需要代码级回调挂载。
+> 适用范围说明：上述"高代码须挂 4 回调"结论来自本仓历史联调记录（2026-09-10/11），反映的是 VeADK/ADK 高代码 Agent 在当时版本下的接入要求；不同 SDK 版本、不同 Agent 框架（如纯 HTTP/MCP App）的接入方式可能不同，以官方文档为准。控制台路径（托管/低代码）不需要代码级回调挂载。
 
 以下是**未挂 content_safety 回调的基线 Agent 代码**。
 
@@ -165,7 +165,7 @@ app.run(host="0.0.0.0", port=8000)
 | 模型滥用防护 | 检测模型被用于违规/违法/非预期用途（内容安全模型分类：涉黄/涉政/涉暴/辱骂/商业） |
 | 敏感数据防护 | PII 识别（身份证/手机号/银行卡等）与脱敏 |
 | 算力消耗防护 | 防止 DDoS、资源滥用、异常高频调用 |
-| 自定义规则/词库 | 支持自定义敏感词库、Regex、自定义防护模型与规则（LLM Shield 策略配置）（来源：<internal-lark-doc> |
+| 自定义规则/词库 | 支持自定义敏感词库、Regex、自定义防护模型与规则（LLM Shield 策略配置，以公开文档为准） |
 
 ## 4. 核心概念与 API
 
@@ -275,7 +275,7 @@ $AGENTKIT_CLI invoke run --runtime-id <runtime-id> \
 - 安全围栏在 Runtime 创建/编辑时勾选开启，**不支持运行时动态开关**（需编辑 Runtime 重新发布）
 - 防护规则支持**默认规则 + 自定义规则**（自定义词库/Regex/自定义防护模型，见 §3.3）；不再是"仅平台默认规则"
 - 拦截响应体的具体格式：**Prompt Injection 类型已实测确认**为 `"Your request has been blocked due to: Prompt Injection. Please modify your input and try again."`（HTTP 200）；其他防护类型（PII/滥用/算力）的拦截消息格式仍待实测确认
-- 安全围栏**独立计费**（大模型应用防火墙：文本每 1000 token 计 1 次、图片每张 1 次、文档每个 1 次），不包含在 Runtime 基础费用中（来源：<internal-lark-doc>
+- 安全围栏按 LLM Shield 调用量独立计费，不包含在 Runtime 基础费用中；具体单价以控制台计费页为准。
 - 安全围栏与身份权限是两层独立防护，**不能互相替代**：围栏不做身份认证，身份不做内容安全检测
 - **开关≠生效**：高代码 ADK 场景必须额外挂 `content_safety` 4 回调 + `TOOL_LLM_SHIELD_APP_ID`，否则控制台开着也不真正检测（见 §1 反直觉坑）
 - 仍待确认：算力消耗防护可调阈值清单，企业资料未闭环；LLM Shield攻击日志AK/SK查询API（当前SDK仅提供Moderate内容检测，无日志查询）
@@ -289,6 +289,3 @@ $AGENTKIT_CLI invoke run --runtime-id <runtime-id> \
 | SDK 集成（路径二，content_safety 回调） | https://docs.volcengine.com/docs/AgentKit/IntegratingGuardrailsinagents?lang=zh | 在 Agent 中集成安全围栏 |
 | 自定义防护策略（规则/词库/模型） | https://docs.volcengine.com/docs/LLM_Shield/IntroductiontoProtectionStrategy?lang=zh | 防护策略介绍 |
 | OWASP LLM Top10 防护定位 | https://docs.volcengine.com/docs/AgentKit/Guardrailsoverview?lang=zh | 概述 |
-| 双开启路径 / 高代码须挂 content_safety 4 回调 + TOOL_LLM_SHIELD_APP_ID（核证 2026-09-22） | <internal-lark-doc>/threads/7678591673703958225 | <customer-project>安全围栏联调（0910） |
-| 开关≠生效、误判根因排查（核证 2026-09-22） | <internal-lark-doc>/threads/7689610310833901596 | 安全围栏问题处理群（0910/0911） |
-| 防护组成（规则库+内容安全模型+提示词防护模型）与计费（核证 2026-09-22） | <internal-lark-doc> | 大模型应用防火墙接入指南（0921） |

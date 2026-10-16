@@ -32,9 +32,9 @@ AgentKit 控制台 → 评测工具 → 以下子模块：
 AgentKit 控制台 → 评测工具 → 会话分析 → 查看消息/会话/链路/评估结果串联 → 满意度分析、情绪诊断
 
 **trace 回流评测集（详见 observability 组件 §3.1）**：
-AgentKit 控制台 →「可观测」→「数据回流」→「创建导出任务」：设置过滤条件（可套推荐配置卡片，如 LLM 异常/长度截断/高 Token 样本）→ 选时间范围与按天/按周重复频率 → 导出平台选「智能体评测」并指定目标评测集 → 字段映射（`GenAIInput→input`、`GenAIOutput→output`）→ 预览后提交。上限：总量/单次均 10 万条，只回流新数据，PII 默认脱敏。（来源：<internal-lark-doc>）
+AgentKit 控制台 →「可观测」→「数据回流」→「创建导出任务」：设置过滤条件（可套推荐配置卡片，如 LLM 异常/长度截断/高 Token 样本）→ 选时间范围与按天/按周重复频率 → 导出平台选「智能体评测」并指定目标评测集 → 字段映射（`GenAIInput→input`、`GenAIOutput→output`）→ 预览后提交。（回流数量上限、是否只回流新数据、PII 脱敏默认状态等具体口径以控制台与公开文档为准，本仓未做云端实测）
 
-> **评测对象限制（企业内部 Demo 核证）**：当前评测实验的「评测对象」**仅支持 A2A 中心注册的 Agent**（需 A2A 协议接入），可多选评估器运行；非 A2A 托管的自定义 Agent 暂不能直接作为评测对象。（来源：<internal-lark-doc>）
+> **评测对象限制（边界注记）**：现行公开文档未明确评测对象范围；本仓曾记录「评测对象仅支持 A2A 中心注册的 Agent」的口径，未经云端实测复核，实际以控制台为准。
 
 ### 3.2 代码集成
 
@@ -114,7 +114,7 @@ app.run(host="0.0.0.0", port=8000)
 | **LLM-as-Judge** | 用大模型作为评估器自动打分 | 评估 Prompt、打分维度 |
 | **人工校准** | 人工标注校准评估器准确性 | 校准样本集 |
 
-### 评估器类型与打分形式（企业内部核证）
+### 评估器类型与打分形式
 
 | 评估器 | 评估维度 |
 |---|---|
@@ -122,14 +122,14 @@ app.run(host="0.0.0.0", port=8000)
 | 工具调用 | 工具选择正确性、参数正确性、调用链路合理性；高频失败点：失败谎报、未验证修改、事务闭环、越权、输出格式、延迟/Token |
 | 轨迹质量 | Agent 决策路径合理性（轨迹/过程白盒化评测，P1 路线，建设中） |
 
-**打分形式**：预置评估器 **≥50 个** + 自建；**LLM 评估器按 0.0~1.0 打分**（可开放客户自选模型/Prompt）；**Code 评估器支持 Python / JavaScript**（精确规则类指标）。（来源：<internal-lark-doc>；<internal-lark-doc>）
+**打分形式**：LLM 评估器按 0.0~1.0 打分（可开放客户自选模型/Prompt）；Code 评估器支持 Python / JavaScript（精确规则类指标）。预置评估器数量以控制台公开列表为准。
 
 ### 评估器组合模式
-- **内置/预置官方评估器**：开箱即用，复用豆包/即梦/剪映内部评估资产（≥50）
+- **内置/预置官方评估器**：开箱即用，复用官方预置评估器资产，数量以控制台公开列表为准
 - **自建评估器**：自定义评估逻辑（LLM Prompt 或 Code）
 - **LLM-as-Judge**：用大模型自动打分（0.0~1.0）
 - **人工校准**：人工标注，校准评估器准确性
-- **评测集 Dataset**：列含 `input` / `reference_output` / `actual_output`；上限约 5000~10000 条、约 200MB、最多 50 个自定义列（内部资料口径不一，**以控制台为准**），通过「提交新版本」固化版本号。（来源：<internal-lark-doc>；<internal-lark-doc>）
+- **评测集 Dataset**：列含 `input` / `reference_output` / `actual_output`；容量上限（条数/大小/列数）以控制台公开说明为准，通过「提交新版本」固化版本号。
 
 ## 5. 输入输出规范
 
@@ -199,17 +199,17 @@ curl -X POST https://<runtime-domain>/invoke \
 ## 10. 已知限制与注意事项
 
 - **在线评测必须先开启观测服务**，否则 trace 无法回流
-- **评测对象当前仅支持 A2A 中心注册的 Agent**；非 A2A 托管 Agent 暂不能直接作为评测对象。（来源：<internal-lark-doc>）
+- 评测对象范围以控制台公开文档为准（本仓未云端实测）。
 - **轨迹/过程白盒化评测建设中**（P1），当前以端到端结果评估为主；计划 Q3/Q4 补齐轨迹、工具序列、副作用、循环检测等过程评测。
-- **存量 CozeLoop 客户提示**：存量用过 CozeLoop 的客户评测侧仍是旧版，需单独开白切换到新版评测；AgentKit 本身处于公测/开白状态。（来源：<internal-lark-doc>）
+- 产品发布状态与租户可用范围以官方公告/控制台为准（本仓不引用内部灰度口径）。
 - **评测暂按 token 计费**，观测评测套餐包设计中
-- **路线图（尚未发布，以官方为准；据企业内部资料校准）**：
+- **路线图（尚未发布，以官方为准）**：
   - 已上线：评测集 + 评估器 + 评测实验（8 月），trace 回流自动识别 BadCase（8 月起，部分 10 月）
-  - 进行中/规划：Skill 维度优化建议（9 月/0910）、Code 评估器与自动化 A/B 实验、评测基线准入准出门禁（9 月）、评测能力私有化/混合云部署（9 月内）（来源：<internal-lark-doc>；<internal-lark-doc>）
-- 复用豆包/即梦/剪映内部评估资产与官方评测集，降低从零搭建门槛
+  - 本仓不记录未发布功能路线图；后续能力以官方发布文档为准。
+- 复用官方预置评估器资产与官方评测集，降低从零搭建门槛
 - 数据回流支持：回流到 agentkit、暴露原始 topic 给 TLS 加工、导出 Kafka/las/tos
-- **云端已实测（2026-09-28，<tea-workspace>）**：使用独立 Runtime-source A2A Agent、3 条评测样本、`builtin_template_correctness` 和 Doubao 2.0 Lite，Experiment 到达 `status=11` 且 `end_time` 已设置，`success_turn_cnt=3`、`fail_turn_cnt=0`，3 条 `actual_output` 与 reference 一致，3 条 score 均为 1.0。详见下方《在线实测校正》。
-- **项目边界**：TEA 后端忽略 `-p/--project`，评测集/评估器/实验归属账号独立 <tea-workspace>；当前只把 default/TEA 验收视为通过，不外推为任意 AgentKit project 均支持。
+- **云端已实测（2026-09-28）**：使用独立 Runtime-source A2A Agent、3 条评测样本、`builtin_template_correctness` 和 Doubao 2.0 Lite，Experiment 到达 `status=11` 且 `end_time` 已设置，`success_turn_cnt=3`、`fail_turn_cnt=0`，3 条 `actual_output` 与 reference 一致，3 条 score 均为 1.0。详见下方《在线实测校正》。
+- **项目边界**：TEA 后端忽略 `-p/--project`，评测集/评估器/实验归属账号独立工作区；当前只把 default/TEA 验收视为通过，不外推为任意 AgentKit project 均支持。
 
 ## 11. 来源追溯
 
@@ -217,13 +217,7 @@ curl -X POST https://<runtime-domain>/invoke \
 |---|---|---|
 | 评测工具概述与三件套 | https://docs.volcengine.com/docs/AgentKit/overview-of-evaluation-tools?lang=zh | 概述 |
 | 评测工具（AgentKit） | https://docs.volcengine.com/docs/86681/2607692?lang=zh | 评测工具 |
-| 会话分析/评估打标/路线图/定价/对比 | <internal-lark-doc> | doc07 第二节 |
 | 数据回流（全栈可观测平台） | https://docs.volcengine.com/docs/86845/2232301?lang=zh | 数据回流 |
-| 会话分析新功能记录（2026-05-29） | <internal-lark-doc> | doc07 |
-| 评估器 ≥50/LLM 0.0~1.0/Code(Python·JS)/评测集列与版本 | <internal-lark-doc> | 评测能力更新 + 数据回流 OnePage（企业内部） |
-| 评测对象仅支持 A2A 注册 Agent、路线图节奏 | <internal-lark-doc> | 评测+可观测最佳实践纪要（企业内部，2026-08-24） |
-| 评估器五类/过程评测/门禁 P0~P2 规划 | <internal-lark-doc> | 0720 新品发布说明（企业内部） |
-| 存量 CozeLoop 客户需开白切新版、公测开白状态 | <internal-lark-doc> | Agent 观测/评测能力下钻对比（企业内部） |
 
 ---
 
@@ -254,7 +248,7 @@ google.adk AgentEvaluator / LLM-as-Judge / deepeval / EvalSetRecorder 上报 / T
 
 ## 在线实测校正（2026-09-28，CLI 0.52.13）
 
-本节来自 <tea-workspace> 的真实端到端评测，不是离线 reference：
+本节为真实端到端评测，不是离线 reference：
 
 1. **评测对象必须是 Runtime-source A2A Agent**。先用正式 `veadk.a2a.ve_a2a_server.init_app()` 部署 Runtime，再通过 `CreateA2aAgent` 注册：`Source=Runtime`、`A2aSpaceId`、`RuntimeConfig.RuntimeId/NetworkType=Public`、`SetDefaultVersion=true`。等待 `eval target list --cache-refresh` 可见后再提交实验。
 2. **Runtime-source POST 路径可能重复**：平台目标实际可调用路径为 `/runtime/<id>/runtime/<id>`；容器必须使用 A2A Skill 中 `_GatewayPathRewrite` 将所有 POST 路径重写为 `/`。基础 `/runtime/<id>` 在本次验证中返回 404，而重复路径返回 200 和真实模型结果。

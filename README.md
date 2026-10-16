@@ -195,3 +195,36 @@ cd web && npm install && npm run build       # -> web/dist/
 - 本项目：见仓库。
 - 内置 vendored **Hermes agent**（MIT）许可证随镜像分发。
 - Prompt 来源声明见服务内 prompts 的 NOTICES 文件。
+
+## 2026-10-16 官网同步结论（只读复核）
+
+- 本仓钉版（veadk-python==1.1.13 / agentkit-sdk-python==0.8.7 / google-adk==2.2.0 / mcp==1.26.0 / 公开 agentkit-cli 0.52.13）为**本仓离线实测钉版**，不代表官网最新版本；官网快速上手可能钉更旧 SDK，以本仓钉版为准。
+- 已按现行官网公开页修订：MCP 2026-07-28 兼容口径（含 HTTP 转 MCP）、initialize 握手示例版本、KB 环境变量边界、CLI 钉版口径、IAM 策略名拼写注记；详见 `skills/` 各 Skill 与 `docs/volcengine-official/snapshot_index.md`。
+- 实际租户/区域可用范围、定价、配额以控制台与公开文档为准；本仓未进行云端实测，不背书内部灰度口径。
+
+### 可复现门禁命令（引自只读门禁审计矩阵，2026-10-16）
+
+```bash
+# G1 后端 pytest（unit/integration 为 mock 离线；3 个 veadk 根测试构造 Agent()，可能触发 AK/SK 查找，不得宣称完全离线）
+python -m pytest tests/ -q
+# G2 Ruff lint（离线）
+python -m ruff check server tests deploy
+# G3 后端 HTTP E2E（离线 mock；PY 默认 /tmp/agentkit_verify_venv/bin/python，缺失须 PY=<venv> 覆盖）
+bash deploy/e2e_smoke.sh [port]
+# G4 前端构建（需 Node LTS；registry 取包）
+cd web && npm ci && npm run build
+# G5/G6 前端 lint / typecheck（依赖 G4 的 node_modules）
+cd web && npm run lint && npm run typecheck
+# G7 前端 E2E（依赖 G4 产出 web/dist）
+bash deploy/e2e-web.sh [port]
+# G8 统一 benchmark 门禁（verify_all.py；secret_scan 仅扫 skills/+benchmark，非全仓）
+python benchmark_20260928/iteration2/verification/verify_all.py
+# G9 ADK 编排离线真跑（google-adk FunctionNode，无模型）
+python skills/adk-workflow/scripts/validate_orchestration.py
+# G10 冷启动示例（无云凭据、不建云资源）
+bash examples/cold-start-agent/run.sh
+# G11 全仓秘密扫描（标准库，可立即跑；只报 file:line:pattern 不打值）
+python3 sec-audit/scan_secrets.py
+```
+
+离线边界：G1/G3/G7/G8/G10 需先在 venv 装 `deploy/requirements.txt` 与钉版依赖（veadk-python==1.1.13[extensions] / agentkit-sdk-python==0.8.7 / google-adk==2.2.0 / mcp==1.26.0）；本机仅有 Python3.13 与 Node v22，venv 与 web/node_modules 未落地时上述命令不可立即跑。local 后端 ≠ 无凭据。

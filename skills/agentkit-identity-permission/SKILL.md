@@ -20,7 +20,9 @@ description: AgentKit 身份与权限平台——覆盖 User→Agent→Tool 全�
   - **【默认/推荐】离线导入基线（本仓库统一）**：`agentkit-sdk-python==0.8.7` + `veadk-python==1.1.13` + `google-adk==2.2.0` + Python 3.12–3.13 + `mcp==1.26.0`；下方 §3.3 两个 import 在此版本 import PASS
   - **【仅历史教学复现，不要用于新项目】** 0714 教学 E2E 钉版（已云端实测验收 2026-07-16）：`agentkit-sdk-python==0.6.2`（内部 commit `<git-sha-prefix>`）+ Python 3.10.19 + `mcp==1.28.1`
   - 公开 `agentkit-sdk-python 0.5.10` 不含完整认证模块，不能回退使用
-- CLI 版本：`agentkit-cli==0.52.5`（钉版；无内部仓库权限时应停止，不能退回公开包）
+- CLI 版本：本节历史复现路径钉 `agentkit-cli==0.52.5`（无内部仓库权限时应停止，不能退回公开包）；本仓其他 Skill 对公开 CLI 的实测基线为 0.52.13。两者均为"本仓已实测钉版"，不代表官网最新版本；跨 Skill 引用 CLI 子命令前以各自实测记录为准，不要据此升级。
+- 预设策略名注记：公开页 AgentKit_IAM_policy_types 正文使用 `AgentKitDeveloperAcess`（官网原文拼写），本仓不硬编码该策略名；授权前以控制台 IAM 策略管理页实际名称为准。
+  - 公开出处：https://docs.volcengine.com/docs/agentkit/AgentKit_IAM_policy_types?lang=zh
 - 环境变量：`VOLCENGINE_REGION=cn-beijing`（已公测地域为华北2/北京、华东2/上海）
 
 ## 3. 快速上手
@@ -143,7 +145,7 @@ launch_types:
 | `GetMCPService` | 回读服务实际配置（含入站 Key 有效值） |
 | `PublishService` / `PublishRoute` | 发布权限网关 Service 和 Route |
 
-> ⚠️ 上表中 `CreateWorkloadPool` / `CreateWorkloadIdentity` / `AddWorkloadMetaData` / `GetWorkloadAccessToken*` 等 Workload 身份 API **未出现在 shard1/2/4 的官方 OpenAPI 字段分片中**（shard4 身份章节均为控制台操作页，非 OpenAPI），其字段以内部操作手册与线上回读为准，**勿当已公开的 OpenAPI 契约**。`CreateMCPService`/`GetMCPService` 已在 shard2 核验。
+> ⚠️ 上表中 `CreateWorkloadPool` / `CreateWorkloadIdentity` / `AddWorkloadMetaData` / `GetWorkloadAccessToken*` 等 Workload 身份 API **未出现在 shard1/2/4 的官方 OpenAPI 字段分片中**（shard4 身份章节均为控制台操作页，非 OpenAPI），其字段以控制台/官方 OpenAPI 实际返回为准，**勿当已公开的 OpenAPI 契约**。`CreateMCPService`/`GetMCPService` 已在 shard2 核验。
 
 ### 4.5 关键环境变量
 
@@ -260,6 +262,3 @@ launch_types:
 | 出站火山资源 | https://docs.volcengine.com/docs/AgentKit/2549766 | 出站火山资源 |
 | 创建权限网关 | https://docs.volcengine.com/docs/AgentKit/2549776 | 创建权限网关 |
 | 开通身份权限平台 | https://docs.volcengine.com/docs/AgentKit/2549762 | 开通身份权限平台 |
-| 完整链路/坑/验收矩阵/钉版环境 | <internal-lark-doc> | doc06 全文 |
-| CLI 安装/登录/验收矩阵 | <internal-lark-doc> | doc05 全文 |
-| RBAC/ABAC/连接器权限模型 | <internal-lark-doc> | doc08 第4节 |

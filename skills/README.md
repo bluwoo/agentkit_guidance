@@ -1,7 +1,16 @@
 # AgentKit Skills 导航与阅读顺序
 
 > 本文件是 14 个组件 Skill 的总入口。新手不必全读——按下方依赖图先读底座，再按你要搭的能力挑挂载组件，最后读安全横切与闭环。
-> 最后更新：2026-09-28（基准验收后补充）
+> 最后更新：2026-10-16（按现行官网公开页复核协议矩阵与环境变量边界）
+
+## 0. 公开文档入口与基线口径
+
+- 公开文档入口（现行官网，只读参考）：
+  - 快速开始：https://docs.volcengine.com/docs/AgentKit/Quickstart?lang=zh
+  - 网关概述：https://docs.volcengine.com/docs/AgentKit/Gatewayoverview?lang=zh
+  - 智能体运行时概述：https://docs.volcengine.com/docs/AgentKit/Agentruntimeoverview?lang=zh
+- **本仓基线口径**：各组件钉版（§4）均为本仓**离线实测钉版**，不是"官网最新版本"的判断；官网快速上手页可能钉更旧的 SDK（如 Codex 示例 `agentkit-sdk-python==0.6.4`，早于本仓实测基线 0.8.7），照抄前以 §4 钉版为准。
+- **官网新能力边界**：官网公开页可能已文档化更新能力（如 MCP 2026-07-28 无状态协议对 HTTP 转 MCP 的兼容口径）；实际租户/区域可用范围以控制台与授权验证为准，本仓未进行云端实测。
 
 ## 1. 依赖分层图
 
