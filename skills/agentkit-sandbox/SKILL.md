@@ -115,6 +115,8 @@ agentkit sandbox create                         # 用镜像创建自定义沙箱
 > 说明：上表 5 种为**控制台预置模板**（产品概念）。OpenAPI `CreateTool.ToolType` 的取值枚举为 `All-in-one / Skill / Private / CodeEnv / PersonalAssistant / VibeSkill`，二者不是同一概念，勿混用。
 >
 > **公开枚举边界（2026-10-16 复核）**：公开 CreateTool 文档仅列出 4 个 GA 取值（All-in-one / Skill / Private / CodeEnv）；`PersonalAssistant` / `VibeSkill` 为未公开发布枚举，对外示例只用 4 个 GA 值，已验证能力不因公开文档未列而删除。
+>
+> **配额边界（2026-10-23 现行公开文档）**：单账号单地域沙箱模板数量现行公开配额为 50、沙箱实例 100（来源 https://docs.volcengine.com/docs/agentkit/Limits?lang=zh ）；配额会调整，实际以控制台配额中心为准，此处不把数字写成永久上限。
 
 **预置 Skills**：`tos-file-access`（TOS 上传下载）、`code-optimization`（C++/Python/Java/Rust 最多 2 轮性能优化）、`veadk-python`（生成可运行 Agent）、`internal-comms`（企业沟通文案）、`skill-creator`（生成新 Skill）。
 
@@ -140,7 +142,14 @@ agentkit sandbox create                         # 用镜像创建自定义沙箱
 - 工作空间为远程绝对路径，**首条消息后锁定**
 
 ### Sandbox Tool API（Version 2025-10-30）
-CreateTool / UpdateTool / DeleteTool / GetTool / ListTools / InvokeTool / AsyncExecCommand / ViewAsyncCommand / CreateSession / DeleteSession / GetSession / ListSessions / SetSessionTtl / GetSessionLogs
+CreateTool / UpdateTool / DeleteTool / GetTool / ListTools / InvokeTool / AsyncExecCommand / ViewAsyncCommand / CreateSession / DeleteSession / GetSession / ListSessions / SetSessionTtl / GetSessionLogs / PauseSession / ResumeSession
+
+- **PauseSession / ResumeSession（2026-10-21 新增，Version 2025-10-30，现行公开文档，未在本仓离线实测）**：
+  - `PauseSession(SessionId, ToolId)`：暂停运行中会话，返回 `Status=Paused`；**无 Ttl 参数**；挂载 EFS 的沙箱不支持。
+  - `ResumeSession(SessionId, ToolId, Ttl?, TtlUnit?)`：恢复已暂停会话，返回 `ExpireAt / Status=Ready`；`Ttl` 未传默认 3600 秒，`TtlUnit` 默认 `second`（可选 `minute`）。
+  - 页面列出的合法状态含 Starting / Ready / Failed / Terminating / Pausing / Paused；页面未给转换时机/超时回退，不补充时序，不断言为"新增状态机"。
+  - 区分：`ResumeSession`（暂停后恢复）≠ 已有 `ResumeSessionFromSnapshot`（快照恢复）；`ResumeSession` 的 `Ttl/TtlUnit` ≠ 已有 `SetSessionTtl`。
+  - 来源：https://docs.volcengine.com/docs/agentkit/pause-session?lang=zh 、https://docs.volcengine.com/docs/agentkit/resume-session?lang=zh
 
 ### 关键环境变量
 

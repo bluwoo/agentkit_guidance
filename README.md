@@ -202,6 +202,13 @@ cd web && npm install && npm run build       # -> web/dist/
 - 已按现行官网公开页修订：MCP 2026-07-28 兼容口径（含 HTTP 转 MCP）、initialize 握手示例版本、KB 环境变量边界、CLI 钉版口径、IAM 策略名拼写注记；详见 `skills/` 各 Skill 与 `docs/volcengine-official/snapshot_index.md`。
 - 实际租户/区域可用范围、定价、配额以控制台与公开文档为准；本仓未进行云端实测，不背书内部灰度口径。
 
+## 2026-10-23 周度复扫结论（只读复核，未升级钉版）
+
+- 本轮从线上重新发现导航并完成正文内链闭包：导航+闭包正文集合 **451**（AgentKit 本体 393 + VeADK 3 + DeliveryAI 55，三者分列不混算）；分类为未变 404、正文修改 34、导航新收录 3、真新增 API 2（PauseSession/ResumeSession）、基线覆盖缺口回填 8。
+- 数字 86681 引用 326 条：304 canonical 命中本周集合、22 条旧内部数字路由 SSR shell（受限单列，不判删除/缺失），0 外部产品、0 unresolved；2 个集合外 slug（Developing_and_deploying_agents、user-guide-1）为 hub 入口，非正文页。
+- 仅按公开证据修订 5 处边界，未改依赖/UI、未升级钉版：sandbox 配额现行公开注记（模板50/实例100，以配额中心为准、非永久）、identity 在线调试公网/M2M 边界、evaluation 仅华北2北京、sandbox PauseSession/ResumeSession、gateway Identity 鉴权插件；详见 `skills/` 各 Skill 与 `docs/volcengine-official/snapshot_index.md`。
+- 旧页本周不可达 ≠ 删除；目录/页面新增 ≠ 后端能力新增；UpdatedTime 不替代正文 hash 比对。
+
 ### 可复现门禁命令（引自只读门禁审计矩阵，2026-10-16）
 
 ```bash

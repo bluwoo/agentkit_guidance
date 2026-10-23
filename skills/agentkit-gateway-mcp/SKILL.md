@@ -175,6 +175,11 @@ curl -X POST $MCP_ENDPOINT \
   | WASM 插件 | Envoy 内建 WebAssembly | 功能扩展主力（认证鉴权、路由、限流） |
   | 外置 Ext-process | 独立服务 | 独立能力、性能不敏感（意图识别、协议转换） |
 
+**产品插件清单（专属网关，2026-10-23 现行公开文档口径，来源 https://docs.volcengine.com/docs/agentkit/Dedicated_gateway_plugin_configuration_description?lang=zh ）**：
+- 凭据转换：仅 **MCP 类型**专属网关；把 Header/Query 凭据写入 Body/Query 目标位置并移除原位置，未匹配规则自动跳过。
+- 自定义服务扩展：**MCP 类型 + 智能体运行时类型**；外接函数服务做自定义签名/鉴权、审计拦截；其"失败时放行"开关属本插件，与 Identity 无关。
+- Identity 鉴权：**MCP 类型 + 智能体运行时类型**；从 Header（默认 `X-Ve-TIP-Token`，可改，Header 名不区分大小写、保存统一转小写）提取 Token，可选 Bearer 前缀（匹配忽略大小写、命中后剥离再鉴权），绑定指定 Identity 权限空间鉴权，**失败即拒绝、不转发后端**。此为入站访问控制，勿与出站 `AuthorizerType=Identity`（出站凭据注入）混淆。
+
 ## 7. 失败处理与排障
 
 | 错误现象 | 可能原因 | 处理方式 |

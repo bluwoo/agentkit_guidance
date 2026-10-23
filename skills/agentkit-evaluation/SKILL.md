@@ -17,6 +17,7 @@ AgentKit 评测工具是企业级 AI Agent **可度量可优化**的核心能力
 - [ ] Agent 已上线并有运行 trace 数据（trace 回流评测集的前提）
 - 依赖包：无需额外安装（平台侧能力）
 - 环境变量：无（通过控制台配置评测集/评估器/实验）
+- **地域边界（2026-10-23 现行公开文档）**：评测实验/技能评估管理当前公开文档标注仅支持华北 2（北京）地域（来源 https://docs.volcengine.com/docs/agentkit/ManagementSkillsAssessment?lang=zh ）；开放地域以控制台为准，不写成全球永久可用。
 
 ## 3. 快速上手
 

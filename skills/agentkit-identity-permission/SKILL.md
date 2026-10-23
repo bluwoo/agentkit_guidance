@@ -180,6 +180,7 @@ launch_types:
 
 - **所需 IAM 权限**：Identity 平台开通权限 + AgentKit 资源管理权限；建议用短期 STS，确保具备三类临时资源 Create/Get/List/Delete 权限
 - **入站认证**：API Key（教学/服务间）或 OAuth JWT（生产用户）；生产必须用 UserPool + 企业 SSO
+- **在线调试边界（2026-10-23 现行公开文档）**：控制台"在线测试/在线调试"仅当网络访问选**公网访问**时可用；基于 OAuth 入站认证创建的运行时仅 **M2M 类型客户端**可在线测试，其他客户端类型不支持（来源 https://docs.volcengine.com/docs/agentkit/Sample_calls_for_text_prompts?lang=zh ）。此为现行公开口径，非永久能力承诺。
 - **出站凭据**：AK/SK 托管（API Key Provider）、OAuth 令牌托管（OAuth Client / OBO）、IAM 角色级联委托
 - **数据安全**：下游密钥不写 Agent 代码；长期敏感值不明文落库；运行时明文凭据只向受信任 Gateway/执行器返回；**严禁在终端/日志/Trace/错误体/MCP Result 打印 Authorization/API Key/Access Token/Refresh Token**
 - **安全围栏兼容**：身份权限层与安全围栏（Guardrails）独立工作，可同时开启
