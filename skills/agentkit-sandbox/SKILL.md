@@ -151,6 +151,15 @@ CreateTool / UpdateTool / DeleteTool / GetTool / ListTools / InvokeTool / AsyncE
   - 区分：`ResumeSession`（暂停后恢复）≠ 已有 `ResumeSessionFromSnapshot`（快照恢复）；`ResumeSession` 的 `Ttl/TtlUnit` ≠ 已有 `SetSessionTtl`。
   - 来源：https://docs.volcengine.com/docs/agentkit/pause-session?lang=zh 、https://docs.volcengine.com/docs/agentkit/resume-session?lang=zh
 
+### E2B 协议兼容与 E2B API Key（2026-10-23 新增，白名单）
+沙箱模板可开启 **E2B 协议兼容**，让符合 E2B 协议的外部客户端（含 E2B SDK / E2B CLI）用 **E2B API Key** 直接调用沙箱模板，而不必走 AgentKit 的 AK/SK / OAuth JWT 入站链路。
+- **边界（勿越界写成全量开放）**：当前仅 **华北2（北京）** 地域，且为**白名单功能**，未开通时控制台不可见、不可用；试用需联系客户经理。完整 Key 仅创建时展示一次，后续只展示脱敏值。
+- **Key 生命周期（在「身份与权限 > 凭据管理」统一管理）**：查看（脱敏）/ 编辑传递方式 / 绑定到 Agent / **轮换密钥**（新值立即覆盖旧值，已有 Agent 绑定关系不变）/ 删除（须先解除全部 Agent 绑定，否则拒绝）。Key 与名称均以 `e2b_apikey_` 开头。
+- **三种创建入口**：沙箱模板列表单独创建 / 创建沙箱模板时「权限与访问控制」区创建 / 已有模板「配置信息 > E2B 协议兼容」区创建；三种入口配置动作一致。
+- **绑定注意**：以 Agent **唯一标识**绑定而非名称（Agent 名称不唯一）；Agent 发布/升级版本沿用原绑定，删除重建 Runtime 若归属原 Agent 则绑定保留，**重建 Agent 导致唯一标识变更时需重新绑定**。
+- **开关语义**：关闭「E2B 协议兼容」只影响**后续新建实例**；已存在的 E2B 实例继续运行并计费，管理它们用 E2B CLI 或 OpenAPI。
+- 来源：https://docs.volcengine.com/docs/agentkit/create-manage-e2b-api-key?lang=zh 、「更新 E2B 配置」同目录页。
+
 ### 关键环境变量
 
 | 变量名 | 用途 | 是否必填 |
@@ -180,6 +189,7 @@ CreateTool / UpdateTool / DeleteTool / GetTool / ListTools / InvokeTool / AsyncE
 - **出站凭据**：沙箱内执行不可信代码时用 `danger-full-access` 需谨慎；审批策略 `untrusted` 最严
 - **数据安全**：session 间文件系统隔离；TOS 只挂产物/工作空间（默认 `/home/gem/workspace`），不要全量挂载整个沙箱目录
 - **MCP 对外能力**：2026-09-01 起沙箱模板可配置 MCP 服务对外，第三方 Agent 经 MCP 接入
+- **E2B 协议对外（白名单）**：2026-10-23 起沙箱模板可开 E2B 兼容，外部 E2B 客户端用 E2B API Key 调用；Key 在凭据管理中托管/轮换/绑定/删除，遵循最小授权，仅绑定确有访问需求的 Agent
 
 ## 7. 失败处理与排障
 
@@ -229,6 +239,7 @@ agentkit sandbox shell --tool-id "t-xxx" --session-id demo \
 - AK/SK 仅适合 demo，生产用 OAuth JWT / userpool
 - 2026-08-07 前后陆续上线 ArkClaw/Hermes 控制台入口、OAuth 鉴权、MCP 对外能力，以官方最新文档为准
 - Studio 对终端用户只暴露"智能体"概念，不露出"沙箱"
+- **E2B 协议兼容为白名单、仅华北2（北京）**：未开通不可见；Key 完整值只展示一次，须立即保存；关闭兼容开关不回收已运行的 E2B 实例
 
 ## 11. 来源追溯
 
@@ -238,6 +249,7 @@ agentkit sandbox shell --tool-id "t-xxx" --session-id demo \
 | 沙箱类型 | https://docs.volcengine.com/docs/AgentKit/Tooltypes?lang=zh | 工具类型 |
 | run_code 集成代码 | https://docs.volcengine.com/docs/AgentKit/Tools-2?lang=zh | Tools（代码执行） |
 | 沙箱 SDK | https://github.com/volcengine/agentkit-sdk-python | agentkit-sdk-python |
+| E2B 协议兼容 / E2B API Key 生命周期 | https://docs.volcengine.com/docs/agentkit/create-manage-e2b-api-key?lang=zh | 创建和管理 E2B API Key（2026-10-23） |
 
 
 ---

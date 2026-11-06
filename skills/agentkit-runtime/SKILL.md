@@ -141,6 +141,7 @@ curl -X POST https://<runtime-domain>/invoke \
 
 - **上游依赖**：镜像仓库（CR）、模型服务（方舟）、IAM
 - **下游联动**：观测（APMPlus/TLS）、评测（trace回流）、安全围栏、A2A注册
+- **前端对话界面（ChatKit，2026-10-22 上线）**：官方 React 18/19 套件 `@volcengine/chatkit`，内置 ADK（run_sse）、A2A（JSON-RPC over SSE）、OpenAI 兼容、Hermes、Codex 等适配器，可直接把本 Runtime 暴露成流式对话页面（含思考过程、工具调用、HITL 审批/追问、多会话 SessionList）。**边界**：ChatKit 只在浏览器内存持有当前会话，不落浏览器存储、不替代服务端会话持久化；请求地址/鉴权/历史持久化由接入方后端实现。属前端 UI 套件，不是新的后端组件。
 - **常见组合**：
   - Runtime + 观测 + 评测 = Eval-driven 闭环
   - Runtime + MCP工具集 + 知识库 = RAG Agent
@@ -163,6 +164,7 @@ curl -X POST https://<runtime-domain>/invoke \
 | API 清单 | https://docs.volcengine.com/docs/AgentKit/Agentruntimeoverview?lang=zh | API 参考 |
 | SDK 集成 | https://docs.volcengine.com/docs/AgentKit/Quickstart?lang=zh | SDK 快速开始 |
 | 计费形态 | https://docs.volcengine.com/docs/AgentKit/gateway_mode_and_mcp_request_counting_rules?lang=zh | 计费计数规则 |
+| ChatKit 前端对话套件与适配器 | https://docs.volcengine.com/docs/agentkit/chatkit-reference?lang=zh | ChatKit 概述（2026-10-22） |
 
 
 ---

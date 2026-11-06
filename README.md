@@ -202,6 +202,13 @@ cd web && npm install && npm run build       # -> web/dist/
 - 已按现行官网公开页修订：MCP 2026-07-28 兼容口径（含 HTTP 转 MCP）、initialize 握手示例版本、KB 环境变量边界、CLI 钉版口径、IAM 策略名拼写注记；详见 `skills/` 各 Skill 与 `docs/volcengine-official/snapshot_index.md`。
 - 实际租户/区域可用范围、定价、配额以控制台与公开文档为准；本仓未进行云端实测，不背书内部灰度口径。
 
+## 2026-11-06 周度增量核验（只读复核，未改代码/依赖）
+
+- 动态锚点页自 10-23 全量基线后无新条目：新功能发布记录页脚仍为 2026-10-23 19:28:45、API 发布历史页脚仍为 2026-10-21 17:55:06，10-24～11-06 无新功能/新 API。
+- 实质回写（均为文档）：① 补收 10-23 上线但上次闭包漏收的「创建和管理 E2B API Key」页，在 `agentkit-sandbox` 增加 E2B 协议兼容小节（白名单、仅华北2北京；Key 以 `e2b_apikey_` 开头、创建时仅展示一次、凭据管理统一绑定/轮换/删除）；② 对 10-23 留下的 3 个待评估页定级，在 `agentkit-runtime` 标注 ChatKit（`@volcengine/chatkit`，React 18/19 前端套件，内置 ADK/A2A 适配器）为前端 UI 而非新后端组件；有奖问卷活动页（10/31 结束）不纳入。
+- 门禁范围：本轮零 `.py/.ts/.js/配置` 改动，文档相关门禁全绿——skill_structure（14 个）、code_blocks、secret_scan、duplicate_skills、reference_links 均通过。pytest/web build/lint/typecheck/E2E 需在已 provision 的钉版 venv（veadk-python==1.1.13 等）与 `web/node_modules` 中运行，当前环境（Python 3.14、无 venv/node_modules）不可执行，未虚报通过；其上次绿灯基线为 275322a。
+- 边界：E2B/ChatKit 均为 AgentKit 平台能力，未与 veADK / Google ADK 版本混算；E2B 为白名单、ChatKit 前端不替代服务端会话持久化。
+
 ## 2026-10-23 周度复扫结论（只读复核，未升级钉版）
 
 - 本轮从线上重新发现导航并完成正文内链闭包：导航+闭包正文集合 **451**（AgentKit 本体 393 + VeADK 3 + DeliveryAI 55，三者分列不混算）；分类为未变 404、正文修改 34、导航新收录 3、真新增 API 2（PauseSession/ResumeSession）、基线覆盖缺口回填 8。
