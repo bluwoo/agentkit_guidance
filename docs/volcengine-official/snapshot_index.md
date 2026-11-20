@@ -1,4 +1,4 @@
-# AgentKit 官网公开快照索引（2026-11-06 增量核验；全量基线 2026-10-23）
+# AgentKit 官网公开快照索引（2026-11-20 增量核验；全量基线 2026-10-23）
 
 全量基线：2026-10-23 从线上重新发现导航并完成正文内链闭包，共 **451** 页（AgentKit 本体 393 + VeADK 3 + DeliveryAI 55，分列不混算）。对照 2026-10-16 的 439 闭包基线：未变 404、正文修改 34、导航新收录 3、真新增 API 2（PauseSession/ResumeSession，2026-10-21）、基线覆盖缺口回填 8。
 
@@ -7,6 +7,20 @@
 - 补漏 1 页：`create-manage-e2b-api-key`（10-23 随沙箱 E2B 兼容上线，但 10-23 闭包未收录），已纳入 agentkit-sandbox Skill。
 - 对 10-23 留下的 3 个"导航新收录(待评估)"定级：ChatKit 概述/快速上手＝官方 React 前端对话套件（已在 agentkit-runtime Skill 标注边界，非新后端组件）；有奖问卷＝10/16–10/31 活动页，已结束，不纳入 Skill。
 - 其余页面本轮未逐页重算 body hash，沿用 10-23 基线状态。
+
+**2026-11-20 增量核验（定向抽检，非全量重扫；区间 2026-10-24～2026-11-19）**：
+- 发布记录锚点页最新条目＝2026-11-19（页面文档时间戳 2026-11-19 22:29 +08:00）；API 发布历史页最新仍为 2026-10-21（PauseSession/ResumeSession），**本轮无新增 API**。
+- 11-06 上一轮仅核对页脚时间戳，漏收了当时已按日期列出的 10-27～11-06 条目；本轮按发布记录表格逐行补齐 10-27～11-19 全部条目，均为 **AgentKit 本体**模块，未混入 Google ADK / veADK / DeliveryAI 变化。
+- 按模块定级（详见各 Skill §4/§10 与来源追溯）：
+  - 运行时：执行超时配置（1～3600 秒，重新发布生效）。
+  - 沙箱：私网模板实例 EFS 挂载点；实例容量统计与最大实例数设置。
+  - 网关/模型：模型组（权重分流、≤5 上游、备用模型一次、独立 Proxy API Key 授权）；部署型 MCP 常驻最小/最大实例数；MCP 资源管理页签（日志/WebShell/删除补足）；专属网关私网出口；专属网关自定义域名；模型服务新增快手可灵（Kling）提供商协议。
+  - 身份与权限：访问规则支持中间层 Agent（链路收敛，「且」条件，同项目，不替代最小权限）。
+  - 评测：11-13 切换全自研新评测版本；执行/评分模型来源可分离；无法评分状态与可评分覆盖率；技能评测报告导出 HTML/JSON。
+  - 技能：Vibe/在线测试可选模型来源；ZIP 单包多技能导入（≤30 个/任务，单包 ≤25 MiB）；执行轨迹（链路/耗时/Token/Trace ID）。
+  - 计费：套餐包（vCPU/内存预付费抵扣，Sandbox 抵扣系数 0.42/0.66）；金额概览（已产生/预测/构成，可导出明细）。
+  - 新模块：控制台 Harness（声明式 `harness.yaml` 配置/调试/运行管理，请求级临时覆盖），与 CLI `--template harness`、veADK `harness_extension` 术语分层。
+- 本轮新收录独立页见下表末尾 AgentKit 行；既有页的能力更新（创建模型服务/创建 MCP 服务/创建访问规则/什么是评测/手动创建技能/Vibe/在线测试等）在对应 Skill 标注，未重复建行。新收录行 body hash 占位 `pending-full-rescan-2026-11-20`，待下轮全量重扫补真实 hash。
 
 数字 86681 引用 326 条：304 canonical 命中本周集合、22 条旧内部数字路由 SSR shell（受限单列，不判删除/缺失），0 外部、0 unresolved；Developing_and_deploying_agents、user-guide-1 为 hub 入口不计正文页。
 仅记录公开页 URL、产品归属、标题、正文摘要、raw body hash、字符数与本周状态；正文原文留私有工作区，不发布 raw 正文、本机绝对路径或凭据。
@@ -350,7 +364,7 @@
 | AgentKit | https://docs.volcengine.com/docs/agentkit/billing-faq?lang=zh | 费用FAQ | 本文面向使用 AgentKit 的用户，集中解答费用来源、账单查询、停止计费、退费与欠费处理等常见问题。 <span id="WcD6usos"></span> ## 相关入口 * [费用中心—账单详情](https://console.v | true | 3996 | `b665b772935dfb6f3ba8b8c9a6f36034d6ba78bf40f9a6ba46eaccadaa1ad0f4` | 未变(hash一致) |
 | AgentKit | https://docs.volcengine.com/docs/agentkit/bind-unbind-agent?lang=zh | 绑定与解绑 Agent | 凭据与目标 Agent 绑定后，Agent 才能在运行时引用该凭据访问外部服务。通过绑定和解绑操作，可以控制凭据的使用范围：绑定用于授权 Agent 使用凭据；解绑用于在 Agent 下线、权限调整或删除凭据前撤销授权。 **建议遵循最小授权原则，仅绑定确有业务需求的 Agent**。解绑前，请确认 Agent 已停止使用该凭据或已切换至其他凭据，避免影响正 | true | 2631 | `15917d7b426e0080eb35861d9d9594f7d1cfe99a03a6172bc8b3fafa81d59113` | 未变(hash一致) |
 | AgentKit | https://docs.volcengine.com/docs/agentkit/change-role?lang=zh | 更换角色 | 更换角色用于**调整火山云角色凭据**所使用的 IAM 角色。更换完成后，系统将基于新角色换取 STS 临时凭证，后续请求也将按照新角色的权限访问火山引擎云资源。 如果新角色未授予业务所需权限，可能导致 TOS、方舟或相关工具调用失败。操作前，请确认新角色已配置正确的信任关系和权限策略。[了解更多](https://docs.volcengine.com/d | true | 1717 | `00013f978ca141c1fef5941ab81c660faf3d592885cdb75fa73b0ab2dd00727f` | 未变(hash一致) |
-| AgentKit | https://docs.volcengine.com/docs/agentkit/chatkit-reference?lang=zh | ChatKit 概述 | ## 什么是 ChatKit [ChatKit](https://chatkit-docs.bytedance.com/) 是面向 React 18 或 React 19 应用的 Agent 对话界面开发套件，以 npm 包 [@volce | true | 4256 | `fee9c27a5e2ed6a91e283e3c8b98379ba50a4739cfb872c5d0fa703d5d07328d` | 已评估(前端套件,已写入 runtime skill) |
+| AgentKit | https://docs.volcengine.com/docs/agentkit/chatkit-reference?lang=zh | ChatKit 概述 | ## 什么是 ChatKit ChatKit 是面向 React 18 或 React 19 应用的 Agent 对话界面开发套件，以 npm 包 [@volce | true | 4256 | `fee9c27a5e2ed6a91e283e3c8b98379ba50a4739cfb872c5d0fa703d5d07328d` | 已评估(前端套件,已写入 runtime skill) |
 | AgentKit | https://docs.volcengine.com/docs/agentkit/configuration-satisfaction-analysis?lang=zh | 配置满意度分析 | 满意度分析关注会话结果层面的体验质量，该模块通过显性指标（点赞、点踩）和隐性指标（会话轮次、中断率等）构建综合评分，帮助业务方不依赖单一点赞或点踩，也能更系统地评估 Agent 的使用效果。其核心机制是基于“基准分 + 加分项 \- 扣分项”的评分模型：以基准分为起点，将点赞、采纳等正向因子计入加分，将点踩、中断、工具失败等负向因子计入扣分，并支持按 Age | true | 4761 | `2bd18ed4faadd77eaa52d4050e3173899e0df6b5d94837bf21c4504a9dd6b883` | 基线缺口回填 |
 | AgentKit | https://docs.volcengine.com/docs/agentkit/configure-agentkit-cli-single-signon-sso?lang=zh | 配置 AgentKit CLI 单点登录（SSO） | 本文介绍如何通过`agentkit auth admin sso-setup`命令，为企业用户配置AgentKit CLI的统一登录入口。完成配置后，终端用户无需本地配置AK/SK，即可通过浏览器完成登录，并自动获取短期STS凭据。 <span id="ix6yQaua"></span> ## 背景介绍 `agentkit auth admin sso-se | true | 11017 | `c534b2ac37a3a7462078faabebeec5b55ad860c12fb0794c023aab3ea3ff4a10` | 未变(hash一致) |
 | AgentKit | https://docs.volcengine.com/docs/agentkit/configure-authentication-information?lang=zh | 配置身份验证信息 | 身份验证配置用于决定用户可以通过哪些凭证进入您的应用。您可以单独配置登录方式和注册方式。 ## 前提条件 * 已创建用户池。相关操作，请参见 [创建用户池](https://docs.volcengine.com/docs/86848/1928256)。 * 若使用短信服务配置，需提前创建发送短信相关的消息组。相关操作，请参见 [新增消息组](https:/ | true | 4009 | `5c3df0925839b95ccc775f4c63950a862d9df3101e1e7db958d39bb5618416dc` | 正文修改(hash不同) |
@@ -407,6 +421,25 @@
 | AgentKit | https://docs.volcengine.com/docs/agentkit/view-evaluation-progress-and-report?lang=zh | 查看评测结果并修复技能问题 | 评测实验执行完成后，可查看本次实验生成的评测报告。通过分析评测实验结果，可以从能力雷达图、效率与成本分析、分维度表现、运行记录等多个能力维度，量化评估技能的实际表现，全面掌握技能整体能力与资源消耗情况。 对于需要深入分析的问题，可进入运行记录逐条浏览样本的输入、输出与分维度评分，精准定位低分或异常样本；再结合轨迹详情与报告中的调优建议，系统性地排查并修复技能 | true | 6611 | `c5ccfc0ebe93dc051d3eff7e9ca9be638c5cdeabbc26bd0b1955d3839930f2e7` | 正文修改(hash不同) |
 | AgentKit | https://docs.volcengine.com/docs/agentkit/view-skill-workbench?lang=zh | 查看技能工作台 | 技能工作台用于集中展示**近期访问的技能**和**需要关注的技能待办事项**，是查看技能状态、进入常用操作和处理治理任务的快捷入口。通过该页面，可快速定位近期操作过的技能，并集中查看质量、安全和评测相关待办，减少在技能列表页逐条搜索和筛选的操作成本。 <span id="6yJJe9pa"></span> ### 适用场景 * **快速访问近期技能** 如需 | true | 1986 | `824b91486b643db67bdd3f56607cb5c0ac480fbe7738efb424f4dd7f0dc1536e` | 未变(hash一致) |
 | AgentKit | https://docs.volcengine.com/docs/agentkit/view_bills?lang=zh | 查看 AgentKit 明细账单 | 您可以通过查询 AgentKit 及其关联云产品的账单，可以及时了解其收费明细，更好地从费用分配角度进行业务决策。本文不介绍计费单价、折扣规则和账单结算周期。相关信息请以各产品的计费说明为准。 <div data-tips="true" data-tips-type="warning" data-tips-is-title="true">注意</div> < | true | 4403 | `88511abb9977f60d87ed12f15b86dd7a6b2e760477db11c915a55ec8d86d2b2d` | 未变(hash一致) |
+| AgentKit | https://docs.volcengine.com/docs/agentkit/create-and-manage-model-group?lang=zh | 创建并授权模型组 | 模型组把多个已接入上游模型组合为统一调用入口，按权重分流；每组最多 5 个上游模型，权重 0 停止分配；组内重试失败后最多调用一次备用模型；模型组须单独授权给 Proxy API Key，保存后仅对新请求生效。 | true | 1417 | `pending-full-rescan-2026-11-20` | 本周新收录(已写入 gateway-mcp skill) |
+| AgentKit | https://docs.volcengine.com/docs/agentkit/call-model-service?lang=zh | 调用模型服务 | 应用在请求 model 字段填写模型组或上游模型名称调用模型服务的接入说明。 | true | 1479 | `pending-full-rescan-2026-11-20` | 本周新收录(已写入 gateway-mcp skill) |
+| AgentKit | https://docs.volcengine.com/docs/agentkit/configure-gateway-private-network-egress?lang=zh | 配置网关私网出口 | 专属网关经私网访问后端（私网域名 MCP 后端、私网 Base URL 模型供应商）的私网出口配置；每实例关联一个 SpaceNetwork，须同地域；仅适用 2026-11-06（含）后创建的专属网关；部署型 MCP/Runtime/沙箱自身出向不经此出口。 | true | 5149 | `pending-full-rescan-2026-11-20` | 本周新收录(已写入 gateway-mcp skill) |
+| AgentKit | https://docs.volcengine.com/docs/agentkit/manage-custom-domain?lang=zh | 配置自定义域名 | 为模型网关/Runtime 网关/MCP 网关三类专属网关配置自定义域名，单实例最多 1 个；非专属网关资源不支持；DNS CNAME 解析与 SSL 证书由接入方自理，公网入口域名需 ICP 备案。 | true | 1967 | `pending-full-rescan-2026-11-20` | 本周新收录(已写入 gateway-mcp skill) |
+| AgentKit | https://docs.volcengine.com/docs/agentkit/manage-mcp-deployment-instance-resources?lang=zh | 管理 MCP 服务的实例资源 | 部署型 MCP 服务详情「资源管理」页签：实例配置（最小/最大实例数、并发、规格）、累计用量、实例日志、WebShell、删除异常实例后平台自动补足；仅部署方式适用，累计用量≠实时监控指标。 | true | 3889 | `pending-full-rescan-2026-11-20` | 本周新收录(已写入 gateway-mcp skill) |
+| AgentKit | https://docs.volcengine.com/docs/agentkit/create-harness?lang=zh | 创建 Harness | 控制台 Harness：基于通用模板创建 Agent，配置抽象为声明式 harness.yaml，统一收敛模型/工具/技能/提示词/MCP/知识库/记忆/鉴权；支持单次请求临时覆盖且不改已部署配置；默认 2vCPU/4GiB、最小 1 最大 4 实例、并发 10。 | true | 3868 | `pending-full-rescan-2026-11-20` | 本周新收录(已写入 runtime skill) |
+| AgentKit | https://docs.volcengine.com/docs/agentkit/update-harness-config-runtime-resources?lang=zh | 更新 Harness 配置或运行资源 | 创建成功后在 Harness 编辑页更新基本信息、能力与运行配置（规格/实例数/并发）。 | false | 628 | `pending-full-rescan-2026-11-20` | 本周新收录(待全量重扫正文) |
+| AgentKit | https://docs.volcengine.com/docs/agentkit/view-config-resource-info?lang=zh | 查看配置和运行资源信息 | 查看 Harness 智能体的配置项与运行资源信息。 | false | 779 | `pending-full-rescan-2026-11-20` | 本周新收录(待全量重扫正文) |
+| AgentKit | https://docs.volcengine.com/docs/agentkit/delete-harness?lang=zh | 删除 Harness | 删除 Harness 智能体的前提条件与操作说明。 | false | 346 | `pending-full-rescan-2026-11-20` | 本周新收录(待全量重扫正文) |
+| AgentKit | https://docs.volcengine.com/docs/agentkit/update-execution-timeout?lang=zh | 更新执行超时 | 设置 Runtime 单次同步请求最大执行时长，取值 1～3600 秒，超时自动终止并返回错误；预览模式仅 Latest 可改，改后需重新发布生效，可回滚历史版本。 | true | 932 | `pending-full-rescan-2026-11-20` | 本周新收录(已写入 runtime skill) |
+| AgentKit | https://docs.volcengine.com/docs/agentkit/view-and-set-instance-capacity?lang=zh | 查看并设置实例容量 | 沙箱模板实例管理：实例总数/运行实例数/已创建数/最大实例数与容量使用率；最大实例数 1～当前用户配额，修改立即生效。 | true | 468 | `pending-full-rescan-2026-11-20` | 本周新收录(已写入 sandbox skill) |
+| AgentKit | https://docs.volcengine.com/docs/agentkit/package-overview?lang=zh | 套餐包概述 | 预付费套餐包抵扣 Runtime/Sandbox/MCP 的 vCPU 与内存费用；分 vCPU 算力包与内存包两类独立售卖抵扣；Runtime/MCP 系数 1.00，Sandbox vCPU 0.42、内存 0.66；优先于按量计费抵扣。 | true | 1949 | `pending-full-rescan-2026-11-20` | 本周新收录(已写入 billing 文档) |
+| AgentKit | https://docs.volcengine.com/docs/agentkit/purchase-package?lang=zh | 购买套餐包 | 购买 vCPU 算力包/内存包的操作步骤。 | false | 897 | `pending-full-rescan-2026-11-20` | 本周新收录(待全量重扫正文) |
+| AgentKit | https://docs.volcengine.com/docs/agentkit/renew-package?lang=zh | 续费套餐包 | 套餐包手动续费说明。 | false | 358 | `pending-full-rescan-2026-11-20` | 本周新收录(待全量重扫正文) |
+| AgentKit | https://docs.volcengine.com/docs/agentkit/view-package-details?lang=zh | 查看套餐包详情 | 查看已购套餐包额度与抵扣详情。 | false | 418 | `pending-full-rescan-2026-11-20` | 本周新收录(待全量重扫正文) |
+| AgentKit | https://docs.volcengine.com/docs/agentkit/view-cost-details?lang=zh | 查看费用趋势与明细 | 计费管理金额概览：账期应付、本月预测、按组件/计费项拆分、日/周/月粒度，明细可导出；历史账期不提供预测；IAM 用户需先获授权。 | true | 1264 | `pending-full-rescan-2026-11-20` | 本周新收录(已写入 billing 文档) |
+| AgentKit | https://docs.volcengine.com/docs/agentkit/management-skills-assessment?lang=zh | 发起技能评测实验 | 发起技能评测实验时可分别配置执行阶段与评分阶段的模型来源；页面最近更新 2026-11-13。 | false | 1284 | `pending-full-rescan-2026-11-20` | 本周新收录(已写入 evaluation/skills skill) |
+| AgentKit | https://docs.volcengine.com/docs/agentkit/view-assessment-experiment?lang=zh | 查看评估实验 | 实验详情：最新任务/实验配置/历史记录；缺参考依据的用例标记无法评分，不强行给分，按可评分覆盖率展示，不影响其他评估器与用例。 | true | 1466 | `pending-full-rescan-2026-11-20` | 本周新收录(已写入 evaluation skill) |
+| AgentKit | https://docs.volcengine.com/docs/agentkit/export-evaluation-experiment-report?lang=zh | 导出评测实验报告 | 技能评测实验报告导出为 HTML（离线查看/归档/分享）或 JSON（结构化二次分析）；位于技能评测链路。 | true | 534 | `pending-full-rescan-2026-11-20` | 本周新收录(已写入 skills skill) |
 | DeliveryAI | https://docs.volcengine.com/docs/agentkit/Environmentconfiguration?lang=zh | 环境配置 | 环境用于集中维护交付流程节点和自动化任务执行时引用的变量配置，例如部署信息、测试环境地址和访问凭据等。环境变量加密存储，在创建环境、编辑环境和查看环境详情时，均支持按需查看变量值。 环境配置完成后，无需在每个流程节点或自动化任务中重复填写变 | true | 4362 | `945b91ac6d1ac3380fbc269177c72dbfd6b25ca58bf6246fcc60c36956361373` | 未变(hash一致) |
 | DeliveryAI | https://docs.volcengine.com/docs/agentkit/IntegrationwithGitHub?lang=zh | 集成 GitHub | 将 DeliveryAI 与 GitHub 代码仓库连接，用于读取仓库、提交代码、创建合并请求，以及在需求流转中执行与代码相关的自动化操作。 <div data-tips="true" data-tips-type="warning" da | true | 1391 | `57e1df7bc33f291aba4b8d59f3ef62b756cf7eb3d899d11bc13aa3c07cdb1fbf` | 未变(hash一致) |
 | DeliveryAI | https://docs.volcengine.com/docs/agentkit/ManagementEvaluator?lang=zh | 管理评估器 | 评估器用于定义评测任务的评分标准。每个评估器绑定一个评估模型和一套评分规则，针对一个评测维度给出评分。本文介绍如何查看系统内置评估器，以及如何新建、克隆、编辑和删除自定义评估器。 <span id="8qHP0IQ8"></span> ## | true | 3041 | `3b183091023c73b2792afed9f5fc18b12941e1bb4d932a2904ce28a8a36ca9a0` | 未变(hash一致) |

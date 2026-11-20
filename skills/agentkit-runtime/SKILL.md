@@ -73,6 +73,7 @@ agentkit invoke "你好" # 调用已部署的 Runtime
 - **镜像**：来源 CR 镜像仓库；支持公网跨账号镜像（2026-08-07起）
 - **模型配置**：模型选择 + 模型 API Key
 - **实例规格**：最低 0.5 vCPU（2026-08-21起）；单实例并发请求数可配
+- **执行超时**（2026-11-03 新增）：单次同步请求最大执行时长，取值 1～3600 秒；超时后系统自动终止请求并返回错误。预览模式仅 Latest 版本可改；改后需**重新发布**才生效并生成新版本，可在版本管理回滚历史版本
 - **网络**：公网访问 / 私网访问（VPC+子网）
 - **观测服务**：开启后自动开通 APMPlus + TLS（在线评测必须开启）
 - **安全围栏**：可选开启提示词攻击/模型滥用/敏感数据/算力消耗防护
@@ -142,6 +143,7 @@ curl -X POST https://<runtime-domain>/invoke \
 - **上游依赖**：镜像仓库（CR）、模型服务（方舟）、IAM
 - **下游联动**：观测（APMPlus/TLS）、评测（trace回流）、安全围栏、A2A注册
 - **前端对话界面（ChatKit，2026-10-22 上线）**：官方 React 18/19 套件 `@volcengine/chatkit`，内置 ADK（run_sse）、A2A（JSON-RPC over SSE）、OpenAI 兼容、Hermes、Codex 等适配器，可直接把本 Runtime 暴露成流式对话页面（含思考过程、工具调用、HITL 审批/追问、多会话 SessionList）。**边界**：ChatKit 只在浏览器内存持有当前会话，不落浏览器存储、不替代服务端会话持久化；请求地址/鉴权/历史持久化由接入方后端实现。属前端 UI 套件，不是新的后端组件。
+- **控制台 Harness（2026-10-30 上线，新配置管理模块）**：把 Agent 配置抽象为声明式 `harness.yaml`，统一收敛模型、工具、技能、系统提示词、MCP、知识库、记忆与鉴权；单次请求可临时覆盖 system prompt / Agent Loop / skills / tools / MCP / 模型（仅本次请求生效，不改已部署配置）。基础通用模板默认 2 vCPU/4 GiB、最小 1、最大 4 实例、单实例并发 10，创建时不可调，创建后在运行配置页签更新；无流量也保留至少 1 个实例并计费。**术语边界（勿混用）**：此控制台 Harness ≠ 本仓 A2A Skill 里 CLI `agentkit init --template harness` 的 Consumer Harness，也 ≠ veADK `harness_extension` sidecar；三者命名相近但层级不同。
 - **常见组合**：
   - Runtime + 观测 + 评测 = Eval-driven 闭环
   - Runtime + MCP工具集 + 知识库 = RAG Agent
@@ -154,6 +156,8 @@ curl -X POST https://<runtime-domain>/invoke \
 - 专属网关适用于生产，共享模式适用于 POC/低流量
 - 计费口径在 2026-09-01 有变更，以官方计费文档为准
 - 最低实例规格 0.5 vCPU（2026-08-21起）
+- 执行超时（1～3600 秒）改的是单次同步请求上限；预览模式仅 Latest 可编辑，保存草稿后必须重新发布才生效，回滚走历史版本。超时终止属请求级动作，不等于实例缩容或释放实例资源
+- 控制台 Harness 的请求级配置覆盖只对当次请求生效，不会回写已部署的 `harness.yaml`；Harness 运行配置（规格/实例数/并发）创建后才可改，无流量常驻 ≥1 实例会持续计费
 
 ## 11. 来源追溯
 
@@ -165,6 +169,8 @@ curl -X POST https://<runtime-domain>/invoke \
 | SDK 集成 | https://docs.volcengine.com/docs/AgentKit/Quickstart?lang=zh | SDK 快速开始 |
 | 计费形态 | https://docs.volcengine.com/docs/AgentKit/gateway_mode_and_mcp_request_counting_rules?lang=zh | 计费计数规则 |
 | ChatKit 前端对话套件与适配器 | https://docs.volcengine.com/docs/agentkit/chatkit-reference?lang=zh | ChatKit 概述（2026-10-22） |
+| 执行超时配置（1～3600 秒，重新发布生效） | https://docs.volcengine.com/docs/agentkit/update-execution-timeout | 更新执行超时（2026-11-03） |
+| 控制台 Harness 声明式配置与请求级覆盖 | https://docs.volcengine.com/docs/agentkit/create-harness | 创建 Harness（2026-10-30） |
 
 
 ---

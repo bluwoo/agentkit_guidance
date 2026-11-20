@@ -160,6 +160,11 @@ CreateTool / UpdateTool / DeleteTool / GetTool / ListTools / InvokeTool / AsyncE
 - **开关语义**：关闭「E2B 协议兼容」只影响**后续新建实例**；已存在的 E2B 实例继续运行并计费，管理它们用 E2B CLI 或 OpenAPI。
 - 来源：https://docs.volcengine.com/docs/agentkit/create-manage-e2b-api-key?lang=zh 、「更新 E2B 配置」同目录页。
 
+### 实例容量管理与 EFS 挂载点（2026-10-27 / 2026-10-29 新增）
+- **实例容量**：沙箱模板「实例管理」页签可查看实例总数、运行实例数、已创建数量与最大实例数量；容量使用率＝已创建数量 ÷ 最大实例数量。最大实例数取值 1～当前用户配额，达到上限后需先提高上限或释放旧实例；修改后立即生效。
+- **EFS 挂载点**：基于配置了私网访问的沙箱模板，手动创建 AgentKit 类型沙箱实例时支持配置 EFS 挂载点。注意与会话 API 边界：挂载 EFS 的沙箱不支持 `PauseSession`（见上文 PauseSession/ResumeSession 条目）。
+- 来源：https://docs.volcengine.com/docs/agentkit/view-and-set-instance-capacity 、https://docs.volcengine.com/docs/agentkit/creating-tool-instances?lang=zh
+
 ### 关键环境变量
 
 | 变量名 | 用途 | 是否必填 |
@@ -240,6 +245,7 @@ agentkit sandbox shell --tool-id "t-xxx" --session-id demo \
 - 2026-08-07 前后陆续上线 ArkClaw/Hermes 控制台入口、OAuth 鉴权、MCP 对外能力，以官方最新文档为准
 - Studio 对终端用户只暴露"智能体"概念，不露出"沙箱"
 - **E2B 协议兼容为白名单、仅华北2（北京）**：未开通不可见；Key 完整值只展示一次，须立即保存；关闭兼容开关不回收已运行的 E2B 实例
+- 实例容量上限受当前用户配额约束，容量使用率按「已创建 ÷ 最大实例」计算；EFS 挂载点仅私网访问模板的手动创建实例可配，挂载 EFS 的沙箱不可暂停会话
 
 ## 11. 来源追溯
 
@@ -250,6 +256,8 @@ agentkit sandbox shell --tool-id "t-xxx" --session-id demo \
 | run_code 集成代码 | https://docs.volcengine.com/docs/AgentKit/Tools-2?lang=zh | Tools（代码执行） |
 | 沙箱 SDK | https://github.com/volcengine/agentkit-sdk-python | agentkit-sdk-python |
 | E2B 协议兼容 / E2B API Key 生命周期 | https://docs.volcengine.com/docs/agentkit/create-manage-e2b-api-key?lang=zh | 创建和管理 E2B API Key（2026-10-23） |
+| 实例容量统计与最大实例数设置 | https://docs.volcengine.com/docs/agentkit/view-and-set-instance-capacity | 查看并设置实例容量（2026-10-29） |
+| 私网模板实例 EFS 挂载点 | https://docs.volcengine.com/docs/agentkit/creating-tool-instances?lang=zh | 手动创建沙箱实例（2026-10-27） |
 
 
 ---

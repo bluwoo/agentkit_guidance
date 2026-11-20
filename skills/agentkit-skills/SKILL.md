@@ -119,6 +119,13 @@ app.run(host="0.0.0.0", port=8000)
 
 > 公开 CLI 0.52.13 仅支持 Runtime 关联组件的部署期挂载（Space 全量）。Hub slug 和 Space:Skill 指定格式依赖内部 CLI 版本的 `--skills` 请求级参数。
 
+### 创建/调试/评测侧新能力（2026-11-10～2026-11-19）
+- **模型来源选择（11-13）**：Vibe 创建技能、在线测试技能时支持按需选择模型来源及具体模型；当前模型下拉仅快速切换**当前模型来源下已授权**的模型，调整来源 / API Key / MCP / 环境变量等运行配置需走运行配置页签。
+- **ZIP 单包多技能导入（11-17）**：上传压缩包创建技能时，一个 ZIP 可含多个技能文件夹或嵌套 ZIP，系统自动解析为独立技能。同一创建任务累计最多解析 **30 个**技能（单次/多次上传合并计数）；每个技能包 ≤ **25 MiB**；同任务内技能名不得重复（重名报错），与控制台已有技能同名则转为升级覆盖。
+- **Agent 执行轨迹查看（11-17 / 11-19）**：Vibe 创建、在线测试、技能评测均可查看当轮任务执行轨迹——调用链路、事件状态、耗时分布与 Token 消耗（含 Trace ID）；技能评测结果可进一步跳转可观测页面查看完整会话分析。**边界**：在线测试结果仅临时保存，新建对话后不可再查看。
+- **评测报告导出（10-29，技能评测路径）**：已完成的技能评测实验可导出 **HTML**（离线查看/归档/分享）或 **JSON**（结构化数据，便于二次分析/集成）；该导出位于「技能 > 技能评测」链路，区别于通用评测实验报告。
+- 来源：https://docs.volcengine.com/docs/agentkit/edit-skills-file?lang=zh 、https://docs.volcengine.com/docs/agentkit/online-test-1?lang=zh 、https://docs.volcengine.com/docs/agentkit/create-skills?lang=zh 、https://docs.volcengine.com/docs/agentkit/export-evaluation-experiment-report 、https://docs.volcengine.com/docs/agentkit/view-evaluation-progress-and-report?lang=zh
+
 ### 关键环境变量
 
 | 变量名 | 用途 | 是否必填 |
@@ -217,6 +224,9 @@ agentkit skill delete <skill-id> -y
 - **地域**：已公测华北2（北京）/华东2（上海）；企业私有 SkillSpace 按 region 隔离，公开 Skill 为 global；详见 §2 地域前提
 - **Quota**：Skill/SkillSpace/绑定数量上限以控制台公开说明为准（本仓不背书内部售前口径）。
 - Skills Sandbox 模板自动具备执行 Skill 的能力，无需额外配置
+- ZIP 导入多技能：任务内累计上限 30 个技能、单包 ≤25 MiB；同任务技能名须互异，与存量同名技能冲突时按升级覆盖处理
+- 执行轨迹里的 Trace ID 用于关联单次任务与其他场景日志；在线测试结果不落持久存储，新建对话后丢失
+- 报告导出分两条链路：技能评测报告（技能路径）与通用评测实验报告，勿混为同一导出入口
 
 ## 10.5 实测校正（2026-09-24 <project-name>/<region> 端到端验证）
 
@@ -256,3 +266,6 @@ if _skill_space_id:
 | 在 Agent 中集成 Skill（Runtime 关联 + execute_skill） | https://docs.volcengine.com/docs/AgentKit/IntegratingSkillsintoagent?lang=zh | 在 Agent 中集成 Skills |
 | 批量创建（2026-09-03起） | https://docs.volcengine.com/docs/AgentKit/SkillsOverview?lang=zh | Skills 概述（更新说明） |
 | Skill API 清单 | https://docs.volcengine.com/docs/AgentKit/SkillsOverview?lang=zh | API 参考 |
+| ZIP 单包多技能导入（≤30 技能/任务，单包 ≤25 MiB） | https://docs.volcengine.com/docs/agentkit/create-skills?lang=zh | 手动创建技能（2026-11-17 更新） |
+| Vibe / 在线测试模型来源选择与执行轨迹 | https://docs.volcengine.com/docs/agentkit/edit-skills-file?lang=zh | 通过 Vibe 创建技能（2026-11-13/19 更新） |
+| 技能评测报告导出 HTML / JSON | https://docs.volcengine.com/docs/agentkit/export-evaluation-experiment-report | 导出评测实验报告（2026-10-29） |

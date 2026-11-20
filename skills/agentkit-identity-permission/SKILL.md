@@ -243,6 +243,7 @@ launch_types:
 - **入站 Key 创建时不要提交值**：创建 MCP Service 只提交 Key 名称，Ready 后从 `GetMCPService` 回读才是有效值。回读值仅内存使用。
 - **出站注入 Header 不得与入站 Authorization 共用**：实测入站 Authorization 仍会到后端，不能当作凭据隔离。
 - **Workload Access Token 接入 Gateway 的完整 issuer/JWKS/audience 配置当前手册未闭环**，需以线上接口和回读验证为准。
+- **中间层 Agent（2026-10-30 新增，访问规则）**：多 Agent 串联场景下，规则可限定用户「必须经过指定中间 Agent」才能调用目标工具/Agent，避免绕过受控业务 Agent 直连底层敏感工具。判定为**「且」条件**：请求必须完整经过所配置链路，少一级、多一级或顺序不一致都判不命中；中间层 Agent 须与目标工具同项目，Agent 迁移项目后规则失效；中间层 Agent 被删除时，规则在保存/模拟判定时提示层级不存在。**边界**：中间层 Agent 解决调用链路收敛，**不替代**用户维度最小权限授权，两者须配合使用。
 
 ### 版本兼容性
 - 公开 `agentkit-sdk-python 0.5.10` 不含完整认证模块，不能用于本组件
@@ -263,3 +264,4 @@ launch_types:
 | 出站火山资源 | https://docs.volcengine.com/docs/AgentKit/2549766 | 出站火山资源 |
 | 创建权限网关 | https://docs.volcengine.com/docs/AgentKit/2549776 | 创建权限网关 |
 | 开通身份权限平台 | https://docs.volcengine.com/docs/AgentKit/2549762 | 开通身份权限平台 |
+| 访问规则中间层 Agent（链路收敛，同项目，不替代最小权限） | https://docs.volcengine.com/docs/agentkit/create-access-rules | 创建访问规则（2026-10-30 更新） |

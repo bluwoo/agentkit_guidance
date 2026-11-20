@@ -209,6 +209,23 @@ cd web && npm install && npm run build       # -> web/dist/
 - 门禁范围：本轮零 `.py/.ts/.js/配置` 改动，文档相关门禁全绿——skill_structure（14 个）、code_blocks、secret_scan、duplicate_skills、reference_links 均通过。pytest/web build/lint/typecheck/E2E 需在已 provision 的钉版 venv（veadk-python==1.1.13 等）与 `web/node_modules` 中运行，当前环境（Python 3.14、无 venv/node_modules）不可执行，未虚报通过；其上次绿灯基线为 275322a。
 - 边界：E2B/ChatKit 均为 AgentKit 平台能力，未与 veADK / Google ADK 版本混算；E2B 为白名单、ChatKit 前端不替代服务端会话持久化。
 
+## 2026-11-20 周度增量核验（只读文档复核，未改代码/依赖/钉版）
+
+- 扫描区间 2026-10-24～2026-11-19：发布记录最新条目 11-19；API 发布历史最新仍为 10-21（PauseSession/ResumeSession），**本轮无新增 API**。11-06 上一轮仅核对页脚时间戳，漏收 10-27～11-06 已列条目，本轮按发布表格逐行补齐。
+- 全部条目均为 **AgentKit 本体**模块，未与 Google ADK / veADK / DeliveryAI 混算；回写均为文档，未升级钉版依赖（`veadk-python==1.1.13` / `agentkit-sdk-python==0.8.7` / `google-adk==2.2.0` / `mcp==1.26.0` / CLI 0.52.13 不变）。
+- 能力定级与落点：
+  - runtime：执行超时（1～3600 秒，重新发布生效）；控制台 Harness 声明式配置模块（与 CLI `--template harness`、veADK `harness_extension` 分层）。
+  - sandbox：私网模板 EFS 挂载点；实例容量统计与最大实例数。
+  - gateway-mcp：模型组（权重/≤5 上游/备用模型一次/独立 Key 授权）；部署型 MCP 实例弹性与资源管理页签；专属网关私网出口、自定义域名；模型服务新增可灵 Kling 提供商。
+  - identity：访问规则中间层 Agent（链路收敛，「且」条件，同项目，不替代最小权限）。
+  - evaluation：11-13 切换全自研新评测版本；执行/评分模型来源分离；无法评分状态；技能评测报告导出。
+  - skills：模型来源选择；ZIP 单包多技能导入（≤30/任务，单包 ≤25 MiB）；执行轨迹（链路/耗时/Token/Trace ID）。
+  - billing：套餐包（资源 vCPU/内存预付费抵扣，非模型 Token 包）；金额概览。
+- 新收录独立页 19 个见 `docs/volcengine-official/snapshot_index.md` 本周新收录行，body hash 占位待下轮全量重扫；既有页能力更新在对应 Skill §4/§10/§11 标注。
+- 门禁（2026-11-20 本机重新 provision 并实跑，零 `.py/.ts/.js/配置` 改动）：G1 根级 `tests/` **158 passed**；服务端精确依赖独立环境的 unit/integration **146 passed**；G8 统一验证 **PASS**——14 个正式 Skill、31 文件/69 代码块、9 个相对链接、无重复/秘密模式命中；Benchmark **53 passed / 0 failed**、evaluation **9 passed**、iteration2 cold_start **7 passed**。G2 ruff、G3 后端 mock HTTP E2E、G4 build、G5 lint、G6 typecheck、G7 前端资源 HTTP E2E、G9 无模型编排均通过；G10 冷启动示例 **14 passed**，另通过 `run.sh` 真起服务验证 `/ping`、缺身份 400、BUG/SUPPORT 路由与两轮持久化。云主机此前缺凭据造成的 6 例初始化失败已用授权环境实际复验通过，未改断言、未跳过用例。
+- 安全与证据边界：全仓扫描无密钥类别命中；发现的本机路径来自未跟踪 Ruff 缓存，不进入提交；发布前另扫描待提交文件完整内容及增量，禁止凭据、真实账号/资源标识、内部链接或本机用户路径。快照摘要中的历史非公开 ChatKit 链接已移除，官方公开来源行保留。服务端依赖与 AgentKit 钉版分别在独立环境解析并通过依赖一致性检查，未改变仓库钉版。
+- 非阻断警告如实保留：ADK Template 弃用/A2A 实验性、旧版 Dynamic 清理日志、测试客户端弃用及前端单 bundle 大于 500 kB；不隐藏警告，也不把 L2/mock 验证冒充真实模型或云端 L3/L4。新页正文 hash 与 7 个不完整正文页面仍待后续全量重扫，**本轮不宣称已完成官网全量扫描**。机器可读回查材料见 `docs/volcengine-official/sync_verification_2026-11-20.json`。
+
 ## 2026-10-23 周度复扫结论（只读复核，未升级钉版）
 
 - 本轮从线上重新发现导航并完成正文内链闭包：导航+闭包正文集合 **451**（AgentKit 本体 393 + VeADK 3 + DeliveryAI 55，三者分列不混算）；分类为未变 404、正文修改 34、导航新收录 3、真新增 API 2（PauseSession/ResumeSession）、基线覆盖缺口回填 8。

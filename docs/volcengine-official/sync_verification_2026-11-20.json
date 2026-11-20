@@ -1,0 +1,69 @@
+{
+  "date": "2026-11-20",
+  "baseline_commit": "5bc34a5c44079fd659540a56b19fe7b7264b50f8",
+  "scope": "Apply reviewed AgentKit official-document incremental update and rerun publication gates. Not a new full-site crawl.",
+  "repository_code_changed": false,
+  "pinned_agentkit_environment": {
+    "python": "3.12.14",
+    "veadk-python": "1.1.13",
+    "agentkit-sdk-python": "0.8.7",
+    "google-adk": "2.2.0",
+    "mcp": "1.26.0",
+    "dependency_check": "PASS"
+  },
+  "server_environment": {
+    "manifest": "deploy/requirements.txt",
+    "isolated_from_agentkit_sdk_environment": true,
+    "dependency_check": "PASS"
+  },
+  "gates": {
+    "G1_root_pytest": {"status": "PASS", "passed": 158, "failed": 0},
+    "server_manifest_unit_integration": {"status": "PASS", "passed": 146, "failed": 0},
+    "G2_ruff": {"status": "PASS"},
+    "G3_backend_http_e2e": {"status": "PASS", "mode": "mock", "assertions": ["health", "readiness mock identity", "owner bootstrap", "authenticated components", "invoke reply", "SSE done"]},
+    "G4_frontend_build": {"status": "PASS", "modules": 1523, "warning": "minified JS chunk exceeds 500 kB"},
+    "G5_frontend_lint": {"status": "PASS"},
+    "G6_frontend_typecheck": {"status": "PASS"},
+    "G7_frontend_http_e2e": {"status": "PASS", "assertions": ["index HTML served", "referenced hashed JS bundle HTTP 200"]},
+    "G8_unified": {
+      "status": "PASS",
+      "formal_skills": 14,
+      "markdown_files": 31,
+      "fenced_blocks": 69,
+      "documented_placeholder_blocks": 9,
+      "relative_links_checked": 9,
+      "secret_findings": 0,
+      "duplicate_skills": 0,
+      "benchmark_tests": {"passed": 53, "failed": 0},
+      "iteration2_evaluation": {"passed": 9, "failed": 0},
+      "iteration2_cold_start": {"passed": 7, "failed": 0}
+    },
+    "G9_offline_orchestration": {"status": "PASS", "mode": "no-model FunctionNode and compatibility BaseAgent"},
+    "G10_cold_start": {"status": "PASS", "passed": 14, "failed": 0, "real_process_entry": "examples/cold-start-agent/run.sh", "http_assertions": ["ping exact response", "missing identity HTTP 400", "BUG route turn=1", "SUPPORT route persistent turn=2"], "cloud_credentials_in_http_process": false},
+    "G11_security": {
+      "status": "PASS_FOR_PUBLICATION_SCOPE",
+      "full_workspace_secret_categories": 0,
+      "workspace_nonsecret_path_findings": "ignored Ruff binary caches; not staged or published",
+      "workspace_email_findings": "vendor/package author and generic documentation metadata; not claimed to be zero",
+      "full_staged_file_and_added_line_scan": "PASS: 10 staged files, 0 pattern findings, 0 live credential value matches",
+      "baseline_internal_link_in_changed_snapshot": "removed from ChatKit summary; public official source retained",
+      "baseline_unmodified_files": "legacy placeholder paths and vendor service endpoint literals were reviewed separately; not included as changes"
+    }
+  },
+  "warnings": [
+    "ADK Template APIs deprecated; compatibility tests intentionally cover them",
+    "ADK A2A implementation experimental; not a claim about the A2A protocol itself",
+    "ADK 2.2.0 Dynamic cleanup log already documented in the workflow Skill",
+    "TestClient/anyio aliases deprecated in dependency versions",
+    "pytest-asyncio fixture loop scope warning in legacy unified runner",
+    "dependency metadata declares absent optional volcengine-python-sdk ark extra; actual required Ark runtime package installed and imports/tests passed",
+    "frontend chunk-size warning retained without raising threshold"
+  ],
+  "limitations": {
+    "new_page_count": 19,
+    "full_body_incomplete_pages": 7,
+    "new_body_hashes": "pending-full-rescan-2026-11-20",
+    "cloud_model_or_lifecycle_e2e": "not exercised for this documentation-only publication",
+    "local_existing_changes": "Onboarding formatting and legacy verify_report changes kept out of this commit"
+  }
+}

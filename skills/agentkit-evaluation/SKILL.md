@@ -132,6 +132,12 @@ app.run(host="0.0.0.0", port=8000)
 - **人工校准**：人工标注，校准评估器准确性
 - **评测集 Dataset**：列含 `input` / `reference_output` / `actual_output`；容量上限（条数/大小/列数）以控制台公开说明为准，通过「提交新版本」固化版本号。
 
+### 评测版本切换与评分状态（2026-11-13 / 2026-11-17 新增）
+- **全自研新评测版本（11-13 切换）**：11 月 13 日起评测正式切换为全自研新版本，围绕评测标准、运行稳定性与可扩展性重构；旧版评测功能不再迭代更新。离线评测已可用；**在线持续评测**（对新增线上运行记录持续打分）为新版在建能力，具体支持范围以控制台实际展示为准。
+- **无法评分状态（11-17）**：某条用例缺少形成可靠结论所需参考依据（参考资料缺失、参考内容为空、缺关键判断信息等）时，系统标记「无法评分」，**不会勉强输出不可靠分数**；部分或全部用例无法评分不影响其他评估器与用例执行，报告按实际可评分覆盖率展示结果。
+- **技能评测模型来源分离（11-13）**：发起技能评测实验时，可分别为**执行阶段**与**评分阶段**选择不同模型来源，满足运行能力与评分能力的不同要求。
+- 来源：https://docs.volcengine.com/docs/agentkit/whatisareview?lang=zh 、https://docs.volcengine.com/docs/agentkit/view-assessment-experiment 、https://docs.volcengine.com/docs/agentkit/management-skills-assessment?lang=zh
+
 ## 5. 输入输出规范
 
 ### 评测集输入
@@ -203,7 +209,9 @@ curl -X POST https://<runtime-domain>/invoke \
 - 评测对象范围以控制台公开文档为准（本仓未云端实测）。
 - **轨迹/过程白盒化评测建设中**（P1），当前以端到端结果评估为主；计划 Q3/Q4 补齐轨迹、工具序列、副作用、循环检测等过程评测。
 - 产品发布状态与租户可用范围以官方公告/控制台为准（本仓不引用内部灰度口径）。
-- **评测暂按 token 计费**，观测评测套餐包设计中
+- 评测调用评估模型按 Token 用量经模型服务计费；**套餐包抵扣的是 Runtime/Sandbox/MCP 资源的 vCPU 与内存用量，不是评测 Token 包**，二者口径不同
+- **11-13 起切换全自研新评测版本**：旧版不再迭代；在线持续评测仍为新版在建能力，勿把离线评测能力外推到在线持续打分
+- **无法评分 ≠ 0 分**：缺参考依据的用例标记无法评分，不强行给分；报告按可评分覆盖率展示，其他评估器/用例不受影响
 - **路线图（尚未发布，以官方为准）**：
   - 已上线：评测集 + 评估器 + 评测实验（8 月），trace 回流自动识别 BadCase（8 月起，部分 10 月）
   - 本仓不记录未发布功能路线图；后续能力以官方发布文档为准。
@@ -219,6 +227,9 @@ curl -X POST https://<runtime-domain>/invoke \
 | 评测工具概述与三件套 | https://docs.volcengine.com/docs/AgentKit/overview-of-evaluation-tools?lang=zh | 概述 |
 | 评测工具（AgentKit） | https://docs.volcengine.com/docs/86681/2607692?lang=zh | 评测工具 |
 | 数据回流（全栈可观测平台） | https://docs.volcengine.com/docs/86845/2232301?lang=zh | 数据回流 |
+| 全自研新评测版本切换 / 在线评测在建 | https://docs.volcengine.com/docs/agentkit/whatisareview?lang=zh | 评测概述（2026-11-13 更新） |
+| 无法评分状态与可评分覆盖率 | https://docs.volcengine.com/docs/agentkit/view-assessment-experiment | 查看评估实验（2026-11-17 更新） |
+| 技能评测执行/评分模型来源分离 | https://docs.volcengine.com/docs/agentkit/management-skills-assessment?lang=zh | 发起技能评测实验（2026-11-13） |
 
 ---
 

@@ -141,6 +141,28 @@ curl -X POST $MCP_ENDPOINT \
 | MCP 工具集 | CreateMCPToolset / ListMCPToolsets / GetMCPToolset / UpdateMCPToolset / DeleteMCPToolset / ListMCPToolsetTools |
 | 标签 | TagResources / UntagResources / ListTagsForResources |
 
+### 模型组（2026-10-27 新增，模型网关）
+把多个已接入上游模型组合为一个稳定调用入口；应用在请求 `model` 字段填模型组调用名称，网关按权重选组内上游模型。
+- **配置边界**：每组最多 5 个上游模型；单次只能添加一个供应商下的一个模型；每个上游由供应商 + 模型 ID + 权重组成，权重 0 即停止向该上游分配；组内重试次数按模型组共用（非单模型维度）；组内重试仍失败时，**最多调用一次备用模型**。
+- **授权边界**：模型组需单独授权给 Proxy API Key；已有指定供应商调用授权**不会**自动授予模型组权限。保存配置立即对新请求生效，进行中的请求仍用发起时的配置快照。删除前须确认无应用再以该名称调用，并移除相关 Key 授权。
+- 来源：https://docs.volcengine.com/docs/agentkit/create-and-manage-model-group 、https://docs.volcengine.com/docs/agentkit/call-model-service 、https://docs.volcengine.com/docs/agentkit/managing-model-gateway-usage
+
+### 部署型 MCP 服务实例运维（2026-10-29 / 2026-11-16 新增）
+- **实例弹性配置**（10-29）：以「部署 MCP 服务」方式创建的 MCP 服务支持配置常驻最小实例数、可扩容最大实例数；其他接入方式（导入 / HTTP 转 MCP）暂不支持。
+- **资源管理页签**（11-16）：部署型 MCP 服务详情新增「资源管理」页签，可查看运行资源总览（最小/最大实例数、单实例并发数、实例规格、累计用量与实例列表）、单实例最新日志、WebShell 在线诊断、删除异常实例（剩余低于最小实例数时平台自动拉起补足，无需重新发布或重建服务）。
+- **口径边界**：资源用量（运行中实例数 / CPU 核时 / 内存 GB·时 / 公网出流量）为创建以来累计值，不支持按时间范围筛选，与「监控」页签按采样周期展示的实时指标口径不同，二者不可互替；累计用量用于评估规模，不作为费用预估依据。WebShell/删除实例属受控运维操作，需对应权限；仅就绪状态实例可建终端。
+- 来源：https://docs.volcengine.com/docs/agentkit/manage-mcp-deployment-instance-resources 、https://docs.volcengine.com/docs/agentkit/mcp-services?lang=zh
+
+### 网关私网出口与自定义域名（2026-11-06 新增，专属网关）
+- **私网出口**：专属网关需通过私网访问后端（如私网域名 MCP 后端、私网 Base URL 模型供应商）时配置。每个网关实例仅关联一个空间网络服务（SpaceNetwork）；私网出口与网关实例、后端资源需同地域，不支持跨地域。**仅适用于 2026-11-06（含）之后创建的专属网关实例**，此前实例走旧版「配置火山引擎私网出口」流程。
+  - 出站路径边界：网关私网出口只作用于网关访问后端的出站流量；部署型 MCP 服务、Runtime 自身出向、沙箱直连均不经网关私网出口。
+- **自定义域名**：支持模型网关、智能体运行时网关、MCP 网关三类专属网关；非专属网关下的 MCP 服务/工具集/Runtime 不支持。单网关实例最多 1 个自定义域名。AgentKit 不包装 DNS 解析与证书管理：完成控制台配置后需自行添加 CNAME 指向默认域名，并在证书中心管理 HTTPS 证书；公网入口域名需完成 ICP 备案。
+- 来源：https://docs.volcengine.com/docs/agentkit/configure-gateway-private-network-egress 、https://docs.volcengine.com/docs/agentkit/manage-custom-domain
+
+### 自定义模型提供商：快手可灵 Kling（2026-11-10 新增，模型服务）
+模型服务接入自定义类型模型提供商时，协议新增支持**快手可灵（Kling）**，用于对接快手可灵开放平台，把文生视频、图生视频等多模态生成能力纳入统一模型网关管理。属模型服务提供商协议扩展，非新运行时组件；具体可用模型与额度以控制台为准。
+- 来源：https://docs.volcengine.com/docs/agentkit/Creating_model_service?lang=zh （创建模型服务，既有页更新）
+
 ## 5. 输入输出规范
 
 ### 输入
@@ -251,6 +273,10 @@ curl -X POST $MCP_ENDPOINT \
     - HTTP 转 MCP：**存量服务在对 MCP 转换规则做一次增/删/改后自动同步插件即可用新协议；新建服务默认最新插件、自动支持新旧两类协议**（官网 2026-10-16 口径，替代此前"尚不支持 2026-07-28"的旧限制语）
   - 仍待确认：存量 MCP 服务实例的老协议→2026-07-28 迁移工具/迁移 SOP 企业文档未闭环，勿断言存量实例可一键升级
 - 存量应用 API → MCP 接入周期从周级降至 3-5 小时级
+- **模型组授权独立于供应商授权**：已有供应商模型授权不会自动覆盖模型组；模型组配置只影响新请求，在途请求用发起时快照
+- **资源管理页签仅适用部署型 MCP 服务**：导入 / HTTP 转 MCP 不支持实例日志/WebShell/删除补足；累计资源用量 ≠ 实时监控指标，也不作为费用预估
+- **私网出口有实例创建时间分界**：2026-11-06 前创建的专属网关不适用新私网出口流程；私网出口、网关、后端须同地域
+- **自定义域名不包 DNS 与证书**：CNAME 解析、ICP 备案、SSL 证书均由接入方在外部/证书中心自理；非专属网关资源不可配自定义域名
 
 ## 11. 来源追溯
 
@@ -267,5 +293,10 @@ curl -X POST $MCP_ENDPOINT \
 | 模型网关单账号数量限制 | 以控制台实际配额为准（本仓未做云端实测，不背书具体数字） | — |
 | MCP API 清单 | https://docs.volcengine.com/docs/AgentKit/Gatewayoverview?lang=zh | API 参考 |
 | MCP 2026-07-28 新协议与 HTTP 转 MCP 兼容口径（2026-10-16 复核公开页） | https://docs.volcengine.com/docs/agentkit/MCP_protocol_version_compatibility?lang=zh | MCP 协议版本兼容说明 |
+| 模型组组合调用 / 权重 / 备用模型 / Proxy API Key 授权 | https://docs.volcengine.com/docs/agentkit/create-and-manage-model-group | 创建并授权模型组（2026-10-27） |
+| 部署型 MCP 服务资源管理（日志/WebShell/删除补足/实例规格） | https://docs.volcengine.com/docs/agentkit/manage-mcp-deployment-instance-resources | 管理 MCP 服务的实例资源（2026-11-16） |
+| 专属网关私网出口配置 | https://docs.volcengine.com/docs/agentkit/configure-gateway-private-network-egress | 配置网关私网出口（2026-11-06） |
+| 专属网关自定义域名 | https://docs.volcengine.com/docs/agentkit/manage-custom-domain | 配置自定义域名（2026-11-06） |
+| 模型服务快手可灵（Kling）提供商协议 | https://docs.volcengine.com/docs/agentkit/Creating_model_service?lang=zh | 创建模型服务（2026-11-10 更新） |
 
 > **边界声明**：本仓对 MCP 2026-07-28 兼容矩阵的描述取自现行官网公开页（2026-10-16）。实际租户/区域的可用范围以控制台与授权验证为准；本仓未进行云端实测，不据此断言全量开放或存量实例可一键升级。
